@@ -1,0 +1,2371 @@
+{
+  "commands": [
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -59.5,
+          -31.0,
+          0.5
+        ],
+        "diameter": 5.2,
+        "height": 62.0,
+        "axis": "Y",
+        "operation": "new",
+        "body_name": "Ref_Rear_Axle",
+        "name": "Axle_Tube"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "ref04_axle_pumpkin_sk",
+        "plane": {
+          "origin": [
+            0.0,
+            -7.5,
+            0.0
+          ],
+          "x_dir": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -64.0,
+            -5.5
+          ],
+          [
+            -55.0,
+            -5.5
+          ],
+          [
+            -53.5,
+            -3.5
+          ],
+          [
+            -53.5,
+            4.5
+          ],
+          [
+            -55.5,
+            6.5
+          ],
+          [
+            -63.5,
+            6.5
+          ],
+          [
+            -65.5,
+            4.0
+          ],
+          [
+            -65.5,
+            -3.5
+          ]
+        ],
+        "closed": true,
+        "connect": false
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -53.5,
+          0.0,
+          2.0
+        ],
+        "diameter": 5.4,
+        "height": 6.5,
+        "axis": "X",
+        "operation": "join",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Pinion_Snout"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "ref04_axle_hex_L_sk",
+        "plane": {
+          "origin": [
+            0.0,
+            29.0,
+            0.0
+          ],
+          "x_dir": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -55.4585,
+            0.5
+          ],
+          [
+            -57.4793,
+            4.0
+          ],
+          [
+            -61.5207,
+            4.0
+          ],
+          [
+            -63.5415,
+            0.5
+          ],
+          [
+            -61.5207,
+            -3.0
+          ],
+          [
+            -57.4793,
+            -3.0
+          ]
+        ],
+        "closed": true,
+        "connect": false
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "ref04_axle_hex_L_sk",
+        "distance": 2.5,
+        "direction": "negative",
+        "operation": "join",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Hex_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "ref04_axle_hex_R_sk",
+        "plane": {
+          "origin": [
+            0.0,
+            -29.0,
+            0.0
+          ],
+          "x_dir": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -55.4585,
+            0.5
+          ],
+          [
+            -57.4793,
+            4.0
+          ],
+          [
+            -61.5207,
+            4.0
+          ],
+          [
+            -63.5415,
+            0.5
+          ],
+          [
+            -61.5207,
+            -3.0
+          ],
+          [
+            -57.4793,
+            -3.0
+          ]
+        ],
+        "closed": true,
+        "connect": false
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "ref04_axle_hex_R_sk",
+        "distance": 2.5,
+        "direction": "positive",
+        "operation": "join",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Hex_R"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          -57.5,
+          14.5,
+          -4.5
+        ],
+        "length": 4.5,
+        "width": 1.25,
+        "height": 6.25,
+        "operation": "join",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Trailing_Ear_In_L"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          -57.5,
+          19.75,
+          -4.5
+        ],
+        "length": 4.5,
+        "width": 1.25,
+        "height": 6.25,
+        "operation": "join",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Trailing_Ear_Out_L"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          -57.5,
+          14.5,
+          -5.5
+        ],
+        "length": 4.5,
+        "width": 6.5,
+        "height": 1.0,
+        "operation": "join",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Trailing_Bridge_L"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          -57.5,
+          1.75,
+          2.5
+        ],
+        "length": 4.5,
+        "width": 1.05,
+        "height": 4.5,
+        "operation": "join",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Upper_Truss_In_L"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          -57.5,
+          6.4,
+          2.5
+        ],
+        "length": 4.5,
+        "width": 1.0,
+        "height": 4.5,
+        "operation": "join",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Upper_Truss_Out_L"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          -57.5,
+          -15.75,
+          -4.5
+        ],
+        "length": 4.5,
+        "width": 1.25,
+        "height": 6.25,
+        "operation": "join",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Trailing_Ear_In_R"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          -57.5,
+          -21.0,
+          -4.5
+        ],
+        "length": 4.5,
+        "width": 1.25,
+        "height": 6.25,
+        "operation": "join",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Trailing_Ear_Out_R"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          -57.5,
+          -21.0,
+          -5.5
+        ],
+        "length": 4.5,
+        "width": 6.5,
+        "height": 1.0,
+        "operation": "join",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Trailing_Bridge_R"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          -57.5,
+          -2.8,
+          2.5
+        ],
+        "length": 4.5,
+        "width": 1.05,
+        "height": 4.5,
+        "operation": "join",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Upper_Truss_In_R"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          -57.5,
+          -7.4,
+          2.5
+        ],
+        "length": 4.5,
+        "width": 1.0,
+        "height": 4.5,
+        "operation": "join",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Upper_Truss_Out_R"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          -65.8,
+          -13.25,
+          3.25
+        ],
+        "length": 7.55,
+        "width": 26.5,
+        "height": 4.0,
+        "operation": "cut",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Sway_Bridge_Clearance"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          -57.5,
+          2.85,
+          3.1
+        ],
+        "length": 5.5,
+        "width": 3.5,
+        "height": 4.5,
+        "operation": "cut",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Upper_Link_Clearance_L"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          -57.5,
+          -6.35,
+          3.1
+        ],
+        "length": 5.5,
+        "width": 3.5,
+        "height": 4.5,
+        "operation": "cut",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Upper_Link_Clearance_R"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -55.0,
+          14.5,
+          -0.5
+        ],
+        "diameter": 3.0,
+        "height": 6.6,
+        "axis": "Y",
+        "operation": "cut",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Trailing_Mount_Hole_L"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -55.0,
+          -21.1,
+          -0.5
+        ],
+        "diameter": 3.0,
+        "height": 6.6,
+        "axis": "Y",
+        "operation": "cut",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Trailing_Mount_Hole_R"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -54.64,
+          2.05,
+          5.0
+        ],
+        "axis": [
+          -0.1455,
+          0.9893,
+          0.0
+        ],
+        "diameter": 2.8,
+        "height": 5.0,
+        "operation": "cut",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Upper_Link_Mount_Hole_L"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -54.64,
+          -2.05,
+          5.0
+        ],
+        "axis": [
+          -0.1455,
+          -0.9893,
+          0.0
+        ],
+        "diameter": 2.8,
+        "height": 5.0,
+        "operation": "cut",
+        "targets": [
+          "Ref_Rear_Axle"
+        ],
+        "name": "Axle_Upper_Link_Mount_Hole_R"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "ref04_wheel_revolve_sk",
+        "plane": {
+          "origin": [
+            48.0,
+            0.0,
+            3.0
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            29.0,
+            9.6
+          ],
+          [
+            29.0,
+            16.5
+          ],
+          [
+            29.8,
+            17.5
+          ],
+          [
+            30.5,
+            18.0
+          ],
+          [
+            41.0,
+            18.0
+          ],
+          [
+            41.7,
+            17.5
+          ],
+          [
+            42.5,
+            16.5
+          ],
+          [
+            42.5,
+            9.2
+          ],
+          [
+            41.5,
+            9.2
+          ],
+          [
+            41.5,
+            8.2
+          ],
+          [
+            40.5,
+            8.2
+          ],
+          [
+            40.5,
+            9.0
+          ],
+          [
+            39.3,
+            9.0
+          ],
+          [
+            39.3,
+            2.2
+          ],
+          [
+            39.0,
+            2.2
+          ],
+          [
+            39.0,
+            9.6
+          ]
+        ],
+        "closed": true,
+        "connect": false
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.revolve",
+      "params": {
+        "sketch": "ref04_wheel_revolve_sk",
+        "axis": "x",
+        "angle": 360.0,
+        "operation": "new",
+        "body_name": "Ref_Wheel_FL",
+        "name": "Wheel_Body_Revolve"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "ref04_wheel_spokes_sk",
+        "plane": {
+          "origin": [
+            48.0,
+            38.9,
+            3.0
+          ],
+          "x_dir": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            3.3829,
+            -1.2313
+          ],
+          [
+            7.0466,
+            -2.847
+          ],
+          [
+            7.0466,
+            2.847
+          ],
+          [
+            3.3829,
+            1.2313
+          ]
+        ],
+        "closed": true,
+        "connect": false
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "ref04_wheel_spokes_sk",
+        "distance": 2.0,
+        "direction": "negative",
+        "operation": "cut",
+        "targets": [
+          "Ref_Wheel_FL"
+        ],
+        "name": "Wheel_Spoke_Window"
+      }
+    },
+    {
+      "command": "solid.pattern.circular",
+      "params": {
+        "features": [
+          "Wheel_Spoke_Window"
+        ],
+        "axis": {
+          "origin": [
+            48.0,
+            0.0,
+            3.0
+          ],
+          "dir": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "count": 5
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          57.6,
+          42.1,
+          3.0
+        ],
+        "diameter": 0.9,
+        "height": 0.4,
+        "axis": "Y",
+        "operation": "join",
+        "targets": [
+          "Ref_Wheel_FL"
+        ],
+        "name": "Wheel_Beadlock_Bolt"
+      }
+    },
+    {
+      "command": "solid.pattern.circular",
+      "params": {
+        "features": [
+          "Wheel_Beadlock_Bolt"
+        ],
+        "axis": {
+          "origin": [
+            48.0,
+            0.0,
+            3.0
+          ],
+          "dir": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "count": 6
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "ref04_wheel_tread_sk",
+        "plane": {
+          "origin": [
+            48.0,
+            29.6,
+            3.0
+          ],
+          "x_dir": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            17.4,
+            -0.7
+          ],
+          [
+            18.2,
+            -0.7
+          ],
+          [
+            18.2,
+            0.7
+          ],
+          [
+            17.4,
+            0.7
+          ]
+        ],
+        "closed": true,
+        "connect": false
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "ref04_wheel_tread_sk",
+        "distance": 12.3,
+        "direction": "negative",
+        "operation": "cut",
+        "targets": [
+          "Ref_Wheel_FL"
+        ],
+        "name": "Wheel_Tread_Groove"
+      }
+    },
+    {
+      "command": "solid.pattern.circular",
+      "params": {
+        "features": [
+          "Wheel_Tread_Groove"
+        ],
+        "axis": {
+          "origin": [
+            48.0,
+            0.0,
+            3.0
+          ],
+          "dir": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "count": 16
+      }
+    },
+    {
+      "command": "solid.mirror",
+      "params": {
+        "bodies": [
+          "Ref_Wheel_FL"
+        ],
+        "plane": "XZ"
+      }
+    },
+    {
+      "command": "body.rename",
+      "params": {
+        "body": "Ref_Wheel_FL (2)",
+        "name": "Ref_Wheel_FR"
+      }
+    },
+    {
+      "command": "solid.move",
+      "params": {
+        "bodies": [
+          "Ref_Wheel_FL",
+          "Ref_Wheel_FR"
+        ],
+        "translate": [
+          -107.5,
+          0.0,
+          -1.5
+        ],
+        "copy": true,
+        "body_names": [
+          "Ref_Wheel_RL",
+          "Ref_Wheel_RR"
+        ],
+        "name": "Copy_Rear_Wheels"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "ref04_spare_revolve_sk",
+        "plane": {
+          "origin": [
+            -51.2053,
+            0.0,
+            34.7352
+          ],
+          "x_dir": [
+            0.422618,
+            0.0,
+            -0.906308
+          ],
+          "y_dir": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            13.5,
+            9.6
+          ],
+          [
+            13.5,
+            16.5
+          ],
+          [
+            12.7,
+            17.5
+          ],
+          [
+            12.0,
+            18.0
+          ],
+          [
+            1.5,
+            18.0
+          ],
+          [
+            0.8,
+            17.5
+          ],
+          [
+            0.0,
+            16.5
+          ],
+          [
+            0.0,
+            9.2
+          ],
+          [
+            1.0,
+            9.2
+          ],
+          [
+            1.0,
+            8.2
+          ],
+          [
+            2.0,
+            8.2
+          ],
+          [
+            2.0,
+            9.0
+          ],
+          [
+            3.2,
+            9.0
+          ],
+          [
+            3.2,
+            2.2
+          ],
+          [
+            3.5,
+            2.2
+          ],
+          [
+            3.5,
+            9.6
+          ]
+        ],
+        "closed": true,
+        "connect": false
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.revolve",
+      "params": {
+        "sketch": "ref04_spare_revolve_sk",
+        "axis": "x",
+        "angle": 360.0,
+        "operation": "new",
+        "body_name": "Ref_Wheel_Spare",
+        "name": "Spare_Wheel_Body_Revolve"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "ref04_spare_spokes_sk",
+        "plane": {
+          "origin": [
+            -49.6839,
+            0.0,
+            31.4724
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            -0.906308,
+            0.0,
+            -0.422618
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            3.3829,
+            -1.2313
+          ],
+          [
+            7.0466,
+            -2.847
+          ],
+          [
+            7.0466,
+            2.847
+          ],
+          [
+            3.3829,
+            1.2313
+          ]
+        ],
+        "closed": true,
+        "connect": false
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "ref04_spare_spokes_sk",
+        "distance": 2.0,
+        "direction": "negative",
+        "operation": "cut",
+        "targets": [
+          "Ref_Wheel_Spare"
+        ],
+        "name": "Spare_Spoke_Window"
+      }
+    },
+    {
+      "command": "solid.pattern.circular",
+      "params": {
+        "features": [
+          "Spare_Spoke_Window"
+        ],
+        "axis": {
+          "origin": [
+            -51.2053,
+            0.0,
+            34.7352
+          ],
+          "dir": [
+            0.422618,
+            0.0,
+            -0.906308
+          ]
+        },
+        "count": 5
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -51.2053,
+          9.6,
+          34.7352
+        ],
+        "diameter": 0.9,
+        "height": 0.4,
+        "axis": [
+          0.422618,
+          0.0,
+          -0.906308
+        ],
+        "operation": "join",
+        "targets": [
+          "Ref_Wheel_Spare"
+        ],
+        "name": "Spare_Beadlock_Bolt"
+      }
+    },
+    {
+      "command": "solid.pattern.circular",
+      "params": {
+        "features": [
+          "Spare_Beadlock_Bolt"
+        ],
+        "axis": {
+          "origin": [
+            -51.2053,
+            0.0,
+            34.7352
+          ],
+          "dir": [
+            0.422618,
+            0.0,
+            -0.906308
+          ]
+        },
+        "count": 6
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "ref04_spare_tread_sk",
+        "plane": {
+          "origin": [
+            -45.7536,
+            0.0,
+            23.0438
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            -0.906308,
+            0.0,
+            -0.422618
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            17.4,
+            -0.7
+          ],
+          [
+            18.2,
+            -0.7
+          ],
+          [
+            18.2,
+            0.7
+          ],
+          [
+            17.4,
+            0.7
+          ]
+        ],
+        "closed": true,
+        "connect": false
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "ref04_spare_tread_sk",
+        "distance": 12.3,
+        "direction": "negative",
+        "operation": "cut",
+        "targets": [
+          "Ref_Wheel_Spare"
+        ],
+        "name": "Spare_Tread_Groove"
+      }
+    },
+    {
+      "command": "solid.pattern.circular",
+      "params": {
+        "features": [
+          "Spare_Tread_Groove"
+        ],
+        "axis": {
+          "origin": [
+            -51.2053,
+            0.0,
+            34.7352
+          ],
+          "dir": [
+            0.422618,
+            0.0,
+            -0.906308
+          ]
+        },
+        "count": 16
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          58.6,
+          13.6109,
+          8.0455
+        ],
+        "axis": [
+          0.0,
+          0.882188,
+          -0.470898
+        ],
+        "diameter": 3.4,
+        "height": 4.2,
+        "operation": "new",
+        "body_name": "Ref_Shock_FL",
+        "name": "Front_Shock_Body"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          58.6,
+          13.4345,
+          8.1397
+        ],
+        "axis": [
+          0.0,
+          0.882188,
+          -0.470898
+        ],
+        "diameter": 3.6,
+        "height": 0.8,
+        "operation": "join",
+        "targets": [
+          "Ref_Shock_FL"
+        ],
+        "name": "Front_Shock_Cap"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          58.6,
+          16.9633,
+          6.2561
+        ],
+        "axis": [
+          0.0,
+          0.882188,
+          -0.470898
+        ],
+        "diameter": 1.4,
+        "height": 6.4,
+        "operation": "join",
+        "targets": [
+          "Ref_Shock_FL"
+        ],
+        "name": "Front_Shock_Shaft"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          58.6,
+          13.7874,
+          7.9513
+        ],
+        "axis": [
+          0.0,
+          0.882188,
+          -0.470898
+        ],
+        "diameter": 4.4,
+        "height": 0.45,
+        "operation": "join",
+        "targets": [
+          "Ref_Shock_FL"
+        ],
+        "name": "Front_Shock_Coil_0"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          58.6,
+          14.846,
+          7.3863
+        ],
+        "axis": [
+          0.0,
+          0.882188,
+          -0.470898
+        ],
+        "diameter": 4.4,
+        "height": 0.45,
+        "operation": "join",
+        "targets": [
+          "Ref_Shock_FL"
+        ],
+        "name": "Front_Shock_Coil_1"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          58.6,
+          15.9046,
+          6.8212
+        ],
+        "axis": [
+          0.0,
+          0.882188,
+          -0.470898
+        ],
+        "diameter": 4.4,
+        "height": 0.45,
+        "operation": "join",
+        "targets": [
+          "Ref_Shock_FL"
+        ],
+        "name": "Front_Shock_Coil_2"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          58.6,
+          16.9633,
+          6.2561
+        ],
+        "axis": [
+          0.0,
+          0.882188,
+          -0.470898
+        ],
+        "diameter": 4.4,
+        "height": 0.45,
+        "operation": "join",
+        "targets": [
+          "Ref_Shock_FL"
+        ],
+        "name": "Front_Shock_Coil_3"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          58.6,
+          10.2586,
+          9.8349
+        ],
+        "axis": [
+          0.0,
+          0.882188,
+          -0.470898
+        ],
+        "diameter": 1.4,
+        "height": 3.8,
+        "operation": "join",
+        "targets": [
+          "Ref_Shock_FL"
+        ],
+        "name": "Front_Shock_Upper_Stem"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          58.05,
+          9.2,
+          10.4
+        ],
+        "diameter": 2.8,
+        "height": 1.1,
+        "axis": "X",
+        "operation": "join",
+        "targets": [
+          "Ref_Shock_FL"
+        ],
+        "name": "Front_Shock_Upper_Eyelet"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          57.95,
+          9.2,
+          10.4
+        ],
+        "diameter": 1.6,
+        "height": 1.3,
+        "axis": "X",
+        "operation": "cut",
+        "targets": [
+          "Ref_Shock_FL"
+        ],
+        "name": "Front_Shock_Upper_Eye_Hole"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          58.05,
+          24.0,
+          2.5
+        ],
+        "diameter": 2.8,
+        "height": 1.1,
+        "axis": "X",
+        "operation": "join",
+        "targets": [
+          "Ref_Shock_FL"
+        ],
+        "name": "Front_Shock_Lower_Eyelet"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          57.95,
+          24.0,
+          2.5
+        ],
+        "diameter": 1.6,
+        "height": 1.3,
+        "axis": "X",
+        "operation": "cut",
+        "targets": [
+          "Ref_Shock_FL"
+        ],
+        "name": "Front_Shock_Lower_Eye_Hole"
+      }
+    },
+    {
+      "command": "solid.mirror",
+      "params": {
+        "bodies": [
+          "Ref_Shock_FL"
+        ],
+        "plane": "XZ"
+      }
+    },
+    {
+      "command": "body.rename",
+      "params": {
+        "body": "Ref_Shock_FL (2)",
+        "name": "Ref_Shock_FR"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -28.0825,
+          17.75,
+          19.0704
+        ],
+        "axis": [
+          -0.650791,
+          0.0,
+          -0.759257
+        ],
+        "diameter": 3.8,
+        "height": 10.6,
+        "operation": "new",
+        "body_name": "Ref_Shock_RL",
+        "name": "Rear_Shock_Body"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -28.0825,
+          17.75,
+          19.0704
+        ],
+        "axis": [
+          -0.650791,
+          0.0,
+          -0.759257
+        ],
+        "diameter": 4.1,
+        "height": 1.0,
+        "operation": "join",
+        "targets": [
+          "Ref_Shock_RL"
+        ],
+        "name": "Rear_Shock_Cap"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -34.7857,
+          17.75,
+          11.25
+        ],
+        "axis": [
+          -0.650791,
+          0.0,
+          -0.759257
+        ],
+        "diameter": 1.5,
+        "height": 10.8,
+        "operation": "join",
+        "targets": [
+          "Ref_Shock_RL"
+        ],
+        "name": "Rear_Shock_Shaft"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -29.1238,
+          17.75,
+          17.8556
+        ],
+        "axis": [
+          -0.650791,
+          0.0,
+          -0.759257
+        ],
+        "diameter": 4.2,
+        "height": 0.5,
+        "operation": "join",
+        "targets": [
+          "Ref_Shock_RL"
+        ],
+        "name": "Rear_Shock_Coil_0"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -30.2301,
+          17.75,
+          16.5648
+        ],
+        "axis": [
+          -0.650791,
+          0.0,
+          -0.759257
+        ],
+        "diameter": 4.2,
+        "height": 0.5,
+        "operation": "join",
+        "targets": [
+          "Ref_Shock_RL"
+        ],
+        "name": "Rear_Shock_Coil_1"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -31.3365,
+          17.75,
+          15.2741
+        ],
+        "axis": [
+          -0.650791,
+          0.0,
+          -0.759257
+        ],
+        "diameter": 4.2,
+        "height": 0.5,
+        "operation": "join",
+        "targets": [
+          "Ref_Shock_RL"
+        ],
+        "name": "Rear_Shock_Coil_2"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -32.4428,
+          17.75,
+          13.9834
+        ],
+        "axis": [
+          -0.650791,
+          0.0,
+          -0.759257
+        ],
+        "diameter": 4.2,
+        "height": 0.5,
+        "operation": "join",
+        "targets": [
+          "Ref_Shock_RL"
+        ],
+        "name": "Rear_Shock_Coil_3"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -33.5492,
+          17.75,
+          12.6926
+        ],
+        "axis": [
+          -0.650791,
+          0.0,
+          -0.759257
+        ],
+        "diameter": 4.2,
+        "height": 0.5,
+        "operation": "join",
+        "targets": [
+          "Ref_Shock_RL"
+        ],
+        "name": "Rear_Shock_Coil_4"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -34.6555,
+          17.75,
+          11.4019
+        ],
+        "axis": [
+          -0.650791,
+          0.0,
+          -0.759257
+        ],
+        "diameter": 4.2,
+        "height": 0.5,
+        "operation": "join",
+        "targets": [
+          "Ref_Shock_RL"
+        ],
+        "name": "Rear_Shock_Coil_5"
+      }
+    },
+    {
+      "command": "solid.mirror",
+      "params": {
+        "bodies": [
+          "Ref_Shock_RL"
+        ],
+        "plane": "XZ"
+      }
+    },
+    {
+      "command": "body.rename",
+      "params": {
+        "body": "Ref_Shock_RL (2)",
+        "name": "Ref_Shock_RR"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -66.1,
+          -17.75,
+          7.2
+        ],
+        "diameter": 1.5,
+        "height": 35.5,
+        "axis": "Y",
+        "operation": "new",
+        "body_name": "Ref_Rear_Sway_Bar",
+        "name": "Sway_Torsion_Bar"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -66.1,
+          17.75,
+          7.2
+        ],
+        "diameter": 1.5,
+        "height": 19.1,
+        "axis": "X",
+        "operation": "join",
+        "targets": [
+          "Ref_Rear_Sway_Bar"
+        ],
+        "name": "Sway_Arm_L"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -47.0,
+          17.75,
+          5.2
+        ],
+        "diameter": 1.2,
+        "height": 2.0,
+        "axis": "Z",
+        "operation": "join",
+        "targets": [
+          "Ref_Rear_Sway_Bar"
+        ],
+        "name": "Sway_Drop_Link_L"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -66.1,
+          -17.75,
+          7.2
+        ],
+        "diameter": 1.5,
+        "height": 19.1,
+        "axis": "X",
+        "operation": "join",
+        "targets": [
+          "Ref_Rear_Sway_Bar"
+        ],
+        "name": "Sway_Arm_R"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -47.0,
+          -17.75,
+          5.2
+        ],
+        "diameter": 1.2,
+        "height": 2.0,
+        "axis": "Z",
+        "operation": "join",
+        "targets": [
+          "Ref_Rear_Sway_Bar"
+        ],
+        "name": "Sway_Drop_Link_R"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -10.0,
+          0.0,
+          5.5
+        ],
+        "axis": [
+          -0.994113,
+          0.0,
+          -0.10835
+        ],
+        "diameter": 4.0,
+        "height": 24.0,
+        "operation": "new",
+        "body_name": "Ref_Rear_Driveshaft",
+        "name": "Driveshaft_Outer_Sleeve"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -23.8354,
+          0.0,
+          3.992
+        ],
+        "axis": [
+          -0.994113,
+          0.0,
+          -0.10835
+        ],
+        "diameter": 2.6,
+        "height": 23.0,
+        "operation": "join",
+        "targets": [
+          "Ref_Rear_Driveshaft"
+        ],
+        "name": "Driveshaft_Inner_Shaft"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          10.0,
+          0.0,
+          5.5
+        ],
+        "axis": [
+          0.99052,
+          0.0,
+          -0.137371
+        ],
+        "diameter": 3.6,
+        "height": 7.6071,
+        "operation": "new",
+        "body_name": "Ref_Front_Center_Driveshaft",
+        "name": "Front_Center_Sleeve"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          16.85,
+          0.0,
+          4.55
+        ],
+        "axis": [
+          0.99052,
+          0.0,
+          -0.137371
+        ],
+        "diameter": 2.4,
+        "height": 6.9156,
+        "operation": "join",
+        "targets": [
+          "Ref_Front_Center_Driveshaft"
+        ],
+        "name": "Front_Center_Shaft"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          48.0,
+          10.5,
+          3.0
+        ],
+        "axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "diameter": 1.0,
+        "height": 2.5,
+        "operation": "new",
+        "body_name": "Ref_Front_CVD_L",
+        "name": "Front_CVD_Inner_Cup"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          48.0,
+          13.0,
+          3.0
+        ],
+        "axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "diameter": 0.9,
+        "height": 15.0,
+        "operation": "join",
+        "targets": [
+          "Ref_Front_CVD_L"
+        ],
+        "name": "Front_CVD_Shaft"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          48.0,
+          28.0,
+          3.0
+        ],
+        "axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "diameter": 1.0,
+        "height": 2.5,
+        "operation": "join",
+        "targets": [
+          "Ref_Front_CVD_L"
+        ],
+        "name": "Front_CVD_Outer_Cup"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          48.0,
+          30.5,
+          3.0
+        ],
+        "diameter": 1.0,
+        "height": 7.5,
+        "axis": "Y",
+        "operation": "join",
+        "targets": [
+          "Ref_Front_CVD_L"
+        ],
+        "name": "Front_CVD_Hub_Stub"
+      }
+    },
+    {
+      "command": "solid.mirror",
+      "params": {
+        "bodies": [
+          "Ref_Front_CVD_L"
+        ],
+        "plane": "XZ"
+      }
+    },
+    {
+      "command": "body.rename",
+      "params": {
+        "body": "Ref_Front_CVD_L (2)",
+        "name": "Ref_Front_CVD_R"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "ref04_diff_ring_sk",
+        "plane": "XZ",
+        "offset": -1.2
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            49.7404,
+            -3.1829
+          ],
+          [
+            50.1471,
+            -3.1125
+          ],
+          [
+            50.1471,
+            -2.8875
+          ],
+          [
+            49.7404,
+            -2.8171
+          ],
+          [
+            49.5987,
+            -2.2882
+          ],
+          [
+            49.9157,
+            -2.0239
+          ],
+          [
+            49.8031,
+            -1.829
+          ],
+          [
+            49.4158,
+            -1.9714
+          ],
+          [
+            49.0286,
+            -1.5842
+          ],
+          [
+            49.171,
+            -1.1969
+          ],
+          [
+            48.9761,
+            -1.0843
+          ],
+          [
+            48.7118,
+            -1.4013
+          ],
+          [
+            48.1829,
+            -1.2596
+          ],
+          [
+            48.1125,
+            -0.8529
+          ],
+          [
+            47.8875,
+            -0.8529
+          ],
+          [
+            47.8171,
+            -1.2596
+          ],
+          [
+            47.2882,
+            -1.4013
+          ],
+          [
+            47.0239,
+            -1.0843
+          ],
+          [
+            46.829,
+            -1.1969
+          ],
+          [
+            46.9714,
+            -1.5842
+          ],
+          [
+            46.5842,
+            -1.9714
+          ],
+          [
+            46.1969,
+            -1.829
+          ],
+          [
+            46.0843,
+            -2.0239
+          ],
+          [
+            46.4013,
+            -2.2882
+          ],
+          [
+            46.2596,
+            -2.8171
+          ],
+          [
+            45.8529,
+            -2.8875
+          ],
+          [
+            45.8529,
+            -3.1125
+          ],
+          [
+            46.2596,
+            -3.1829
+          ],
+          [
+            46.4013,
+            -3.7118
+          ],
+          [
+            46.0843,
+            -3.9761
+          ],
+          [
+            46.1969,
+            -4.171
+          ],
+          [
+            46.5842,
+            -4.0286
+          ],
+          [
+            46.9714,
+            -4.4158
+          ],
+          [
+            46.829,
+            -4.8031
+          ],
+          [
+            47.0239,
+            -4.9157
+          ],
+          [
+            47.2882,
+            -4.5987
+          ],
+          [
+            47.8171,
+            -4.7404
+          ],
+          [
+            47.8875,
+            -5.1471
+          ],
+          [
+            48.1125,
+            -5.1471
+          ],
+          [
+            48.1829,
+            -4.7404
+          ],
+          [
+            48.7118,
+            -4.5987
+          ],
+          [
+            48.9761,
+            -4.9157
+          ],
+          [
+            49.171,
+            -4.8031
+          ],
+          [
+            49.0286,
+            -4.4158
+          ],
+          [
+            49.4158,
+            -4.0286
+          ],
+          [
+            49.8031,
+            -4.171
+          ],
+          [
+            49.9157,
+            -3.9761
+          ],
+          [
+            49.5987,
+            -3.7118
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "ref04_diff_ring_sk",
+        "distance": 2.4,
+        "direction": "positive",
+        "operation": "new",
+        "body_name": "Ref_Front_Diff_Ring_Gear",
+        "name": "Diff_Ring_Teeth"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          48.0,
+          -10.3,
+          3.0
+        ],
+        "diameter": 2.2,
+        "height": 20.6,
+        "axis": "Y",
+        "operation": "join",
+        "targets": [
+          "Ref_Front_Diff_Ring_Gear"
+        ],
+        "name": "Diff_Outdrive_Shaft"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          40.0,
+          0.0,
+          6.85
+        ],
+        "diameter": 2.6,
+        "height": 12.2,
+        "axis": "X",
+        "operation": "new",
+        "body_name": "Ref_Front_Input_Worm_Gear",
+        "name": "Worm_Input_Shaft"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          45.5,
+          0.0,
+          6.85
+        ],
+        "diameter": 3.3,
+        "height": 0.45,
+        "axis": "X",
+        "operation": "join",
+        "targets": [
+          "Ref_Front_Input_Worm_Gear"
+        ],
+        "name": "Worm_Land_0"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          46.5,
+          0.0,
+          6.85
+        ],
+        "diameter": 3.3,
+        "height": 0.45,
+        "axis": "X",
+        "operation": "join",
+        "targets": [
+          "Ref_Front_Input_Worm_Gear"
+        ],
+        "name": "Worm_Land_1"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          47.5,
+          0.0,
+          6.85
+        ],
+        "diameter": 3.3,
+        "height": 0.45,
+        "axis": "X",
+        "operation": "join",
+        "targets": [
+          "Ref_Front_Input_Worm_Gear"
+        ],
+        "name": "Worm_Land_2"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          48.5,
+          0.0,
+          6.85
+        ],
+        "diameter": 3.3,
+        "height": 0.45,
+        "axis": "X",
+        "operation": "join",
+        "targets": [
+          "Ref_Front_Input_Worm_Gear"
+        ],
+        "name": "Worm_Land_3"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          49.5,
+          0.0,
+          6.85
+        ],
+        "diameter": 3.3,
+        "height": 0.45,
+        "axis": "X",
+        "operation": "join",
+        "targets": [
+          "Ref_Front_Input_Worm_Gear"
+        ],
+        "name": "Worm_Land_4"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          50.5,
+          0.0,
+          6.85
+        ],
+        "diameter": 3.3,
+        "height": 0.45,
+        "axis": "X",
+        "operation": "join",
+        "targets": [
+          "Ref_Front_Input_Worm_Gear"
+        ],
+        "name": "Worm_Land_5"
+      }
+    },
+    {
+      "command": "appearance.assign",
+      "params": {
+        "bodies": [
+          "Ref_Front_Diff_Ring_Gear",
+          "Ref_Front_Input_Worm_Gear"
+        ],
+        "color": "#C9A227",
+        "metallic": 0.9,
+        "roughness": 0.25
+      }
+    }
+  ]
+}

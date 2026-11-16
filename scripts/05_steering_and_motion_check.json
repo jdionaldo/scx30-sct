@@ -1,0 +1,753 @@
+{
+  "commands": [
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          25.8,
+          -6.0,
+          2.3
+        ],
+        "length": 6.0,
+        "width": 12.0,
+        "height": 6.8,
+        "operation": "new",
+        "body_name": "Servo_Ref",
+        "name": "Servo_Case"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          27.3,
+          -8.5,
+          4.5
+        ],
+        "length": 3.0,
+        "width": 17.0,
+        "height": 1.2,
+        "operation": "join",
+        "targets": [
+          "Servo_Ref"
+        ],
+        "name": "Servo_Mounting_Ears"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          28.8,
+          3.0,
+          9.1
+        ],
+        "diameter": 3.2,
+        "height": 0.6,
+        "axis": "Z",
+        "operation": "join",
+        "targets": [
+          "Servo_Ref"
+        ],
+        "name": "Servo_Spline_Boss"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st05_servo_horn_sk",
+        "plane": {
+          "origin": [
+            0.0,
+            0.0,
+            9.8
+          ],
+          "x_dir": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            27.3,
+            2.0
+          ],
+          [
+            30.3,
+            2.0
+          ],
+          [
+            29.7,
+            8.8
+          ],
+          [
+            27.9,
+            8.8
+          ]
+        ],
+        "closed": true,
+        "connect": false
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "st05_servo_horn_sk",
+        "distance": 0.95,
+        "direction": "positive",
+        "operation": "new",
+        "body_name": "Servo_Horn",
+        "name": "Servo_Horn_Body"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st05_bellcrank_L_sk",
+        "plane": {
+          "origin": [
+            0.0,
+            0.0,
+            2.2
+          ],
+          "x_dir": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            31.4,
+            6.4
+          ],
+          [
+            31.4,
+            9.6
+          ],
+          [
+            40.8,
+            9.4
+          ],
+          [
+            40.8,
+            6.6
+          ],
+          [
+            37.8,
+            5.4
+          ],
+          [
+            36.0,
+            5.4
+          ]
+        ],
+        "closed": true,
+        "connect": false
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "st05_bellcrank_L_sk",
+        "distance": 1.5,
+        "direction": "positive",
+        "operation": "new",
+        "body_name": "Steering_Bell_Crank_L",
+        "name": "Bell_Crank_Arm_L"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          34.6,
+          7.3,
+          3.65
+        ],
+        "length": 1.6,
+        "width": 2.0,
+        "height": 1.95,
+        "operation": "join",
+        "targets": [
+          "Steering_Bell_Crank_L"
+        ],
+        "name": "Bell_Crank_Drag_Ear"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          33.0,
+          8.0,
+          2.0
+        ],
+        "diameter": 2.2,
+        "height": 2.0,
+        "axis": "Z",
+        "operation": "cut",
+        "targets": [
+          "Steering_Bell_Crank_L"
+        ]
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          39.5,
+          8.0,
+          2.0
+        ],
+        "diameter": 1.6,
+        "height": 2.0,
+        "axis": "Z",
+        "operation": "cut",
+        "targets": [
+          "Steering_Bell_Crank_L"
+        ]
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          37.0,
+          6.4,
+          2.0
+        ],
+        "diameter": 1.6,
+        "height": 2.0,
+        "axis": "Z",
+        "operation": "cut",
+        "targets": [
+          "Steering_Bell_Crank_L"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st05_bellcrank_R_sk",
+        "plane": {
+          "origin": [
+            0.0,
+            0.0,
+            2.2
+          ],
+          "x_dir": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            31.4,
+            -9.6
+          ],
+          [
+            31.4,
+            -6.4
+          ],
+          [
+            36.0,
+            -5.4
+          ],
+          [
+            37.8,
+            -5.4
+          ],
+          [
+            40.8,
+            -6.6
+          ],
+          [
+            40.8,
+            -9.4
+          ]
+        ],
+        "closed": true,
+        "connect": false
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "st05_bellcrank_R_sk",
+        "distance": 1.5,
+        "direction": "positive",
+        "operation": "new",
+        "body_name": "Steering_Bell_Crank_R",
+        "name": "Bell_Crank_Arm_R"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          33.0,
+          -8.0,
+          2.0
+        ],
+        "diameter": 2.2,
+        "height": 2.0,
+        "axis": "Z",
+        "operation": "cut",
+        "targets": [
+          "Steering_Bell_Crank_R"
+        ]
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          39.5,
+          -8.0,
+          2.0
+        ],
+        "diameter": 1.6,
+        "height": 2.0,
+        "axis": "Z",
+        "operation": "cut",
+        "targets": [
+          "Steering_Bell_Crank_R"
+        ]
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          37.0,
+          -6.4,
+          2.0
+        ],
+        "diameter": 1.6,
+        "height": 2.0,
+        "axis": "Z",
+        "operation": "cut",
+        "targets": [
+          "Steering_Bell_Crank_R"
+        ]
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          36.2,
+          -7.2,
+          4.0
+        ],
+        "length": 1.6,
+        "width": 14.4,
+        "height": 1.0,
+        "operation": "new",
+        "body_name": "Steering_Ackermann_Bar",
+        "name": "Ackermann_Bar_Body"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          37.0,
+          6.4,
+          2.3
+        ],
+        "diameter": 1.3,
+        "height": 1.75,
+        "axis": "Z",
+        "operation": "join",
+        "targets": [
+          "Steering_Ackermann_Bar"
+        ],
+        "name": "Ackermann_Pin_L"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          37.0,
+          -6.4,
+          2.3
+        ],
+        "diameter": 1.3,
+        "height": 1.75,
+        "axis": "Z",
+        "operation": "join",
+        "targets": [
+          "Steering_Ackermann_Bar"
+        ],
+        "name": "Ackermann_Pin_R"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          33.0,
+          8.0,
+          2.05
+        ],
+        "diameter": 1.9,
+        "height": 2.3,
+        "axis": "Z",
+        "operation": "new",
+        "body_name": "Steering_Pivot_Pin_L",
+        "name": "Pivot_Pin_L"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          33.0,
+          8.0,
+          4.35
+        ],
+        "diameter": 2.8,
+        "height": 0.5,
+        "axis": "Z",
+        "operation": "join",
+        "targets": [
+          "Steering_Pivot_Pin_L"
+        ],
+        "name": "Pivot_Cap_L"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          33.0,
+          -8.0,
+          2.05
+        ],
+        "diameter": 1.9,
+        "height": 2.3,
+        "axis": "Z",
+        "operation": "new",
+        "body_name": "Steering_Pivot_Pin_R",
+        "name": "Pivot_Pin_R"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          33.0,
+          -8.0,
+          4.35
+        ],
+        "diameter": 2.8,
+        "height": 0.5,
+        "axis": "Z",
+        "operation": "join",
+        "targets": [
+          "Steering_Pivot_Pin_R"
+        ],
+        "name": "Pivot_Cap_R"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          28.8,
+          7.8,
+          9.25
+        ],
+        "axis": [
+          0.9030088230363353,
+          0.06840975932093464,
+          -0.42414050778979395
+        ],
+        "diameter": 1.2,
+        "height": 7.308898685848639,
+        "operation": "new",
+        "body_name": "Drag_Link",
+        "name": "Drag_Link_Rod"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          28.8,
+          7.8,
+          8.85
+        ],
+        "diameter": 2.2,
+        "height": 0.8,
+        "axis": "Z",
+        "operation": "join",
+        "targets": [
+          "Drag_Link"
+        ],
+        "name": "Drag_End_Servo"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          35.4,
+          8.3,
+          5.75
+        ],
+        "diameter": 2.2,
+        "height": 0.8,
+        "axis": "Z",
+        "operation": "join",
+        "targets": [
+          "Drag_Link"
+        ],
+        "name": "Drag_End_BellCrank"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          39.5,
+          8.0,
+          4.65
+        ],
+        "axis": [
+          0.10151368801339448,
+          0.9948341425312659,
+          0.0
+        ],
+        "diameter": 1.4,
+        "height": 24.627220712049503,
+        "operation": "new",
+        "body_name": "Tie_Rod_L",
+        "name": "Tie_Rod_Shaft_L"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          39.5,
+          8.0,
+          4.25
+        ],
+        "diameter": 2.6,
+        "height": 0.85,
+        "axis": "Z",
+        "operation": "join",
+        "targets": [
+          "Tie_Rod_L"
+        ],
+        "name": "Tie_Rod_In_Eye_L"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          42.0,
+          32.5,
+          4.25
+        ],
+        "diameter": 2.6,
+        "height": 0.85,
+        "axis": "Z",
+        "operation": "join",
+        "targets": [
+          "Tie_Rod_L"
+        ],
+        "name": "Tie_Rod_Out_Eye_L"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          39.5,
+          8.0,
+          2.25
+        ],
+        "diameter": 1.3,
+        "height": 2.05,
+        "axis": "Z",
+        "operation": "join",
+        "targets": [
+          "Tie_Rod_L"
+        ],
+        "name": "Tie_Rod_In_Pin_L"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          42.0,
+          32.5,
+          1.75
+        ],
+        "diameter": 1.3,
+        "height": 2.55,
+        "axis": "Z",
+        "operation": "join",
+        "targets": [
+          "Tie_Rod_L"
+        ],
+        "name": "Tie_Rod_Out_Pin_L"
+      }
+    },
+    {
+      "command": "solid.mirror",
+      "params": {
+        "bodies": [
+          "Tie_Rod_L"
+        ],
+        "plane": "XZ"
+      }
+    },
+    {
+      "command": "body.rename",
+      "params": {
+        "body": "Tie_Rod_L (2)",
+        "name": "Tie_Rod_R"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          28.8,
+          7.3,
+          4.4
+        ],
+        "diameter": 1.4,
+        "height": 1.4,
+        "axis": "Z",
+        "operation": "cut",
+        "targets": [
+          "Servo_Ref"
+        ],
+        "name": "Servo_Mount_Hole_L"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          28.8,
+          -7.3,
+          4.4
+        ],
+        "diameter": 1.4,
+        "height": 1.4,
+        "axis": "Z",
+        "operation": "cut",
+        "targets": [
+          "Servo_Ref"
+        ],
+        "name": "Servo_Mount_Hole_R"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          28.8,
+          7.8,
+          9.0
+        ],
+        "diameter": 1.4,
+        "height": 1.5,
+        "axis": "Z",
+        "operation": "cut",
+        "targets": [
+          "Servo_Horn"
+        ],
+        "name": "Servo_Horn_Drag_Hole"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          35.4,
+          8.3,
+          3.5
+        ],
+        "diameter": 1.4,
+        "height": 2.2,
+        "axis": "Z",
+        "operation": "cut",
+        "targets": [
+          "Steering_Bell_Crank_L"
+        ],
+        "name": "Bell_Crank_Drag_Hole"
+      }
+    },
+    {
+      "command": "file.export_stl",
+      "params": {
+        "bodies": [
+          "Steering_Bell_Crank_L",
+          "Steering_Bell_Crank_R",
+          "Steering_Ackermann_Bar",
+          "Servo_Horn",
+          "Tie_Rod_L",
+          "Tie_Rod_R",
+          "Drag_Link"
+        ],
+        "path": "/Users/johndionaldo/GitHub/scx30-sct/stl/steering_parts.stl",
+        "quality": "fine"
+      }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+.venv/
+.DS_Store
+*.bak
+*.lock
+.~*
+__pycache__/

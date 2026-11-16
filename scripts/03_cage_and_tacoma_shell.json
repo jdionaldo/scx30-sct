@@ -1,0 +1,9884 @@
+{
+  "commands": [
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_1",
+        "plane": {
+          "origin": [
+            35.0,
+            14.25,
+            11.2
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            -0.247598,
+            0.0,
+            -0.968863
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_1",
+        "distance": 18.5785,
+        "operation": "new",
+        "body_name": "Roll_Cage",
+        "name": "Cage_Main_Profile_L_0"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_2",
+        "plane": {
+          "origin": [
+            17.0,
+            14.25,
+            15.8
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            -0.588337,
+            0.0,
+            -0.808615
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_2",
+        "distance": 17.9319,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Main_Profile_L_1"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_3",
+        "plane": {
+          "origin": [
+            2.5,
+            14.25,
+            26.35
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            -0.099504,
+            0.0,
+            -0.995037
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_3",
+        "distance": 24.6222,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Main_Profile_L_2"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_4",
+        "plane": {
+          "origin": [
+            -22.0,
+            14.25,
+            28.8
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            0.379353,
+            0.0,
+            -0.925252
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_4",
+        "distance": 43.2315,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Main_Profile_L_3"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_5",
+        "plane": {
+          "origin": [
+            17.0,
+            14.25,
+            15.8
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            1.0,
+            -0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_5",
+        "distance": 6.5,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Lower_Sill_L_0"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_6",
+        "plane": {
+          "origin": [
+            17.0,
+            14.25,
+            9.3
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_6",
+        "distance": 31.0,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Lower_Sill_L_1"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_7",
+        "plane": {
+          "origin": [
+            -14.0,
+            14.25,
+            9.3
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            -0.925169,
+            0.0,
+            -0.379556
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_7",
+        "distance": 21.0772,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Lower_Sill_L_2"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_8",
+        "plane": {
+          "origin": [
+            -14.0,
+            14.25,
+            9.3
+          ],
+          "x_dir": [
+            1.0,
+            0.0,
+            -0.0
+          ],
+          "y_dir": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_8",
+        "distance": 2.65,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Truss_Step_In_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_9",
+        "plane": {
+          "origin": [
+            -14.0,
+            11.6,
+            9.3
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_9",
+        "distance": 8.0,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Truss_Tie_Fwd_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_10",
+        "plane": {
+          "origin": [
+            -22.0,
+            11.6,
+            9.3
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_10",
+        "distance": 22.5,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Rear_Sill_Ext_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_11",
+        "plane": {
+          "origin": [
+            -44.5,
+            11.6,
+            9.3
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_11",
+        "distance": 10.275,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Rear_Bed_Vert_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_12",
+        "plane": {
+          "origin": [
+            -44.5,
+            11.6,
+            19.575
+          ],
+          "x_dir": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            -0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_12",
+        "distance": 2.65,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Rear_Bed_Stub_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_13",
+        "plane": {
+          "origin": [
+            -22.0,
+            14.25,
+            28.8
+          ],
+          "x_dir": [
+            1.0,
+            0.0,
+            -0.0
+          ],
+          "y_dir": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_13",
+        "distance": 2.65,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_C_Pillar_Top_Stub_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_14",
+        "plane": {
+          "origin": [
+            -22.0,
+            11.6,
+            28.8
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            0.851658,
+            0.0,
+            -0.524097
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_14",
+        "distance": 15.2643,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_C_Pillar_Strut_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_15",
+        "plane": {
+          "origin": [
+            -22.0,
+            11.6,
+            9.3
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            -0.630593,
+            0.0,
+            -0.776114
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_15",
+        "distance": 10.3078,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Rear_Tri_Lower_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_16",
+        "plane": {
+          "origin": [
+            -30.0,
+            11.6,
+            15.8
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            -0.251946,
+            0.0,
+            -0.967741
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_16",
+        "distance": 14.9833,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Tower_Fwd_Gusset_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_17",
+        "plane": {
+          "origin": [
+            -44.5,
+            11.6,
+            15.8
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_17",
+        "distance": 9.2073,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Rear_Mid_Bed_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_18",
+        "plane": {
+          "origin": [
+            -53.7073,
+            11.6,
+            15.8
+          ],
+          "x_dir": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            -0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_18",
+        "distance": 2.65,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Rear_Mid_Stub_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_19",
+        "plane": {
+          "origin": [
+            -19.0,
+            14.25,
+            18.5
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            0.247598,
+            -0.0,
+            0.968863
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_19",
+        "distance": 37.157,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Door_Diag_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_20",
+        "plane": {
+          "origin": [
+            17.0,
+            14.25,
+            9.3
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_20",
+        "distance": 3.0,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Fwd_Sill_Stub_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_21",
+        "plane": {
+          "origin": [
+            20.0,
+            14.25,
+            9.3
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            -0.125663,
+            0.0,
+            0.992073
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_21",
+        "distance": 15.1199,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Nose_Lower_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_22",
+        "plane": {
+          "origin": [
+            28.0,
+            14.25,
+            13.2
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            1.0,
+            -0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_22",
+        "distance": 3.9,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Nose_Drop_Post_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_23",
+        "plane": {
+          "origin": [
+            35.0,
+            14.25,
+            11.2
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            1.0,
+            -0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_23",
+        "distance": 2.9,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Nose_Foot_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_24",
+        "plane": {
+          "origin": [
+            28.0,
+            14.25,
+            9.3
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            1.0,
+            -0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_24",
+        "distance": 1.0,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_MidNose_Foot_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_25",
+        "plane": {
+          "origin": [
+            20.0,
+            14.25,
+            9.3
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            1.0,
+            -0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_25",
+        "distance": 1.0,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Cowl_Foot_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_26",
+        "plane": {
+          "origin": [
+            17.0,
+            14.25,
+            9.3
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            1.0,
+            -0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_26",
+        "distance": 1.0,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_B_Foot_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_27",
+        "plane": {
+          "origin": [
+            35.0,
+            14.25,
+            10.05
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_27",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_28",
+        "plane": {
+          "origin": [
+            17.0,
+            14.25,
+            14.65
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_28",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_29",
+        "plane": {
+          "origin": [
+            2.5,
+            14.25,
+            25.2
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_29",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_30",
+        "plane": {
+          "origin": [
+            -22.0,
+            14.25,
+            27.65
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_30",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_31",
+        "plane": {
+          "origin": [
+            -62.0,
+            14.25,
+            11.25
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_31",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_32",
+        "plane": {
+          "origin": [
+            17.0,
+            14.25,
+            8.15
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_32",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_33",
+        "plane": {
+          "origin": [
+            20.0,
+            14.25,
+            8.15
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_33",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_34",
+        "plane": {
+          "origin": [
+            28.0,
+            14.25,
+            12.05
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_34",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_35",
+        "plane": {
+          "origin": [
+            28.0,
+            14.25,
+            8.15
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_35",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_36",
+        "plane": {
+          "origin": [
+            -14.0,
+            14.25,
+            8.15
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_36",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_37",
+        "plane": {
+          "origin": [
+            -14.0,
+            11.6,
+            8.15
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_37",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_38",
+        "plane": {
+          "origin": [
+            -22.0,
+            11.6,
+            8.15
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_38",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_39",
+        "plane": {
+          "origin": [
+            -44.5,
+            11.6,
+            8.15
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_39",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_40",
+        "plane": {
+          "origin": [
+            -44.5,
+            11.6,
+            18.425
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_40",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_41",
+        "plane": {
+          "origin": [
+            -44.5,
+            14.25,
+            18.425
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_41",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_42",
+        "plane": {
+          "origin": [
+            -22.0,
+            11.6,
+            27.65
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_42",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_43",
+        "plane": {
+          "origin": [
+            -30.0,
+            11.6,
+            14.65
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_43",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_44",
+        "plane": {
+          "origin": [
+            -44.5,
+            11.6,
+            14.65
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_44",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_45",
+        "plane": {
+          "origin": [
+            -53.7073,
+            11.6,
+            14.65
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_45",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_46",
+        "plane": {
+          "origin": [
+            -53.7073,
+            14.25,
+            14.65
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_46",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_47",
+        "plane": {
+          "origin": [
+            -19.0,
+            14.25,
+            17.35
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_47",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "solid.mirror",
+      "params": {
+        "bodies": [
+          "Roll_Cage"
+        ],
+        "plane": "XZ"
+      }
+    },
+    {
+      "command": "body.rename",
+      "params": {
+        "body": "Roll_Cage (2)",
+        "name": "Roll_Cage_R"
+      }
+    },
+    {
+      "command": "solid.combine",
+      "params": {
+        "target": "Roll_Cage",
+        "tools": [
+          "Roll_Cage_R"
+        ],
+        "operation": "join",
+        "keep_tools": false
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_48",
+        "plane": {
+          "origin": [
+            35.0,
+            -14.25,
+            11.2
+          ],
+          "x_dir": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            -0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_48",
+        "distance": 28.5,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Cross_Nose_Tip"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_49",
+        "plane": {
+          "origin": [
+            28.0,
+            -14.25,
+            13.2
+          ],
+          "x_dir": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            -0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_49",
+        "distance": 28.5,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Cross_Nose_Mid"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_50",
+        "plane": {
+          "origin": [
+            17.0,
+            -14.25,
+            15.8
+          ],
+          "x_dir": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            -0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_50",
+        "distance": 28.5,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Cross_Dash_Cowl"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_51",
+        "plane": {
+          "origin": [
+            2.5,
+            -14.25,
+            26.35
+          ],
+          "x_dir": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            -0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_51",
+        "distance": 28.5,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Cross_Roof_Front"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_52",
+        "plane": {
+          "origin": [
+            -22.0,
+            -14.25,
+            28.8
+          ],
+          "x_dir": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            -0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_52",
+        "distance": 28.5,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Cross_Roof_Rear"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_53",
+        "plane": {
+          "origin": [
+            -44.5,
+            -14.25,
+            19.575
+          ],
+          "x_dir": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            -0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_53",
+        "distance": 28.5,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Cross_Shock_Bridge"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_54",
+        "plane": {
+          "origin": [
+            -53.23,
+            -14.25,
+            15.9957
+          ],
+          "x_dir": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            -0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_54",
+        "distance": 28.5,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Cross_Tailgate"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_55",
+        "plane": {
+          "origin": [
+            -62.0,
+            -14.25,
+            12.4
+          ],
+          "x_dir": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            -0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_55",
+        "distance": 28.5,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Cross_Rear_Hinge"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_56",
+        "plane": {
+          "origin": [
+            17.0,
+            0.0,
+            15.8
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            0.247598,
+            -0.0,
+            0.968863
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_56",
+        "distance": 18.5785,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Nose_Center_Spine"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_57",
+        "plane": {
+          "origin": [
+            17.0,
+            7.5,
+            15.8
+          ],
+          "x_dir": [
+            0.459423,
+            -0.888218,
+            0.0
+          ],
+          "y_dir": [
+            0.482103,
+            0.249363,
+            0.839878
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_57",
+        "distance": 19.4371,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Windshield_V_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_58",
+        "plane": {
+          "origin": [
+            17.0,
+            -7.5,
+            15.8
+          ],
+          "x_dir": [
+            -0.459423,
+            -0.888218,
+            0.0
+          ],
+          "y_dir": [
+            0.482103,
+            -0.249363,
+            0.839878
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_58",
+        "distance": 19.4371,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Windshield_V_R"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_59",
+        "plane": {
+          "origin": [
+            2.5,
+            14.25,
+            26.35
+          ],
+          "x_dir": [
+            0.758317,
+            -0.651886,
+            0.0
+          ],
+          "y_dir": [
+            0.042406,
+            0.049329,
+            0.997882
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_59",
+        "distance": 37.663,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Roof_X_1"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_60",
+        "plane": {
+          "origin": [
+            2.5,
+            -14.25,
+            26.35
+          ],
+          "x_dir": [
+            -0.758317,
+            -0.651886,
+            0.0
+          ],
+          "y_dir": [
+            0.042406,
+            -0.049329,
+            0.997882
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_60",
+        "distance": 37.663,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Roof_X_2"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_61",
+        "plane": {
+          "origin": [
+            -44.5,
+            9.5,
+            19.575
+          ],
+          "x_dir": [
+            0.736317,
+            -0.676637,
+            0.0
+          ],
+          "y_dir": [
+            -0.180882,
+            -0.196836,
+            0.963607
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_61",
+        "distance": 13.3893,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Spare_Y_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_62",
+        "plane": {
+          "origin": [
+            -44.5,
+            -9.5,
+            19.575
+          ],
+          "x_dir": [
+            -0.736317,
+            -0.676637,
+            0.0
+          ],
+          "y_dir": [
+            -0.180882,
+            0.196836,
+            0.963607
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_62",
+        "distance": 13.3893,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Spare_Y_R"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_63",
+        "plane": {
+          "origin": [
+            -53.23,
+            0.0,
+            15.9957
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            0.379353,
+            0.0,
+            -0.925252
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.1,
+            -0.68
+          ],
+          [
+            1.1,
+            0.68
+          ],
+          [
+            0.68,
+            1.1
+          ],
+          [
+            -0.68,
+            1.1
+          ],
+          [
+            -1.1,
+            0.68
+          ],
+          [
+            -1.1,
+            -0.68
+          ],
+          [
+            -0.68,
+            -1.1
+          ],
+          [
+            0.68,
+            -1.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_63",
+        "distance": 9.4785,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Spare_Y_Stem"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_bar_sk_64",
+        "plane": {
+          "origin": [
+            -50.5,
+            0.0,
+            17.615
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            -0.916513,
+            0.0,
+            0.400006
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            2.5,
+            -1.5
+          ],
+          [
+            2.5,
+            1.5
+          ],
+          [
+            1.5,
+            2.5
+          ],
+          [
+            -1.5,
+            2.5
+          ],
+          [
+            -2.5,
+            1.5
+          ],
+          [
+            -2.5,
+            -1.5
+          ],
+          [
+            -1.5,
+            -2.5
+          ],
+          [
+            1.5,
+            -2.5
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_bar_sk_64",
+        "distance": 1.8,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Cage_Spare_Tire_Hub_Boss"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_65",
+        "plane": {
+          "origin": [
+            17.0,
+            0.0,
+            14.65
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_65",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_66",
+        "plane": {
+          "origin": [
+            17.0,
+            7.5,
+            14.65
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_66",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_67",
+        "plane": {
+          "origin": [
+            17.0,
+            -7.5,
+            14.65
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_67",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_68",
+        "plane": {
+          "origin": [
+            35.0,
+            0.0,
+            10.05
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_68",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_69",
+        "plane": {
+          "origin": [
+            2.5,
+            0.0,
+            25.2
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_69",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_70",
+        "plane": {
+          "origin": [
+            -9.75,
+            0.0,
+            26.425
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_70",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_71",
+        "plane": {
+          "origin": [
+            -44.5,
+            9.5,
+            18.425
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_71",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_72",
+        "plane": {
+          "origin": [
+            -44.5,
+            -9.5,
+            18.425
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_72",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "yeti03_node_sk_73",
+        "plane": {
+          "origin": [
+            -53.23,
+            0.0,
+            14.8457
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "yeti03_node_sk_73",
+        "distance": 2.3,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ]
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          -53.8,
+          13.5,
+          12.6
+        ],
+        "length": 3.6,
+        "width": 2.2,
+        "height": 1.75,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Rear_Body_Magnet_Bridge_L"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -52.0,
+          15.2,
+          12.6
+        ],
+        "diameter": 6.8,
+        "height": 1.75,
+        "axis": "Z",
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Rear_Body_Magnet_Pad_L"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -52.0,
+          15.2,
+          12.9
+        ],
+        "diameter": 6.2,
+        "height": 1.6,
+        "axis": "Z",
+        "operation": "cut",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Rear_Body_Magnet_Pocket_L"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          -53.8,
+          -15.7,
+          12.6
+        ],
+        "length": 3.6,
+        "width": 2.2,
+        "height": 1.75,
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Rear_Body_Magnet_Bridge_R"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -52.0,
+          -15.2,
+          12.6
+        ],
+        "diameter": 6.8,
+        "height": 1.75,
+        "axis": "Z",
+        "operation": "join",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Rear_Body_Magnet_Pad_R"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -52.0,
+          -15.2,
+          12.9
+        ],
+        "diameter": 6.2,
+        "height": 1.6,
+        "axis": "Z",
+        "operation": "cut",
+        "targets": [
+          "Roll_Cage"
+        ],
+        "name": "Rear_Body_Magnet_Pocket_R"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_hood_cowl",
+        "plane": {
+          "origin": [
+            16.5,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0,
+            1,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -20.6,
+            15.6
+          ],
+          [
+            -15.8,
+            17.85
+          ],
+          [
+            15.8,
+            17.85
+          ],
+          [
+            20.6,
+            15.6
+          ],
+          [
+            20.6,
+            16.6
+          ],
+          [
+            14.5,
+            19.0
+          ],
+          [
+            5.2,
+            19.9
+          ],
+          [
+            -5.2,
+            19.9
+          ],
+          [
+            -14.5,
+            19.0
+          ],
+          [
+            -20.6,
+            16.6
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_hood_crease",
+        "plane": {
+          "origin": [
+            44.0,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0,
+            1,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -17.2,
+            13.8
+          ],
+          [
+            -12.6,
+            14.3
+          ],
+          [
+            12.6,
+            14.3
+          ],
+          [
+            17.2,
+            13.8
+          ],
+          [
+            17.2,
+            15.3
+          ],
+          [
+            11.5,
+            16.9
+          ],
+          [
+            4.2,
+            17.7
+          ],
+          [
+            -4.2,
+            17.7
+          ],
+          [
+            -11.5,
+            16.9
+          ],
+          [
+            -17.2,
+            15.3
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_hood_nose",
+        "plane": {
+          "origin": [
+            55.2,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0,
+            1,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -15.0,
+            11.4
+          ],
+          [
+            -10.5,
+            11.6
+          ],
+          [
+            10.5,
+            11.6
+          ],
+          [
+            15.0,
+            11.4
+          ],
+          [
+            15.0,
+            12.8
+          ],
+          [
+            9.8,
+            13.6
+          ],
+          [
+            3.6,
+            14.1
+          ],
+          [
+            -3.6,
+            14.1
+          ],
+          [
+            -9.8,
+            13.6
+          ],
+          [
+            -15.0,
+            12.8
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.loft",
+      "params": {
+        "sections": [
+          {
+            "sketch": "st_hood_cowl"
+          },
+          {
+            "sketch": "st_hood_crease"
+          },
+          {
+            "sketch": "st_hood_nose"
+          }
+        ],
+        "operation": "new",
+        "name": "Stealth_Hood_Loft",
+        "body_name": "Tacoma_Hood_Roof_Shell"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_fascia_back",
+        "plane": {
+          "origin": [
+            52.0,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0,
+            1,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -13.8,
+            9.6
+          ],
+          [
+            13.8,
+            9.6
+          ],
+          [
+            15.5,
+            12.2
+          ],
+          [
+            15.5,
+            14.2
+          ],
+          [
+            -15.5,
+            14.2
+          ],
+          [
+            -15.5,
+            12.2
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_fascia_front",
+        "plane": {
+          "origin": [
+            55.5,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0,
+            1,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -13.0,
+            8.2
+          ],
+          [
+            13.0,
+            8.2
+          ],
+          [
+            14.6,
+            10.8
+          ],
+          [
+            14.6,
+            12.2
+          ],
+          [
+            4.0,
+            13.1
+          ],
+          [
+            -4.0,
+            13.1
+          ],
+          [
+            -14.6,
+            12.2
+          ],
+          [
+            -14.6,
+            10.8
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.loft",
+      "params": {
+        "sections": [
+          {
+            "sketch": "st_fascia_back"
+          },
+          {
+            "sketch": "st_fascia_front"
+          }
+        ],
+        "operation": "join",
+        "name": "Stealth_Armored_Fascia",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ]
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          43.5,
+          -14.0,
+          8.0
+        ],
+        "length": 8.0,
+        "width": 28.0,
+        "height": 6.3,
+        "operation": "cut",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_Bulkhead_Tower_Cut"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          51.5,
+          -14.0,
+          3.5
+        ],
+        "length": 3.0,
+        "width": 28.0,
+        "height": 7.7,
+        "operation": "cut",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_Bulkhead_Clearance_Cut"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          54.5,
+          -14.0,
+          3.5
+        ],
+        "length": 1.5,
+        "width": 28.0,
+        "height": 6.7,
+        "operation": "cut",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_Fascia_Lower_Cut"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_grille_cut_sk",
+        "plane": {
+          "origin": [
+            55.6,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0,
+            1,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -7.6,
+            10.6
+          ],
+          [
+            7.6,
+            10.6
+          ],
+          [
+            8.8,
+            12.5
+          ],
+          [
+            -8.8,
+            12.5
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "st_grille_cut_sk",
+        "distance": 0.85,
+        "direction": "negative",
+        "operation": "cut",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_Grille_Recess_Cut"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          54.3,
+          -8.2,
+          11.3
+        ],
+        "length": 0.9,
+        "width": 16.4,
+        "height": 0.45,
+        "operation": "join",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_Grille_Splitter"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          54.4,
+          3.2,
+          10.6
+        ],
+        "length": 1.0,
+        "width": 1.0,
+        "height": 2.0,
+        "operation": "join",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_Grille_Fang_L"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          54.4,
+          -4.2,
+          10.6
+        ],
+        "length": 1.0,
+        "width": 1.0,
+        "height": 2.0,
+        "operation": "join",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_Grille_Fang_R"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_headlight_cut_L",
+        "plane": {
+          "origin": [
+            55.6,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0,
+            1,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            9.4,
+            11.4
+          ],
+          [
+            13.0,
+            11.6
+          ],
+          [
+            13.4,
+            12.6
+          ],
+          [
+            9.8,
+            12.4
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "st_headlight_cut_L",
+        "distance": 1.2,
+        "direction": "negative",
+        "operation": "cut",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_Headlight_Pod_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_headlight_cut_R",
+        "plane": {
+          "origin": [
+            55.6,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0,
+            1,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -13.0,
+            11.6
+          ],
+          [
+            -9.4,
+            11.4
+          ],
+          [
+            -9.8,
+            12.4
+          ],
+          [
+            -13.4,
+            12.6
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "st_headlight_cut_R",
+        "distance": 1.2,
+        "direction": "negative",
+        "operation": "cut",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_Headlight_Pod_R"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_hood_louver_sk",
+        "plane": {
+          "origin": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            27.5,
+            17.7
+          ],
+          [
+            41.5,
+            16.6
+          ],
+          [
+            40.5,
+            19.2
+          ],
+          [
+            28.5,
+            19.6
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "st_hood_louver_sk",
+        "distance": 8.4,
+        "direction": "symmetric",
+        "operation": "cut",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_Center_Hood_Louver_Cut"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_hood_slat_0",
+        "plane": {
+          "origin": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            31.0,
+            17.1
+          ],
+          [
+            32.2,
+            17.0
+          ],
+          [
+            31.6,
+            18.0
+          ],
+          [
+            30.4,
+            18.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "st_hood_slat_0",
+        "distance": 8.6,
+        "direction": "symmetric",
+        "operation": "join",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_Hood_Louver_Slat_0"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_hood_slat_1",
+        "plane": {
+          "origin": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            34.5,
+            17.1
+          ],
+          [
+            35.7,
+            17.0
+          ],
+          [
+            35.1,
+            18.0
+          ],
+          [
+            33.9,
+            18.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "st_hood_slat_1",
+        "distance": 8.6,
+        "direction": "symmetric",
+        "operation": "join",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_Hood_Louver_Slat_1"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_hood_slat_2",
+        "plane": {
+          "origin": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            38.0,
+            17.1
+          ],
+          [
+            39.2,
+            17.0
+          ],
+          [
+            38.6,
+            18.0
+          ],
+          [
+            37.4,
+            18.1
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "st_hood_slat_2",
+        "distance": 8.6,
+        "direction": "symmetric",
+        "operation": "join",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_Hood_Louver_Slat_2"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_mag_boss_L",
+        "plane": {
+          "origin": [
+            46.5,
+            9.5,
+            12.25
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            4.3,
+            -3.1
+          ],
+          [
+            4.3,
+            3.1
+          ],
+          [
+            3.1,
+            4.3
+          ],
+          [
+            -3.1,
+            4.3
+          ],
+          [
+            -4.3,
+            3.1
+          ],
+          [
+            -4.3,
+            -3.1
+          ],
+          [
+            -3.1,
+            -4.3
+          ],
+          [
+            3.1,
+            -4.3
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "st_mag_boss_L",
+        "distance": 2.2,
+        "operation": "join",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_Hood_Magnet_Boss_L"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "diameter": 6.2,
+        "height": 1.45,
+        "base": [
+          46.5,
+          9.5,
+          12.25
+        ],
+        "axis": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "operation": "cut",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_Hood_Magnet_Pocket_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_mag_boss_R",
+        "plane": {
+          "origin": [
+            46.5,
+            -9.5,
+            12.25
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            4.3,
+            -3.1
+          ],
+          [
+            4.3,
+            3.1
+          ],
+          [
+            3.1,
+            4.3
+          ],
+          [
+            -3.1,
+            4.3
+          ],
+          [
+            -4.3,
+            3.1
+          ],
+          [
+            -4.3,
+            -3.1
+          ],
+          [
+            -3.1,
+            -4.3
+          ],
+          [
+            3.1,
+            -4.3
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "st_mag_boss_R",
+        "distance": 2.2,
+        "operation": "join",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_Hood_Magnet_Boss_R"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "diameter": 6.2,
+        "height": 1.45,
+        "base": [
+          46.5,
+          -9.5,
+          12.25
+        ],
+        "axis": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "operation": "cut",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_Hood_Magnet_Pocket_R"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          16.0,
+          -15.2,
+          14.4
+        ],
+        "length": 6.0,
+        "width": 31.0,
+        "height": 1.6,
+        "operation": "cut",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_Cage_Cowl_Clearance_Cut"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_roof_brow",
+        "plane": {
+          "origin": [
+            8.2,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0,
+            1,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -17.0,
+            26.8
+          ],
+          [
+            17.0,
+            26.8
+          ],
+          [
+            15.6,
+            27.4
+          ],
+          [
+            7.5,
+            27.75
+          ],
+          [
+            -7.5,
+            27.75
+          ],
+          [
+            -15.6,
+            27.4
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_roof_f",
+        "plane": {
+          "origin": [
+            4.2,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0,
+            1,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -16.8,
+            27.6
+          ],
+          [
+            16.8,
+            27.6
+          ],
+          [
+            15.4,
+            28.15
+          ],
+          [
+            7.4,
+            28.5
+          ],
+          [
+            -7.4,
+            28.5
+          ],
+          [
+            -15.4,
+            28.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_roof_m",
+        "plane": {
+          "origin": [
+            -8.0,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0,
+            1,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -16.4,
+            28.85
+          ],
+          [
+            16.4,
+            28.85
+          ],
+          [
+            15.0,
+            29.5
+          ],
+          [
+            7.2,
+            29.9
+          ],
+          [
+            -7.2,
+            29.9
+          ],
+          [
+            -15.0,
+            29.5
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_roof_r",
+        "plane": {
+          "origin": [
+            -21.5,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0,
+            1,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -16.0,
+            30.2
+          ],
+          [
+            16.0,
+            30.2
+          ],
+          [
+            14.6,
+            30.95
+          ],
+          [
+            6.8,
+            31.4
+          ],
+          [
+            -6.8,
+            31.4
+          ],
+          [
+            -14.6,
+            30.95
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.loft",
+      "params": {
+        "sections": [
+          {
+            "sketch": "st_roof_f"
+          },
+          {
+            "sketch": "st_roof_m"
+          },
+          {
+            "sketch": "st_roof_r"
+          }
+        ],
+        "operation": "join",
+        "name": "Stealth_Roof_Panel",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ]
+      }
+    },
+    {
+      "command": "solid.loft",
+      "params": {
+        "sections": [
+          {
+            "sketch": "st_roof_brow"
+          },
+          {
+            "sketch": "st_roof_f"
+          }
+        ],
+        "operation": "join",
+        "name": "Stealth_Roof_Rake_Transition",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_lightbar_l",
+        "plane": {
+          "origin": [
+            0.0,
+            -15.6,
+            0.0
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            4.2,
+            27.8
+          ],
+          [
+            8.2,
+            26.7
+          ],
+          [
+            7.4,
+            28.15
+          ],
+          [
+            4.2,
+            28.55
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_lightbar_m",
+        "plane": {
+          "origin": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            4.2,
+            28.1
+          ],
+          [
+            8.2,
+            27.0
+          ],
+          [
+            7.4,
+            28.45
+          ],
+          [
+            4.2,
+            28.85
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_lightbar_r",
+        "plane": {
+          "origin": [
+            0.0,
+            15.6,
+            0.0
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            4.2,
+            27.8
+          ],
+          [
+            8.2,
+            26.7
+          ],
+          [
+            7.4,
+            28.15
+          ],
+          [
+            4.2,
+            28.55
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.loft",
+      "params": {
+        "sections": [
+          {
+            "sketch": "st_lightbar_l"
+          },
+          {
+            "sketch": "st_lightbar_m"
+          },
+          {
+            "sketch": "st_lightbar_r"
+          }
+        ],
+        "operation": "join",
+        "name": "Stealth_Roof_LightBar_Brow",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ]
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          6.6,
+          -6.6,
+          27.05
+        ],
+        "length": 1.6,
+        "width": 3.6,
+        "height": 0.9,
+        "operation": "cut",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_LightBar_Pod_0"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          6.6,
+          -1.8,
+          27.15
+        ],
+        "length": 1.6,
+        "width": 3.6,
+        "height": 0.9,
+        "operation": "cut",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_LightBar_Pod_1"
+      }
+    },
+    {
+      "command": "solid.box",
+      "params": {
+        "corner": [
+          6.6,
+          3.0,
+          27.05
+        ],
+        "length": 1.6,
+        "width": 3.6,
+        "height": 0.9,
+        "operation": "cut",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ],
+        "name": "Stealth_LightBar_Pod_2"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_apillar_L_bot",
+        "plane": {
+          "origin": [
+            0.0,
+            0.0,
+            16.0
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            16.5,
+            15.8
+          ],
+          [
+            20.5,
+            15.8
+          ],
+          [
+            20.5,
+            18.2
+          ],
+          [
+            16.5,
+            18.2
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_apillar_L_top",
+        "plane": {
+          "origin": [
+            0.0,
+            0.0,
+            27.2
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            4.2,
+            15.45
+          ],
+          [
+            8.2,
+            15.45
+          ],
+          [
+            8.2,
+            17.0
+          ],
+          [
+            4.2,
+            17.0
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.loft",
+      "params": {
+        "sections": [
+          {
+            "sketch": "st_apillar_L_bot"
+          },
+          {
+            "sketch": "st_apillar_L_top"
+          }
+        ],
+        "operation": "join",
+        "name": "Stealth_A_Pillar_L",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_apillar_R_bot",
+        "plane": {
+          "origin": [
+            0.0,
+            0.0,
+            16.0
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            16.5,
+            -18.2
+          ],
+          [
+            20.5,
+            -18.2
+          ],
+          [
+            20.5,
+            -15.8
+          ],
+          [
+            16.5,
+            -15.8
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_apillar_R_top",
+        "plane": {
+          "origin": [
+            0.0,
+            0.0,
+            27.2
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            4.2,
+            -17.0
+          ],
+          [
+            8.2,
+            -17.0
+          ],
+          [
+            8.2,
+            -15.45
+          ],
+          [
+            4.2,
+            -15.45
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.loft",
+      "params": {
+        "sections": [
+          {
+            "sketch": "st_apillar_R_bot"
+          },
+          {
+            "sketch": "st_apillar_R_top"
+          }
+        ],
+        "operation": "join",
+        "name": "Stealth_A_Pillar_R",
+        "targets": [
+          "Tacoma_Hood_Roof_Shell"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_side_x_rear",
+        "plane": {
+          "origin": [
+            -58.0,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0,
+            1,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            20.8,
+            7.5
+          ],
+          [
+            21.5,
+            7.5
+          ],
+          [
+            24.4,
+            7.5
+          ],
+          [
+            19.6,
+            15.8
+          ],
+          [
+            16.6,
+            15.8
+          ],
+          [
+            16.6,
+            8.2
+          ],
+          [
+            20.8,
+            8.2
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_side_x_ra",
+        "plane": {
+          "origin": [
+            -42.0,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0,
+            1,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            20.8,
+            7.5
+          ],
+          [
+            21.5,
+            7.5
+          ],
+          [
+            25.0,
+            7.5
+          ],
+          [
+            19.8,
+            15.8
+          ],
+          [
+            16.6,
+            15.8
+          ],
+          [
+            16.6,
+            8.2
+          ],
+          [
+            20.8,
+            8.2
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_side_x_door",
+        "plane": {
+          "origin": [
+            -12.0,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0,
+            1,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            20.8,
+            -2.0
+          ],
+          [
+            21.5,
+            -2.0
+          ],
+          [
+            24.8,
+            7.5
+          ],
+          [
+            19.8,
+            15.8
+          ],
+          [
+            16.6,
+            15.8
+          ],
+          [
+            16.6,
+            8.2
+          ],
+          [
+            20.8,
+            8.2
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_side_x_fw",
+        "plane": {
+          "origin": [
+            16.5,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0,
+            1,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            20.8,
+            -2.0
+          ],
+          [
+            21.5,
+            -2.0
+          ],
+          [
+            25.0,
+            7.5
+          ],
+          [
+            19.8,
+            15.8
+          ],
+          [
+            16.6,
+            15.8
+          ],
+          [
+            16.6,
+            8.2
+          ],
+          [
+            20.8,
+            8.2
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_side_x_front",
+        "plane": {
+          "origin": [
+            32.0,
+            0.0,
+            0.0
+          ],
+          "x_dir": [
+            0,
+            1,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            20.8,
+            -2.0
+          ],
+          [
+            21.5,
+            -2.0
+          ],
+          [
+            24.6,
+            7.5
+          ],
+          [
+            19.6,
+            15.8
+          ],
+          [
+            16.6,
+            15.8
+          ],
+          [
+            16.6,
+            8.2
+          ],
+          [
+            20.8,
+            8.2
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.loft",
+      "params": {
+        "sections": [
+          {
+            "sketch": "st_side_x_rear"
+          },
+          {
+            "sketch": "st_side_x_ra"
+          },
+          {
+            "sketch": "st_side_x_door"
+          },
+          {
+            "sketch": "st_side_x_fw"
+          },
+          {
+            "sketch": "st_side_x_front"
+          }
+        ],
+        "operation": "new",
+        "name": "Stealth_Side_Hull_Loft_L",
+        "body_name": "Tacoma_Side_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_front_arch_cut_sk",
+        "plane": "XZ"
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            20.5,
+            2.2
+          ],
+          [
+            31.5,
+            -14.4
+          ],
+          [
+            51.5,
+            -14.4
+          ],
+          [
+            55.5,
+            -8.0
+          ],
+          [
+            55.5,
+            2.2
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "st_front_arch_cut_sk",
+        "start_offset": 15.5,
+        "distance": 15.0,
+        "operation": "cut",
+        "targets": [
+          "Tacoma_Side_L"
+        ],
+        "name": "Stealth_Front_WheelArch_Cut_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_rear_arch_cut_sk",
+        "plane": "XZ"
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -31.0,
+            2.2
+          ],
+          [
+            -42.5,
+            -12.6
+          ],
+          [
+            -57.5,
+            -12.6
+          ],
+          [
+            -62.0,
+            -6.0
+          ],
+          [
+            -62.0,
+            2.2
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "st_rear_arch_cut_sk",
+        "start_offset": 21.0,
+        "distance": 9.5,
+        "operation": "cut",
+        "targets": [
+          "Tacoma_Side_L"
+        ],
+        "name": "Stealth_Rear_WheelArch_Cut_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_fflare_in",
+        "plane": {
+          "origin": [
+            0.0,
+            16.6,
+            0.0
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            -1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            18.5,
+            -11.2
+          ],
+          [
+            31.5,
+            -14.4
+          ],
+          [
+            51.5,
+            -14.4
+          ],
+          [
+            54.8,
+            -11.2
+          ],
+          [
+            54.8,
+            -12.8
+          ],
+          [
+            50.5,
+            -15.4
+          ],
+          [
+            38.0,
+            -16.0
+          ],
+          [
+            26.0,
+            -16.4
+          ],
+          [
+            18.5,
+            -16.0
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_fflare_mid",
+        "plane": {
+          "origin": [
+            0.0,
+            24.6,
+            0.0
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            -1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            20.5,
+            -11.4
+          ],
+          [
+            32.0,
+            -14.6
+          ],
+          [
+            51.0,
+            -14.6
+          ],
+          [
+            53.6,
+            -11.5
+          ],
+          [
+            53.6,
+            -13.4
+          ],
+          [
+            49.8,
+            -15.6
+          ],
+          [
+            38.0,
+            -15.9
+          ],
+          [
+            26.0,
+            -16.1
+          ],
+          [
+            20.5,
+            -14.0
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_fflare_out",
+        "plane": {
+          "origin": [
+            0.0,
+            27.2,
+            0.0
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            -1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            26.5,
+            -11.5
+          ],
+          [
+            33.5,
+            -14.8
+          ],
+          [
+            50.0,
+            -14.8
+          ],
+          [
+            52.2,
+            -12.0
+          ],
+          [
+            52.2,
+            -13.6
+          ],
+          [
+            49.0,
+            -15.6
+          ],
+          [
+            38.0,
+            -15.8
+          ],
+          [
+            28.0,
+            -15.5
+          ],
+          [
+            25.5,
+            -12.5
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.loft",
+      "params": {
+        "sections": [
+          {
+            "sketch": "st_fflare_in"
+          },
+          {
+            "sketch": "st_fflare_mid"
+          },
+          {
+            "sketch": "st_fflare_out"
+          }
+        ],
+        "operation": "join",
+        "name": "Stealth_Front_Fender_Flare_L",
+        "targets": [
+          "Tacoma_Side_L"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_rflare_in",
+        "plane": {
+          "origin": [
+            0.0,
+            16.6,
+            0.0
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            -1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -25.0,
+            -11.2
+          ],
+          [
+            -43.0,
+            -15.2
+          ],
+          [
+            -58.0,
+            -15.2
+          ],
+          [
+            -58.0,
+            -16.2
+          ],
+          [
+            -42.0,
+            -16.2
+          ],
+          [
+            -25.0,
+            -15.8
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_rflare_mid",
+        "plane": {
+          "origin": [
+            0.0,
+            24.6,
+            0.0
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            -1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -25.0,
+            -11.4
+          ],
+          [
+            -43.5,
+            -15.4
+          ],
+          [
+            -57.5,
+            -15.4
+          ],
+          [
+            -57.5,
+            -16.0
+          ],
+          [
+            -42.5,
+            -16.0
+          ],
+          [
+            -25.0,
+            -14.2
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_rflare_out",
+        "plane": {
+          "origin": [
+            0.0,
+            27.2,
+            0.0
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            0,
+            -1
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -33.5,
+            -11.5
+          ],
+          [
+            -44.5,
+            -15.6
+          ],
+          [
+            -56.0,
+            -15.6
+          ],
+          [
+            -56.0,
+            -16.0
+          ],
+          [
+            -43.5,
+            -16.0
+          ],
+          [
+            -33.0,
+            -12.5
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.loft",
+      "params": {
+        "sections": [
+          {
+            "sketch": "st_rflare_in"
+          },
+          {
+            "sketch": "st_rflare_mid"
+          },
+          {
+            "sketch": "st_rflare_out"
+          }
+        ],
+        "operation": "join",
+        "name": "Stealth_Rear_Fender_Flare_L",
+        "targets": [
+          "Tacoma_Side_L"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_door_vent_sk",
+        "plane": "XZ"
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            12.0,
+            -5.2
+          ],
+          [
+            -17.5,
+            -5.2
+          ],
+          [
+            -21.5,
+            -11.8
+          ],
+          [
+            7.5,
+            -11.8
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "st_door_vent_sk",
+        "start_offset": 25.2,
+        "distance": 3.4,
+        "direction": "negative",
+        "taper": -22,
+        "operation": "cut",
+        "targets": [
+          "Tacoma_Side_L"
+        ],
+        "name": "Stealth_Door_Intake_Vent_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_rq_vent_sk",
+        "plane": "XZ"
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -22.0,
+            -8.8
+          ],
+          [
+            -30.0,
+            -8.8
+          ],
+          [
+            -31.5,
+            -13.2
+          ],
+          [
+            -23.5,
+            -13.2
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "st_rq_vent_sk",
+        "start_offset": 24.5,
+        "distance": 1.4,
+        "direction": "negative",
+        "taper": -20,
+        "operation": "cut",
+        "targets": [
+          "Tacoma_Side_L"
+        ],
+        "name": "Stealth_RearQuarter_Vent_L"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_buttress_z0",
+        "plane": {
+          "origin": [
+            0.0,
+            0.0,
+            15.5
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -18.5,
+            16.6
+          ],
+          [
+            -18.5,
+            19.6
+          ],
+          [
+            -33.0,
+            19.4
+          ],
+          [
+            -33.0,
+            16.6
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_buttress_z3",
+        "plane": {
+          "origin": [
+            0.0,
+            0.0,
+            30.85
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -17.2,
+            15.45
+          ],
+          [
+            -17.2,
+            16.25
+          ],
+          [
+            -21.8,
+            16.25
+          ],
+          [
+            -21.8,
+            15.45
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.loft",
+      "params": {
+        "sections": [
+          {
+            "sketch": "st_buttress_z0"
+          },
+          {
+            "sketch": "st_buttress_z3"
+          }
+        ],
+        "operation": "join",
+        "name": "Stealth_Fastback_Buttress_L",
+        "targets": [
+          "Tacoma_Side_L"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_wing_base",
+        "plane": {
+          "origin": [
+            0.0,
+            0.0,
+            15.5
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -42.0,
+            16.8
+          ],
+          [
+            -42.0,
+            19.6
+          ],
+          [
+            -54.0,
+            19.4
+          ],
+          [
+            -54.0,
+            16.8
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_wing_top",
+        "plane": {
+          "origin": [
+            0.0,
+            0.0,
+            25.8
+          ],
+          "x_dir": [
+            1,
+            0,
+            0
+          ],
+          "y_dir": [
+            0,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -52.5,
+            21.8
+          ],
+          [
+            -52.5,
+            24.4
+          ],
+          [
+            -63.0,
+            24.2
+          ],
+          [
+            -63.0,
+            21.8
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.loft",
+      "params": {
+        "sections": [
+          {
+            "sketch": "st_wing_base"
+          },
+          {
+            "sketch": "st_wing_top"
+          }
+        ],
+        "operation": "join",
+        "name": "Stealth_Rear_Wing_L",
+        "targets": [
+          "Tacoma_Side_L"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "st_shock_hoop_cut_sk",
+        "plane": "XZ"
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            -46.0,
+            -7.5
+          ],
+          [
+            -46.0,
+            -14.2
+          ],
+          [
+            -28.8,
+            -23.1
+          ],
+          [
+            -26.0,
+            -23.6
+          ],
+          [
+            -23.4,
+            -23.0
+          ],
+          [
+            -23.2,
+            -7.5
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "st_shock_hoop_cut_sk",
+        "distance": 5.1,
+        "operation": "cut",
+        "name": "Stealth_Rear_Shock_Hoop_Cut_L",
+        "targets": [
+          "Tacoma_Side_L"
+        ],
+        "start_offset": 15.4
+      }
+    },
+    {
+      "command": "solid.mirror",
+      "params": {
+        "bodies": [
+          "Tacoma_Side_L"
+        ],
+        "plane": "XZ"
+      }
+    },
+    {
+      "command": "body.rename",
+      "params": {
+        "body": "Tacoma_Side_L (2)",
+        "name": "Tacoma_Side_R"
+      }
+    },
+    {
+      "command": "file.export_stl",
+      "params": {
+        "path": "/Users/johndionaldo/GitHub/scx30-sct/stl/roll_cage.stl",
+        "bodies": [
+          "Roll_Cage"
+        ],
+        "quality": "fine"
+      }
+    },
+    {
+      "command": "solid.combine",
+      "params": {
+        "target": "Tacoma_Hood_Roof_Shell",
+        "tools": [
+          "Tacoma_Side_L",
+          "Tacoma_Side_R"
+        ],
+        "operation": "join",
+        "keep_tools": false
+      }
+    },
+    {
+      "command": "body.rename",
+      "params": {
+        "body": "Tacoma_Hood_Roof_Shell",
+        "name": "Tacoma_Trophy_Body_Shell"
+      }
+    },
+    {
+      "command": "file.export_stl",
+      "params": {
+        "path": "/Users/johndionaldo/GitHub/scx30-sct/stl/tacoma_trophy_shell.stl",
+        "bodies": [
+          "Tacoma_Trophy_Body_Shell"
+        ],
+        "quality": "fine"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "stc_hub_sk",
+        "plane": {
+          "origin": [
+            -45.9649,
+            0.0,
+            23.4969
+          ],
+          "x_dir": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "y_dir": [
+            -0.906308,
+            0.0,
+            -0.422618
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            6.5,
+            -3.5
+          ],
+          [
+            6.5,
+            3.5
+          ],
+          [
+            3.5,
+            6.5
+          ],
+          [
+            -3.5,
+            6.5
+          ],
+          [
+            -6.5,
+            3.5
+          ],
+          [
+            -6.5,
+            -3.5
+          ],
+          [
+            -3.5,
+            -6.5
+          ],
+          [
+            3.5,
+            -6.5
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "stc_hub_sk",
+        "distance": 8.4,
+        "operation": "new",
+        "name": "Carrier_Hub_Boss",
+        "body_name": "Spare_Tire_Carrier",
+        "direction": "positive"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -49.4303,
+          0.0,
+          30.9287
+        ],
+        "diameter": 3.8,
+        "height": 1.7,
+        "axis": [
+          -0.422618,
+          0.0,
+          0.906308
+        ],
+        "operation": "join",
+        "name": "Carrier_Center_Stub",
+        "targets": [
+          "Spare_Tire_Carrier"
+        ]
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -49.4303,
+          4.6,
+          30.9287
+        ],
+        "diameter": 1.1,
+        "height": 0.5,
+        "axis": [
+          -0.422618,
+          0.0,
+          0.906308
+        ],
+        "operation": "join",
+        "name": "Carrier_Lug_0",
+        "targets": [
+          "Spare_Tire_Carrier"
+        ]
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -45.4653,
+          1.4215,
+          32.7776
+        ],
+        "diameter": 1.1,
+        "height": 0.5,
+        "axis": [
+          -0.422618,
+          0.0,
+          0.906308
+        ],
+        "operation": "join",
+        "name": "Carrier_Lug_1",
+        "targets": [
+          "Spare_Tire_Carrier"
+        ]
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -46.9798,
+          -3.7215,
+          32.0714
+        ],
+        "diameter": 1.1,
+        "height": 0.5,
+        "axis": [
+          -0.422618,
+          0.0,
+          0.906308
+        ],
+        "operation": "join",
+        "name": "Carrier_Lug_2",
+        "targets": [
+          "Spare_Tire_Carrier"
+        ]
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -51.8808,
+          -3.7215,
+          29.786
+        ],
+        "diameter": 1.1,
+        "height": 0.5,
+        "axis": [
+          -0.422618,
+          0.0,
+          0.906308
+        ],
+        "operation": "join",
+        "name": "Carrier_Lug_3",
+        "targets": [
+          "Spare_Tire_Carrier"
+        ]
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -53.3953,
+          1.4215,
+          29.0798
+        ],
+        "diameter": 1.1,
+        "height": 0.5,
+        "axis": [
+          -0.422618,
+          0.0,
+          0.906308
+        ],
+        "operation": "join",
+        "name": "Carrier_Lug_4",
+        "targets": [
+          "Spare_Tire_Carrier"
+        ]
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "stc_arm_L_sk",
+        "plane": {
+          "origin": [
+            -45.9649,
+            0.0,
+            23.4969
+          ],
+          "x_dir": [
+            -0.999258,
+            0.038508,
+            0.0
+          ],
+          "y_dir": [
+            0.001176,
+            0.030519,
+            0.999533
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "stc_arm_L_sk",
+        "distance": 9.2,
+        "operation": "join",
+        "name": "Carrier_Strut_L",
+        "targets": [
+          "Spare_Tire_Carrier"
+        ],
+        "direction": "positive"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "stc_pad_L_sk",
+        "plane": {
+          "origin": [
+            -44.5,
+            9.5,
+            20.75
+          ],
+          "x_dir": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.6,
+            -1.1
+          ],
+          [
+            1.6,
+            1.1
+          ],
+          [
+            1.1,
+            1.6
+          ],
+          [
+            -1.1,
+            1.6
+          ],
+          [
+            -1.6,
+            1.1
+          ],
+          [
+            -1.6,
+            -1.1
+          ],
+          [
+            -1.1,
+            -1.6
+          ],
+          [
+            1.1,
+            -1.6
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "stc_pad_L_sk",
+        "distance": 0.9,
+        "operation": "join",
+        "name": "Carrier_Mount_Pad_L",
+        "targets": [
+          "Spare_Tire_Carrier"
+        ],
+        "direction": "positive"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "stc_arm_R_sk",
+        "plane": {
+          "origin": [
+            -45.9649,
+            0.0,
+            23.4969
+          ],
+          "x_dir": [
+            0.999258,
+            0.038508,
+            0.0
+          ],
+          "y_dir": [
+            0.001176,
+            -0.030519,
+            0.999533
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "stc_arm_R_sk",
+        "distance": 9.2,
+        "operation": "join",
+        "name": "Carrier_Strut_R",
+        "targets": [
+          "Spare_Tire_Carrier"
+        ],
+        "direction": "positive"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "stc_pad_R_sk",
+        "plane": {
+          "origin": [
+            -44.5,
+            -9.5,
+            20.75
+          ],
+          "x_dir": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.6,
+            -1.1
+          ],
+          [
+            1.6,
+            1.1
+          ],
+          [
+            1.1,
+            1.6
+          ],
+          [
+            -1.1,
+            1.6
+          ],
+          [
+            -1.6,
+            1.1
+          ],
+          [
+            -1.6,
+            -1.1
+          ],
+          [
+            -1.1,
+            -1.6
+          ],
+          [
+            1.1,
+            -1.6
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "stc_pad_R_sk",
+        "distance": 0.9,
+        "operation": "join",
+        "name": "Carrier_Mount_Pad_R",
+        "targets": [
+          "Spare_Tire_Carrier"
+        ],
+        "direction": "positive"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "stc_arm_C_sk",
+        "plane": {
+          "origin": [
+            -45.9649,
+            0.0,
+            23.4969
+          ],
+          "x_dir": [
+            -0.0,
+            -1.0,
+            0.0
+          ],
+          "y_dir": [
+            -0.421759,
+            0.0,
+            0.906708
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.7
+          ],
+          [
+            1.15,
+            0.7
+          ],
+          [
+            0.7,
+            1.15
+          ],
+          [
+            -0.7,
+            1.15
+          ],
+          [
+            -1.15,
+            0.7
+          ],
+          [
+            -1.15,
+            -0.7
+          ],
+          [
+            -0.7,
+            -1.15
+          ],
+          [
+            0.7,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "stc_arm_C_sk",
+        "distance": 5.6,
+        "operation": "join",
+        "name": "Carrier_Strut_C",
+        "targets": [
+          "Spare_Tire_Carrier"
+        ],
+        "direction": "positive"
+      }
+    },
+    {
+      "command": "sketch.create",
+      "params": {
+        "name": "stc_pad_C_sk",
+        "plane": {
+          "origin": [
+            -51.1,
+            0.0,
+            20.35
+          ],
+          "x_dir": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "y_dir": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "command": "sketch.line",
+      "params": {
+        "points": [
+          [
+            1.15,
+            -0.9
+          ],
+          [
+            1.15,
+            0.9
+          ],
+          [
+            0.8,
+            1.15
+          ],
+          [
+            -0.8,
+            1.15
+          ],
+          [
+            -1.15,
+            0.9
+          ],
+          [
+            -1.15,
+            -0.9
+          ],
+          [
+            -0.8,
+            -1.15
+          ],
+          [
+            0.8,
+            -1.15
+          ]
+        ],
+        "closed": true
+      }
+    },
+    {
+      "command": "sketch.finish",
+      "params": {}
+    },
+    {
+      "command": "solid.extrude",
+      "params": {
+        "sketch": "stc_pad_C_sk",
+        "distance": 0.8,
+        "operation": "join",
+        "name": "Carrier_Mount_Pad_C",
+        "targets": [
+          "Spare_Tire_Carrier"
+        ],
+        "direction": "positive"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -46.8,
+          0.0,
+          25.3
+        ],
+        "diameter": 2.0,
+        "height": 8.0,
+        "axis": [
+          -0.422618,
+          0.0,
+          0.906308
+        ],
+        "operation": "cut",
+        "targets": [
+          "Spare_Tire_Carrier"
+        ],
+        "name": "Carrier_Center_M2_Bore"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -44.5,
+          9.5,
+          20.5
+        ],
+        "diameter": 1.4,
+        "height": 1.5,
+        "axis": "Z",
+        "operation": "cut",
+        "targets": [
+          "Spare_Tire_Carrier"
+        ],
+        "name": "Carrier_Pad_L_Screw_Hole"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -44.5,
+          -9.5,
+          20.5
+        ],
+        "diameter": 1.4,
+        "height": 1.5,
+        "axis": "Z",
+        "operation": "cut",
+        "targets": [
+          "Spare_Tire_Carrier"
+        ],
+        "name": "Carrier_Pad_R_Screw_Hole"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          -51.1,
+          0.0,
+          20.1
+        ],
+        "diameter": 1.4,
+        "height": 1.5,
+        "axis": "Z",
+        "operation": "cut",
+        "targets": [
+          "Spare_Tire_Carrier"
+        ],
+        "name": "Carrier_Pad_C_Screw_Hole"
+      }
+    },
+    {
+      "command": "file.export_stl",
+      "params": {
+        "path": "/Users/johndionaldo/GitHub/scx30-sct/stl/spare_tire_carrier.stl",
+        "bodies": [
+          "Spare_Tire_Carrier"
+        ],
+        "quality": "fine"
+      }
+    }
+  ]
+}
