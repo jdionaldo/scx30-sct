@@ -62,20 +62,22 @@ WHEEL_SHIFT = 4.0              # front wheels move outboard (track 85 -> 93 mm)
 PIN_HINGE_D, BORE_HINGE_D = 1.5, 1.7
 PIN_KP_D, BORE_KP_D = 1.2, 1.4
 # ---- REAL servo: Injora N30 Pro (datasheet; items marked ? are pixel estimates -> correct after measuring)
-SERVO_L, SERVO_W, SERVO_H = 15.8, 9.9, 20.13     # main case: L along Y, W along X (NOT incl. ear flange), height Z
-EAR_OUT = 2.95                  # ear flange projects past ONE long side (+X side here): flange total 12.85
+SERVO_L, SERVO_W, SERVO_H = 15.8, 9.9, 20.13     # main case: L along Z (vertical), W along Y, H along X (spline axis = X, pointing forward) -- servo ON ITS SIDE
+EAR_OUT = 2.95                  # ear flange projects past ONE long side (+Y side here): flange total 12.85
 EAR_T = 1.2                     # ? ear thickness (ears sit at the case's spline-end face)
 HOLE_SP, HOLE_V = 10.0, 11.3    # mount-hole spacing (centred on L) and distance from the non-ear long face
-SPL_V, SPL_U = 4.3, 4.4         # spline centre: from the non-ear long face, from the inner (low-Y) short end
-SPL_D, BOSS_H = 3.93, 2.8       # spline boss dia / height below the case (servo is UPSIDE DOWN)
+SPL_V, SPL_U = 4.3, 4.4         # spline centre: from the non-ear long face, from the (top) short end
+SPL_D, BOSS_H = 3.93, 2.8       # spline boss dia / height past the case front face
 EAR_HOLE_D = 1.2
-SX, YSP = 45.0, 5.4             # spline X, Y (horn pin must stay behind the arms/ rod; Y>=5.4 clears worm Y+-1.6)
-Xn = SX - SPL_V                 # non-ear long face X (case X = Xn .. Xn+9.9)
-SERVO_Y0 = YSP - SPL_U          # inner short end
-YC = SERVO_Y0 + SERVO_L / 2
-ZB = 10.6                       # case spline-end face = ear plane = cradle floor top (floor above upper arm top 8.6, worm 8.5)
-HORN_T = 1.55; HORN_Z0 = ZB - BOSS_H + 0.25; HORN_Z1 = HORN_Z0 + HORN_T   # horn sits on the spline, hub inside a floor hole
-HORN_R = 4.8
+XC1, Y_N, ZC1 = 33.5, 1.8, 10.8   # case front (spline-end) face X, non-ear (inner) face Y, case top Z (cage tube X 26.9..29.2 is at Z >= 12.1; tube X 34..36.1 at Z >= 10.4)
+XC0 = XC1 - SERVO_H; Y_E = Y_N + SERVO_W; ZC0 = ZC1 - SERVO_L; ZCM = (ZC0 + ZC1) / 2
+YSP, ZSP = Y_N + SPL_V, ZC1 - SPL_U                      # spline axis (Y, Z); axis along X
+PILOTS = [(Y_N + HOLE_V, ZCM + g * HOLE_SP / 2) for g in (1, -1)]   # ear-screw axes (Y, Z); screws run +X through the ears into the front wall
+HORN_T = 1.5; HORN_X0 = XC1 + 0.05; HORN_X1 = HORN_X0 + HORN_T
+ZPIN = 1.5; YB = -8.5
+HORN_R = ZSP - ZPIN             # horn crank length (pin at ZPIN straight below the spline at centre)           # link pin height (Z) and rack-lug pin Y at centre
+LINK_T = 1.2; LINK_X0 = HORN_X1 + 0.1; LINK_X1 = LINK_X0 + LINK_T
+LINK_L0 = YSP - YB              # link length (pin A -> pin B)
 GBX_SHAFT_Z = 4.1               # UNVERIFIED gearbox output-shaft height (spec update 3)
 GBX_X = 11.5                    # gearbox X face (box rotated 90: X +-11.5, Y +-13)
 WORM_IN = (39.8, 0.0, 6.85)     # front worm input (existing Ref_Front_Input_Worm_Gear)
@@ -132,60 +134,51 @@ sp = D(sp, cyl("y", [KX, 40.7, ZH], 2.05, 6.0, 40),                         # be
        cyl("z", [ARM_PT[0], ARM_PT[1], 2.55], 0.8, 4, 16))
 parts["Front_Spindle_L"] = sp
 
-# ---------------------------------------------------------------- bulkhead: servo cradle, shaft tunnel, rack deck
+# ---------------------------------------------------------------- bulkhead: servo cradle (servo ON ITS SIDE), shaft tunnel, rack deck
 bk = load("IFS_Bulkhead_Convertible")
 V_ORIG = bk.volume
-# trim side walls flush with the new rail inner faces (Y=+-12.0) where the rails run alongside (X<36)
-bk = D(bk, box(24, 36.1, 13.45, 15, -3, 13), box(24, 36.1, -15, -13.45, -3, 13))
-# --- servo cradle (tub) hugging the lower part of the case; servo hangs from its +X ear tabs
-Y0s, Y1s = SERVO_Y0, SERVO_Y0 + SERVO_L
-Xa, Xb = Xn, Xn + SERVO_W                                  # case X span (ears project to Xb+EAR_OUT)
-FT = ZB - 0.05                                             # floor top (ears + case bottom rest on it)
-tub = U(box(Xa - 1.65, Xb + EAR_OUT + 1.0, Y0s - 1.65, Y1s + 1.65, FT - 1.5, FT),                       # floor 1.5 thick (Z 9.05..10.55), carries the ear screws
-        box(Xa - 1.65, Xa - 0.15, Y0s - 1.65, Y1s + 1.65, FT, FT + 8),                                  # rear (-X) wall (non-ear side)
-        box(Xa - 1.65, Xb + 0.15, Y0s - 1.65, Y0s - 0.15, FT, FT + 8),                                  # inner (-Y) wall
-        box(Xa - 1.65, Xb + 0.15, Y1s + 0.15, Y1s + 1.65, FT, FT + 8))                                  # outer (+Y) wall
-bk = U(bk, tub, box(33.5, 38.5, -4.2, 4.2, -1.6, 1.8))                                                  # + rack deck (guide-screw boss)
-# servo pocket (case + ears) above the floor; boss/spline/horn-hub hole through the floor
-bk = D(bk, box(Xa - 0.15, Xb + EAR_OUT + 0.3, Y0s - 0.15, Y1s + 0.15, FT, 40), cyl("z", [SX, YSP, 8.8], SPL_D / 2 + 1.5, 4.2, 28))
-EAR_X = Xn + SERVO_W + EAR_OUT - (SERVO_W + EAR_OUT - HOLE_V)   # = Xn + HOLE_V
-YC = Y0s + SERVO_L / 2
-EAR_HOLES = [(Xn + HOLE_V, YC + g * HOLE_SP / 2) for g in (1, -1)]
-for (ex, ey) in EAR_HOLES:
-    bk = D(bk, cyl("z", [ex, ey, FT - 1.2], 0.5, 2.4, 14))                                            # Ø1.0 pilot (1.2 deep below floor top) for M1.0 x 3
-bk = D(bk, cyl("z", [SX, YSP, 7.0], SPL_D / 2 + 1.5, 5.6, 28))                                  # spline / horn-hub relief
-# front driveshaft tunnel: straight Ø2.2 shaft gearbox (X13,Z3.1) -> worm input (X39.8,Z6.85)
+bk = D(bk, box(24, 36.1, 13.45, 15, -3, 13), box(24, 36.1, -15, -13.45, -3, 13))     # side walls flush with rail inner faces
+front_wall = box(XC1 + 0.15, XC1 + 2.6, Y_E + 0.15, Y_E + EAR_OUT + 0.25, ZC0 + 0.2, ZC1 - 0.9)   # carries the two ear-screw pilots (screws go forward through the ears)
+cage_ = trimesh.load(os.path.join(os.path.dirname(__file__), "..", "stl", "v3", "Roll_Cage.stl"))   # read-only: keep the pilot wall off the cage tubes (+0.3)
+cc_ = trimesh.boolean.intersection([cage_, box(30, 40, 6, 17, -6, 14)], engine=ENG)
+front_wall = D(front_wall, U(*[cc_.copy().apply_translation(d_) for d_ in ([0, 0, 0], [.3, 0, 0], [-.3, 0, 0], [0, .3, 0], [0, -.3, 0], [0, 0, .3], [0, 0, -.3])]))
+bk = U(bk,  front_wall, box(33.5, 38.5, -4.2, 4.2, -1.6, 1.8))                          # + rack deck (guide-screw boss)
+bk = D(bk, box(XC0 - 0.15, XC1 + 0.15, Y_N - 0.15, Y_E + 0.15, ZC0 - 0.15, 40),                      # case pocket (open top: servo drops in)
+       box(XC1 - EAR_T - 0.15, XC1 + 0.15, Y_E, Y_E + EAR_OUT + 0.3, ZC0 - 0.15, 40),                 # ear-tab recess
+       box(30.8, XC1 - EAR_T - 0.1, Y_E + 0.15, Y_E + EAR_OUT + 0.6, ZC0 - 0.15, 40),                 # screw-head / driver access behind the tabs
+       cyl("x", [XC1 + 1.4, YSP, ZSP], SPL_D / 2 + 0.6, 3.2, 28))                                     # boss / spline relief
+for (py_, pz_) in PILOTS:
+    bk = D(bk, cyl("x", [XC1 + 1.35, py_, pz_], 0.45, 2.4, 14))                                       # Ø0.9 pilot for M1.0 x 4 (self tapping)
 SH0 = np.array([GBX_X + 0.5, 0.0, GBX_SHAFT_Z + (WORM_IN[2] - GBX_SHAFT_Z) * 0.5 / (WORM_IN[0] - GBX_X)])
 SH1 = np.array(WORM_IN)
 def seg_cyl(p0, p1, r, n=24):
     p0, p1 = np.array(p0, float), np.array(p1, float); L = np.linalg.norm(p1 - p0)
     m = trimesh.creation.cylinder(radius=r, height=L, sections=n)
     m.apply_transform(trimesh.geometry.align_vectors([0, 0, 1], (p1 - p0) / L)); m.apply_translation((p0 + p1) / 2); return m
-bk = D(bk, seg_cyl(SH0 + (SH1 - SH0) * 0.0, SH1 + np.array([4.0, 0, 0.55]), TUN_R))
-# shock sweep relief: carve the volume the front shock body sweeps (+/-20 deg about its upper eye) out of the bulkhead
+bk = D(bk, seg_cyl(SH0, SH1 + np.array([4.0, 0, 0.55]), TUN_R))
 shk0 = load("Ref_Shock_FL"); sw = []
 for a_ in np.radians(np.linspace(-20, 20, 17)):
     m_ = shk0.copy(); m_.apply_transform(rotx(a_, 9.2, 10.4)); sw.append(m_)
 relief = U(*sw)
-v0 = bk.volume
 bk = D(bk, relief, mirror(relief))
 print("bulkhead (before steering relief): shells %d, vol %.0f -> %.0f mm3" % (len(bk.split(only_watertight=False)), V_ORIG, bk.volume))
 parts["IFS_Bulkhead_Convertible"] = bk
 
-# ---------------------------------------------------------------- steering parts (centre rack, scotch-yoke horn under the inverted servo)
-PIN_X0 = SX - HORN_R
-SLOT_X0, SLOT_X1 = PIN_X0 - 0.75, PIN_X0 + 0.9 * 0 + (HORN_R - math.sqrt(HORN_R ** 2 - 2.8 ** 2)) + 0.75   # pin travels toward +X by R(1-cos)
-rack = U(box(RACK_X - 1.2, RACK_X + 1.2, -7.4, 7.4, 2.1, 3.0), box(RACK_X, SLOT_X1 + 1.0, YSP - 1.8, YSP + 1.8, 2.1, 3.0))   # stem reaches FORWARD to the horn pin
+# ---------------------------------------------------------------- steering parts: horn (Y-Z plane) -> link (along Y) -> centre rack
+rack = U(box(RACK_X - 1.2, RACK_X + 1.2, -7.4, 7.4, 2.1, 3.0), box(RACK_X - 1.2, RACK_X + 1.2, YB - 1.5, -7.2, ZPIN - 1.2, 2.5), box(RACK_X - 1.2, RACK_X + 0.6, YB - 1.5, YB + 1.5, ZPIN - 1.2, 2.5))   # lug arm kept below the right tie rod (Z<2.5)   # bar + lug for link pin B
 rack = D(rack, box(RACK_X - 0.85, RACK_X + 0.85, -3.8, 3.8, 2.0, 6.0),      # guide slot (7.6 long)
-         box(SLOT_X0, SLOT_X1, YSP - 0.8, YSP + 0.8, 2.0, 6.0),             # scotch-yoke slot for the horn pin
-         cyl("z", [RACK_X, ROD_Y0, 2.5], 0.8, 6, 16), cyl("z", [RACK_X, -ROD_Y0, 2.5], 0.8, 6, 16))
+         cyl("z", [RACK_X, ROD_Y0, 2.5], 0.8, 6, 16), cyl("z", [RACK_X, -ROD_Y0, 2.5], 0.8, 6, 16),
+         cyl("x", [RACK_X - 0.3, YB, ZPIN], 0.45, 1.8, 14))                  # Ø0.9 pilot for the M1.0 link screw
 parts["Steering_Rack"] = rack
 
-horn = U(cyl("z", [SX, YSP, (HORN_Z0 + HORN_Z1) / 2], 2.7, HORN_T, 32), box(PIN_X0, SX, YSP - 1.2, YSP + 1.2, HORN_Z0, HORN_Z1),
-         cyl("z", [PIN_X0, YSP, (HORN_Z0 + HORN_Z1) / 2], 1.3, HORN_T, 24),
-         cyl("z", [PIN_X0, YSP, (2.3 + HORN_Z0 + 0.3) / 2], 0.75, HORN_Z0 + 0.3 - 2.3, 16))     # Ø1.4 pin rides in the rack slot (Z 2.3..)
-horn = D(horn, cyl("z", [SX, YSP, (HORN_Z0 + HORN_Z1) / 2], 1.95, 3, 24))                         # Ø3.9 bore for the Ø3.93 spline (ream / press fit)
+HXC = (HORN_X0 + HORN_X1) / 2
+horn = U(cyl("x", [HXC, YSP, ZSP], 3.3, HORN_T, 36), box(HORN_X0, HORN_X1, YSP - 1.5, YSP + 1.5, ZPIN, ZSP), cyl("x", [HXC, YSP, ZPIN], 1.85, HORN_T, 24))
+horn = D(horn, cyl("x", [HXC, YSP, ZSP], 1.95, 3, 24), cyl("x", [HXC, YSP, ZPIN], 0.65, 3, 16))     # Ø3.9 spline bore; Ø1.3 pin hole
 parts["Servo_Horn"] = horn
+LXC = (LINK_X0 + LINK_X1) / 2
+link = U(box(LINK_X0, LINK_X1, YB, YSP, ZPIN - 1.1, ZPIN + 1.1), cyl("x", [LXC, YSP, ZPIN], 1.9, LINK_T, 24), cyl("x", [LXC, YB, ZPIN], 1.9, LINK_T, 24))
+link = D(link, cyl("x", [LXC, YSP, ZPIN], 0.65, 3, 16), cyl("x", [LXC, YB, ZPIN], 0.55, 3, 16))
+parts["Steering_Link"] = link
 
 def rod_mesh(p0, p1, w=2.0, t=ROD_T, eye=1.4):
     p0, p1 = np.array(p0, float), np.array(p1, float); L = np.linalg.norm(p1 - p0)
@@ -199,18 +192,17 @@ parts["Tie_Rod_L"] = rod_mesh(ROD_IN, ROD_OUT)
 
 # ---------------------------------------------------------------- reference / hardware (not printed)
 refs = {}
-sv = U(box(Xa, Xb, Y0s, Y1s, ZB, ZB + SERVO_H), cyl("z", [SX, YSP, ZB - BOSS_H / 2], SPL_D / 2, BOSS_H, 20),
-       box(Xb, Xb + EAR_OUT, Y0s, Y1s, ZB, ZB + EAR_T))
-sv = D(sv, *[cyl("z", [ex, ey, ZB], EAR_HOLE_D / 2, 3, 12) for ex, ey in EAR_HOLES])
+sv = U(box(XC0, XC1, Y_N, Y_E, ZC0, ZC1), cyl("x", [XC1 + BOSS_H / 2, YSP, ZSP], SPL_D / 2, BOSS_H, 20),
+       box(XC1 - EAR_T, XC1, Y_E, Y_E + EAR_OUT, ZCM - HOLE_SP / 2 - 1.8, ZCM + HOLE_SP / 2 + 1.8))
+sv = D(sv, *[cyl("x", [XC1, py_, pz_], EAR_HOLE_D / 2, 3, 12) for py_, pz_ in PILOTS])
 refs["Servo_Ref"] = sv
-for i, (ex, ey) in enumerate(EAR_HOLES):
-    refs[f"HW_Servo_Mount_Screw_{'LR'[i]}"] = U(cyl("z", [ex, ey, ZB - 0.2], 0.5, 3.0, 14), cyl("z", [ex, ey, ZB + EAR_T + 0.3], 1.0, 0.6, 14))
+for i, (py_, pz_) in enumerate(PILOTS):
+    refs[f"HW_Servo_Mount_Screw_{'LR'[i]}"] = U(cyl("x", [XC1 + 0.5, py_, pz_], 0.5, 3.4, 14), cyl("x", [XC1 - EAR_T - 0.35, py_, pz_], 1.0, 0.6, 14))
 refs["HW_Rack_Guide_Screw"] = U(cyl("z", [RACK_X, 0, 1.4], 0.55, 4.0, 14), cyl("z", [RACK_X, 0, 3.25], 0.9, 0.5, 14))
-ZSE = ZB - BOSS_H                 # spline end
-refs["HW_Horn_Screw"] = U(cyl("z", [SX, YSP, ZSE + 1.0], 0.6, 3.0, 12), cyl("z", [SX, YSP, ZSE - 0.25], 1.2, 0.5, 14))
-# front driveshaft Ø2.2: gearbox output face (X13, Z3.1; stub enters the box 0.5 mm: intentional) -> worm input
+refs["HW_Horn_Screw"] = U(cyl("x", [XC1 + 2.4, YSP, ZSP], 0.6, 2.0, 12), cyl("x", [XC1 + BOSS_H + 0.25, YSP, ZSP], 1.2, 0.5, 14))
+refs["HW_Link_Pin_A"] = U(cyl("x", [(HORN_X0 + 0.4 + LINK_X1) / 2, YSP, ZPIN], 0.6, LINK_X1 - HORN_X0 - 0.4, 12), cyl("x", [LINK_X1 + 0.2, YSP, ZPIN], 1.0, 0.4, 14))
+refs["HW_Link_Screw_B"] = U(cyl("x", [(LINK_X0 + RACK_X + 0.5) / 2, YB, ZPIN], 0.5, RACK_X + 0.5 - LINK_X0, 12), cyl("x", [LINK_X0 - 0.3, YB, ZPIN], 0.9, 0.6, 14))
 refs["Ref_Front_Driveshaft"] = seg_cyl([GBX_X, 0, GBX_SHAFT_Z], WORM_IN, 1.1)
-# LOCKED chassis spec stand-ins (sibling owns the real parts)
 refs["Ref_Gearbox_Spec_Box"] = box(-11.5, 11.5, -13.0, 13.0, -4.9, 23.1)
 refs["Rail_Box_L"] = box(-64.0, 36.0, 13.5, 18.5, -2.8, 23.1)
 refs["Rail_Box_R"] = box(-64.0, 36.0, -18.5, -13.5, -2.8, 23.1)
@@ -233,7 +225,7 @@ L_names = ["IFS_Lower_Arm_L", "IFS_Upper_Arm_L", "Front_Carrier_L", "Front_Spind
 printable = {}
 for n in L_names:
     printable[n] = parts[n]; printable[rn(n)] = mirror(parts[n])
-for n in ["IFS_Bulkhead_Convertible", "Steering_Rack", "Servo_Horn"]: printable[n] = parts[n]
+for n in ["IFS_Bulkhead_Convertible", "Steering_Rack", "Servo_Horn", "Steering_Link"]: printable[n] = parts[n]
 
 # ---------------------------------------------------------------- static scene
 replaced = ("IFS_Lower_Arm_", "IFS_Upper_Arm_", "IFS_Knuckle_", "IFS_Bulkhead", "Servo_Ref", "Servo_Horn", "Drag_Link", "HW_Drag",
@@ -275,7 +267,7 @@ for k in ("Ref_Wheel_FL", "HW_Front_Wheel_Nut_L", "Ref_Shock_FL"): pass
 rest_all = dict(static)
 for n, (g, m) in moving.items():
     rest_all[n] = m; rest_all[rn(n)] = mirror(m) if n != "Ref_Shock_FL" else allb["Ref_Shock_FR"]
-rest_all["Steering_Rack"] = parts["Steering_Rack"]; rest_all["Servo_Horn"] = parts["Servo_Horn"]
+rest_all["Steering_Rack"] = parts["Steering_Rack"]; rest_all["Servo_Horn"] = parts["Servo_Horn"]; rest_all["Steering_Link"] = parts["Steering_Link"]
 
 from trimesh.collision import CollisionManager
 def check(scene, label, ignore=()):
@@ -333,8 +325,16 @@ for s in (-3, -2.75, -2.5, -2, -1, 0, 1, 2, 2.5, 2.75, 3):
     print(" s=%+.1f  left=%s  right=%s" % (s, None if dl is None else round(math.degrees(dl), 1), None if dr is None else round(-math.degrees(dr), 1)))
 print(" (positive left angle = wheel turns left; right shown with same sign convention)")
 # horn angle to deliver s
-def horn_angle(s): return -math.asin(s / HORN_R)   # horn points -X; pin Y = YSP - R sin(a)
-print(" servo horn angle for s=+/-2.6 mm: %.1f deg" % math.degrees(horn_angle(2.6)))
+def horn_angle(s):
+    """horn angle (rad, about +X through the spline) that puts the rack at offset s (crank-slider, link length LINK_L0)"""
+    if abs(s) < 1e-9: return 0.0
+    f = lambda a: math.hypot((YSP + HORN_R * math.sin(a)) - (YB + s), (ZSP - HORN_R * math.cos(a)) - ZPIN) - LINK_L0
+    return brentq(f, 0.0, 1.3) if s > 0 else brentq(f, -1.3, 0.0)
+def link_T(s):
+    a = horn_angle(s); A = np.array([YSP + HORN_R * math.sin(a), ZSP - HORN_R * math.cos(a)]); B = np.array([YB + s, ZPIN])
+    d = B - A; dl = math.atan2(d[1], d[0]) - math.atan2(0.0, -1.0)      # rest link points -Y
+    return tr([0, A[0] - YSP, A[1] - ZPIN]) @ rotx(dl, YSP, ZPIN)
+print(" servo horn angle for s=+/-2.6 mm: %.1f deg ; s=+/-3.0: %.1f deg" % (math.degrees(horn_angle(2.6)), math.degrees(horn_angle(3.0))))
 
 # bump steer: toe change over travel with rack centred
 print("\n--- BUMP STEER (rack s=0): left wheel toe vs lower-arm angle ---")
@@ -349,7 +349,8 @@ for th in (-23, -12, -4, 0, 8, 15, 22):
 def pose_scene(theta_deg, s):
     sol = solve_front(theta_deg); sc = {n: (m, I) for n, m in static.items()}
     for n in ("Steering_Rack",): pass
-    sc["Servo_Horn"] = (parts["Servo_Horn"], rotz(horn_angle(s), SX, YSP))
+    sc["Servo_Horn"] = (parts["Servo_Horn"], rotx(horn_angle(s), YSP, ZSP))
+    sc["Steering_Link"] = (parts["Steering_Link"], link_T(s))
     sc["Steering_Rack"] = (parts["Steering_Rack"], tr([0, s, 0]))
     for side, sgn in (("L", 1), ("R", -1)):
         ss = s if side == "L" else -s
@@ -394,10 +395,10 @@ for th_ in (-8, -6, -4, -2, 0, 2, 4, 6, 8):
     for s_ in np.linspace(-3.0, 3.0, 7):
         sc_, sol_ = pose_scene(th_, s_)
         if sc_ is None: continue
-        for k_ in ("Steering_Rack", "Servo_Horn", "Tie_Rod_L", "Tie_Rod_R"):
+        for k_ in ("Steering_Rack", "Servo_Horn", "Steering_Link", "Tie_Rod_L", "Tie_Rod_R"):
             m_, T_ = sc_[k_]; mm_ = m_.copy(); mm_.apply_transform(T_); sweep.append(mm_)
 for s_ in np.linspace(-3.4, 3.4, 35):
-    for k_, m_, T_ in (('h', parts['Servo_Horn'], rotz(horn_angle(s_), SX, YSP)), ('r', parts['Steering_Rack'], tr([0, s_, 0]))):
+    for k_, m_, T_ in (('h', parts['Servo_Horn'], rotx(horn_angle(s_), YSP, ZSP)), ('l', parts['Steering_Link'], link_T(s_)), ('r', parts['Steering_Rack'], tr([0, s_, 0]))):
         mm_ = m_.copy(); mm_.apply_transform(T_); sweep.append(mm_)
 # upper arm (+ bump to +12 deg, droop to -4) sweeps through the cradle floor: cut it so the floor can sit low
 for th_ in np.arange(-4, 12.1, 2):
@@ -408,9 +409,9 @@ infl = U(*[cutv.copy().apply_translation(d_) for d_ in ([0.35, 0, 0], [-0.35, 0,
 bk = D(parts["IFS_Bulkhead_Convertible"], infl)
 bk = max(bk.split(only_watertight=False), key=lambda s: s.volume)   # drop zero-volume slivers
 bk = D(bk, cyl("z", [RACK_X, 0.0, 0.3], 0.55, 4.8, 16))   # rack guide-screw pilot (opened after the rack channel is cut)
-for (ex_, ey_) in EAR_HOLES:   # re-open the ear-screw pilots and verify the floor still carries them
-    bk = D(bk, cyl("z", [ex_, ey_, FT - 1.2], 0.5, 2.4, 14))
-    print("   ear pilot (%.1f, %.1f): floor solid 0.7 mm below top? %s; 1.3 mm? %s" % (ex_, ey_, bool(bk.contains([[ex_ + 1.5, ey_, FT - 0.7]])[0]), bool(bk.contains([[ex_ + 1.5, ey_, FT - 1.3]])[0])))
+for (py_, pz_) in PILOTS:   # re-open the ear-screw pilots (along X) and verify the front wall still carries them
+    bk = D(bk, cyl("x", [XC1 + 1.35, py_, pz_], 0.45, 2.4, 14))
+    print("   ear pilot (Y %.1f, Z %.1f): wall solid 0.6 mm beside it? %s" % (py_, pz_, bool(bk.contains([[XC1 + 1.35, py_ + 0.95, pz_]])[0])))
 bk = max(bk.split(only_watertight=False), key=lambda s: s.volume)   # drop slivers again
 parts["IFS_Bulkhead_Convertible"] = bk; static["IFS_Bulkhead_Convertible"] = bk; rest_all["IFS_Bulkhead_Convertible"] = bk
 print("bulkhead after steering relief: shells %d, vol %.0f mm3 (original %.0f)" % (len(bk.split(only_watertight=False)), bk.volume, V_ORIG))
@@ -475,6 +476,7 @@ for s in (0.0, SLOCK):
 print(" max CVD plunge/extension needed over free travel: %.2f mm" % max(PL_ or [0]))
 
 # ---------------------------------------------------------------- write STLs + roundtrip watertight check
+printable["IFS_Bulkhead_Convertible"] = parts["IFS_Bulkhead_Convertible"]   # the RELIEVED bulkhead (was exported unrelieved)
 for n, m in printable.items(): m.export(os.path.join(OUT, n + ".stl"))
 rt = {n: trimesh.load(os.path.join(OUT, n + ".stl")) for n in printable}
 print("\nROUNDTRIP watertight:", {n: bool(m.is_watertight) for n, m in rt.items() if not m.is_watertight} or "all printed parts OK", " (", len(rt), "parts )")
@@ -487,9 +489,19 @@ for n in sorted(printable):
     m = printable[n]; print(f"  {n:28s} vol {m.volume:7.1f}  ext {np.round(m.extents,1)}")
 
 
-if os.environ.get("DBG"):
-    for s_ in (2.0, 2.1, 2.3):
-        sc_, _ = pose_scene(-4, s_)
-        hm, hT = sc_["Servo_Horn"]; hm = hm.copy(); hm.apply_transform(hT)
-        x_ = trimesh.boolean.intersection([bk, hm], engine=ENG)
-        print("DBG s=%.1f horn x bulkhead: vol %.3f bounds %s" % (s_, x_.volume if len(x_.faces) else 0, np.round(x_.bounds, 2).tolist() if len(x_.faces) else ""), "horn bounds", np.round(hm.bounds, 2).tolist())
+# ---------------------------------------------------------------- envelope check vs the CURRENT cage / shell / rails (stl/v3, read-only) + moving-part sweeps
+print("\n--- ENVELOPE CHECK vs stl/v3 cage, shell, rails, gearbox ---")
+envd = os.path.join(os.path.dirname(__file__), "..", "stl", "v3")
+env = {n: trimesh.load(os.path.join(envd, n + ".stl")) for n in ("Roll_Cage", "Tacoma_Trophy_Body_Shell", "Chassis_Rail_L", "Chassis_Rail_R", "Ref_Gearbox")}
+sw_ = {"horn": [], "link": [], "rack": []}
+for s_ in np.linspace(-3.0, 3.0, 13):
+    for k_, m_, T_ in (("horn", parts["Servo_Horn"], rotx(horn_angle(s_), YSP, ZSP)), ("link", parts["Steering_Link"], link_T(s_)), ("rack", parts["Steering_Rack"], tr([0, s_, 0]))):
+        mm_ = m_.copy(); mm_.apply_transform(T_); sw_[k_].append(mm_)
+mine = {"Servo_Ref": refs["Servo_Ref"], "HW_Servo_Mount_Screw_L": refs["HW_Servo_Mount_Screw_L"], "HW_Servo_Mount_Screw_R": refs["HW_Servo_Mount_Screw_R"],
+        "Bulkhead": parts["IFS_Bulkhead_Convertible"], "horn_sweep": U(*sw_["horn"]), "link_sweep": U(*sw_["link"]), "rack_sweep": U(*sw_["rack"]), "Tie_Rod_L": parts["Tie_Rod_L"]}
+for en, em in env.items():
+    for mn, mm in mine.items():
+        try: x_ = trimesh.boolean.intersection([em, mm], engine=ENG); v_ = x_.volume if len(x_.faces) else 0.0
+        except Exception: v_ = -1
+        if v_ > 0.02 or v_ < 0: print("   %-22s x %-24s %.2f mm3  bounds %s" % (en, mn, v_, np.round(x_.bounds, 1).tolist() if v_ > 0 else ""))
+print(" (no line above = no overlap)  servo case X %.1f..%.1f Y %.1f..%.1f Z %.1f..%.1f ; ears to Y %.2f ; boss tip X %.1f" % (XC0, XC1, Y_N, Y_E, ZC0, ZC1, Y_E + EAR_OUT, XC1 + BOSS_H))
