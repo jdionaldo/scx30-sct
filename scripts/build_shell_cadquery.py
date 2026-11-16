@@ -115,10 +115,10 @@ wind_cut_xz = (
 )
 master_half = master_half.cut(wind_cut_xz)
 
-# Extend Rear C-Pillar Fastback Sail Panel flush with roof bevel (15.4,31.5)-(17.2,30.6) down along rear cage slope
+# Extend Rear C-Pillar Fastback Sail Panel flush with roof bevel (15.4,31.5)-(17.2,30.6) at uniform 2.4mm perpendicular width down to Z=15.8 fender deck
 c_pillar_sail = loft_yz([
-    (-21.5, [(15.4, 23.2), (17.2, 23.2), (17.2, 30.6), (15.4, 31.5)]),
-    (-56.2, [(15.55, 14.6), (17.5, 14.6), (17.5, 15.8), (15.55, 15.8)]),
+    (-21.5, [(15.4, 28.0), (17.2, 28.0), (17.2, 30.6), (15.4, 31.5)]),
+    (-50.1, [(15.55, 15.0), (17.5, 15.0), (17.5, 18.4), (15.55, 18.4)]),
 ], ruled=True)
 master_half = master_half.union(c_pillar_sail)
 
@@ -126,7 +126,7 @@ master_half = master_half.union(c_pillar_sail)
 side_win_cut = (
     cq.Workplane("XZ")
     .workplane(offset=-14.0)
-    .polyline([(12.5, 18.0), (3.8, 27.2), (-16.8, 29.2), (-18.2, 27.8), (-18.2, 18.0)])
+    .polyline([(15.04, 18.0), (0.40, 27.2), (-16.8, 29.2), (-18.2, 27.8), (-18.2, 18.0)])
     .close()
     .extrude(-10.0)
 )
@@ -145,11 +145,11 @@ rear_bay_cut = (
 )
 master_half = master_half.cut(rear_bay_cut)
 
-# Cut Rear Shock Hoop Clearance Window (Y=15.4..23.9, behind X=-23.5) — level Z=15.8 fender top
+# Cut Rear Shock Hoop Clearance Window (Y=15.4..23.9, behind X=-23.5) — parallel to C-pillar sail bottom
 shock_hoop_cut = (
     cq.Workplane("XZ")
     .workplane(offset=-15.4)
-    .polyline([(-46.0, 15.8), (-26.0, 26.0), (-23.5, 26.0), (-23.5, 15.8)])
+    .polyline([(-50.5, 15.82), (-23.5, 27.15), (-23.5, 15.82)])
     .close()
     .extrude(-8.5)
 )

@@ -501,9 +501,9 @@
       "command": "solid.cylinder",
       "params": {
         "base": [
-          28.8,
-          7.8,
-          9.25
+          29.6127,
+          7.8616,
+          8.8683
         ],
         "axis": [
           0.9030088230363353,
@@ -511,7 +511,7 @@
           -0.42414050778979395
         ],
         "diameter": 1.2,
-        "height": 7.308898685848639,
+        "height": 4.6,
         "operation": "new",
         "body_name": "Drag_Link",
         "name": "Drag_Link_Rod"
@@ -557,6 +557,42 @@
       "command": "solid.cylinder",
       "params": {
         "base": [
+          28.8,
+          7.8,
+          8.75
+        ],
+        "diameter": 1.5,
+        "height": 1.0,
+        "axis": "Z",
+        "operation": "cut",
+        "targets": [
+          "Drag_Link"
+        ],
+        "name": "Drag_End_Servo_Hole"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
+          35.4,
+          8.3,
+          5.65
+        ],
+        "diameter": 1.5,
+        "height": 1.0,
+        "axis": "Z",
+        "operation": "cut",
+        "targets": [
+          "Drag_Link"
+        ],
+        "name": "Drag_End_BellCrank_Hole"
+      }
+    },
+    {
+      "command": "solid.cylinder",
+      "params": {
+        "base": [
           39.5,
           8.0,
           4.65
@@ -566,7 +602,7 @@
           0.9948341425312659,
           0.0
         ],
-        "diameter": 1.4,
+        "diameter": 1.2,
         "height": 24.627220712049503,
         "operation": "new",
         "body_name": "Tie_Rod_L",
@@ -615,16 +651,16 @@
         "base": [
           39.5,
           8.0,
-          2.25
+          3.8
         ],
-        "diameter": 1.3,
-        "height": 2.05,
+        "diameter": 1.6,
+        "height": 1.7,
         "axis": "Z",
-        "operation": "join",
+        "operation": "cut",
         "targets": [
           "Tie_Rod_L"
         ],
-        "name": "Tie_Rod_In_Pin_L"
+        "name": "Tie_Rod_In_Hole_L"
       }
     },
     {
@@ -633,16 +669,16 @@
         "base": [
           42.0,
           32.5,
-          1.75
+          3.8
         ],
-        "diameter": 1.3,
-        "height": 2.55,
+        "diameter": 1.6,
+        "height": 1.7,
         "axis": "Z",
-        "operation": "join",
+        "operation": "cut",
         "targets": [
           "Tie_Rod_L"
         ],
-        "name": "Tie_Rod_Out_Pin_L"
+        "name": "Tie_Rod_Out_Hole_L"
       }
     },
     {
@@ -703,10 +739,10 @@
         "base": [
           28.8,
           7.8,
-          9.0
+          9.6
         ],
-        "diameter": 1.4,
-        "height": 1.5,
+        "diameter": 1.45,
+        "height": 1.4,
         "axis": "Z",
         "operation": "cut",
         "targets": [
@@ -723,7 +759,7 @@
           8.3,
           3.5
         ],
-        "diameter": 1.4,
+        "diameter": 1.45,
         "height": 2.2,
         "axis": "Z",
         "operation": "cut",
@@ -731,6 +767,66 @@
           "Steering_Bell_Crank_L"
         ],
         "name": "Bell_Crank_Drag_Hole"
+      }
+    },
+    {
+      "command": "solid.chamfer",
+      "params": {
+        "body": "Steering_Ackermann_Bar",
+        "edges": [
+          [36.2, 0.0, 5.0],
+          [37.8, 0.0, 5.0],
+          [36.2, 0.0, 4.0],
+          [37.8, 0.0, 4.0],
+          [37.0, 7.2, 5.0],
+          [37.0, -7.2, 5.0],
+          [36.2, 7.2, 4.5],
+          [37.8, 7.2, 4.5],
+          [36.2, -7.2, 4.5],
+          [37.8, -7.2, 4.5]
+        ],
+        "distance": 0.2,
+        "tangent_chain": false
+      }
+    },
+    {
+      "command": "solid.chamfer",
+      "params": {
+        "body": "Steering_Bell_Crank_L",
+        "edges": [
+          [40.8, 8.0, 3.7],
+          [40.8, 8.0, 2.2],
+          [31.4, 8.0, 2.2]
+        ],
+        "distance": 0.15,
+        "tangent_chain": false
+      }
+    },
+    {
+      "command": "solid.chamfer",
+      "params": {
+        "body": "Steering_Bell_Crank_R",
+        "edges": [
+          [40.8, -8.0, 3.7],
+          [40.8, -8.0, 2.2],
+          [31.4, -8.0, 2.2]
+        ],
+        "distance": 0.15,
+        "tangent_chain": false
+      }
+    },
+    {
+      "command": "solid.chamfer",
+      "params": {
+        "body": "Servo_Horn",
+        "edges": [
+          [28.8, 2.0, 10.75],
+          [28.8, 8.8, 10.75],
+          [27.6, 5.4, 10.75],
+          [30.0, 5.4, 10.75]
+        ],
+        "distance": 0.2,
+        "tangent_chain": false
       }
     },
     {
