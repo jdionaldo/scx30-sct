@@ -74,10 +74,25 @@ XC0 = XC1 - SERVO_H; Y_E = Y_N + SERVO_W; ZC0 = ZC1 - SERVO_L; ZCM = (ZC0 + ZC1)
 YSP, ZSP = Y_N + SPL_V, ZC1 - SPL_U                      # spline axis (Y, Z); axis along X
 PILOTS = [(Y_N + HOLE_V, ZCM + g * HOLE_SP / 2) for g in (1, -1)]   # ear-screw axes (Y, Z); screws run +X through the ears into the front wall
 HORN_T = 1.5; HORN_X0 = XC1 + 0.05; HORN_X1 = HORN_X0 + HORN_T
-ZPIN = 1.5; YB = -8.5
+ZPIN = 1.5
 HORN_R = ZSP - ZPIN             # horn crank length (pin at ZPIN straight below the spline at centre)           # link pin height (Z) and rack-lug pin Y at centre
 LINK_T = 1.2; LINK_X0 = HORN_X1 + 0.1; LINK_X1 = LINK_X0 + LINK_T
-LINK_L0 = YSP - YB              # link length (pin A -> pin B)
+XA = (LINK_X0 + LINK_X1) / 2   # horn-pin line X
+# ---- bell crank (vertical pivot pin on the bulkhead floor, XY plane): servo horn -> drag link -> crank input arm (-X); output arm (+X) pin rides an X-slot in the rack plate
+XP, YPC, AO, AI = 32.4, -8.4, 5.4, 3.4      # pivot (X,Y), output arm, input arm lengths
+CK_Z0, CK_Z1 = 0.1, 1.3                     # crank plane
+PL_Z0, PL_Z1 = 1.4, 2.5                     # rack slot plate / drag-link plate plane (just above the crank)
+ZI = (PL_Z0 + PL_Z1) / 2
+I0 = np.array([XP - AI, YPC, ZI]); A0 = np.array([XA, YSP, ZPIN]); LD = float(np.linalg.norm(A0 - I0))   # drag-link pin-to-pin length
+# ---- front axle chain (stock/Injora layout): diff axle shaft (slotted end) -> dogbone (joint at BOTH ends) -> stub axle in the knuckle (2 bearings). ESTIMATES: edit after measuring.
+INJORA_PN = "SCX30-34BKFR"      # Injora +4.5 mm Planet Axle set (front 27.8 g, 2/13T front gear, stainless double-joint shafts, retaining spring on each joint pin)
+DOG_RATING_DEG = 52.0           # listed steering rating of the Injora double-joint shaft (listing value)
+DOG_LEN = None                  # joint-to-joint length: derived = YS - DOG_J1_Y (+DOG_J2_DY); lengthen by lowering DOG_J1_Y (longer shaft/plunge) if the diff output spacing is wider
+WORM_RING_CD = 3.85             # ASSUMPTION: worm/ring centre distance (stock). The Injora 13T ring may differ; keep parametric and re-check the worm mesh
+DOG_J1_Y = 10.3                 # diff-side joint centre Y (slotted end of the axle shaft, at the spool end) = CVD_S
+DOG_J2_DY = 0.0                 # knuckle-side joint centre offset along the stub axle from the kingpin axis (0 = joint centre ON the kingpin axis)
+DOG_SLOT = 2.5                  # assumed slot engagement depth per end (plunge capacity each way = this minus 0.5 retention)
+BRG_IN_Y, BRG_OUT_Y = 40.5, 42.1  # stub-axle bearings in the knuckle (Ø4 x 1.6, back to back): one in the wall, one in the hub sleeve
 GBX_SHAFT_Z = 4.1               # UNVERIFIED gearbox output-shaft height (spec update 3)
 GBX_X = 11.5                    # gearbox X face (box rotated 90: X +-11.5, Y +-13)
 WORM_IN = (39.8, 0.0, 6.85)     # front worm input (existing Ref_Front_Input_Worm_Gear)
@@ -156,6 +171,7 @@ def seg_cyl(p0, p1, r, n=24):
     m = trimesh.creation.cylinder(radius=r, height=L, sections=n)
     m.apply_transform(trimesh.geometry.align_vectors([0, 0, 1], (p1 - p0) / L)); m.apply_translation((p0 + p1) / 2); return m
 bk = D(bk, seg_cyl(SH0, SH1 + np.array([4.0, 0, 0.55]), TUN_R))
+bk = D(bk, seg_cyl(SH0 + (SH1 - SH0) * ((35.6 - SH0[0]) / (SH1[0] - SH0[0])), SH1 + np.array([0.5, 0, 0.05]), 2.0))      # Ø4.0 seat for the worm-end dogbone/U-joint coupler
 shk0 = load("Ref_Shock_FL"); sw = []
 for a_ in np.radians(np.linspace(-20, 20, 17)):
     m_ = shk0.copy(); m_.apply_transform(rotx(a_, 9.2, 10.4)); sw.append(m_)
@@ -165,20 +181,29 @@ print("bulkhead (before steering relief): shells %d, vol %.0f -> %.0f mm3" % (le
 parts["IFS_Bulkhead_Convertible"] = bk
 
 # ---------------------------------------------------------------- steering parts: horn (Y-Z plane) -> link (along Y) -> centre rack
-rack = U(box(RACK_X - 1.2, RACK_X + 1.2, -7.4, 7.4, 2.1, 3.0), box(RACK_X - 1.2, RACK_X + 1.2, YB - 1.5, -7.2, ZPIN - 1.2, 2.5), box(RACK_X - 1.2, RACK_X + 0.6, YB - 1.5, YB + 1.5, ZPIN - 1.2, 2.5))   # lug arm kept below the right tie rod (Z<2.5)   # bar + lug for link pin B
+rack = U(box(RACK_X - 1.2, RACK_X + 1.2, -7.4, 7.4, 2.1, 3.0), box(35.4, 39.3, YPC - 1.7, -6.8, PL_Z0, PL_Z1))   # bar + slot plate (below the right tie rod, Z < 2.7)
 rack = D(rack, box(RACK_X - 0.85, RACK_X + 0.85, -3.8, 3.8, 2.0, 6.0),      # guide slot (7.6 long)
          cyl("z", [RACK_X, ROD_Y0, 2.5], 0.8, 6, 16), cyl("z", [RACK_X, -ROD_Y0, 2.5], 0.8, 6, 16),
-         cyl("x", [RACK_X - 0.3, YB, ZPIN], 0.45, 1.8, 14))                  # Ø0.9 pilot for the M1.0 link screw
+         box(36.2, 38.45, YPC - 0.55, YPC + 0.55, 1.0, 4.0))                 # X-elongated slot for the crank output pin
 parts["Steering_Rack"] = rack
 
 HXC = (HORN_X0 + HORN_X1) / 2
 horn = U(cyl("x", [HXC, YSP, ZSP], 3.3, HORN_T, 36), box(HORN_X0, HORN_X1, YSP - 1.5, YSP + 1.5, ZPIN, ZSP), cyl("x", [HXC, YSP, ZPIN], 1.85, HORN_T, 24))
 horn = D(horn, cyl("x", [HXC, YSP, ZSP], 1.95, 3, 24), cyl("x", [HXC, YSP, ZPIN], 0.65, 3, 16))     # Ø3.9 spline bore; Ø1.3 pin hole
 parts["Servo_Horn"] = horn
-LXC = (LINK_X0 + LINK_X1) / 2
-link = U(box(LINK_X0, LINK_X1, YB, YSP, ZPIN - 1.1, ZPIN + 1.1), cyl("x", [LXC, YSP, ZPIN], 1.9, LINK_T, 24), cyl("x", [LXC, YB, ZPIN], 1.9, LINK_T, 24))
-link = D(link, cyl("x", [LXC, YSP, ZPIN], 0.65, 3, 16), cyl("x", [LXC, YB, ZPIN], 0.55, 3, 16))
-parts["Steering_Link"] = link
+def seg_plate(p0, p1, w, z0, z1):
+    p0, p1 = np.array(p0[:2], float), np.array(p1[:2], float); Lh = float(np.linalg.norm(p1 - p0))
+    m = box(0, Lh, -w / 2, w / 2, z0, z1); m.apply_transform(rotz(math.atan2(*(p1 - p0)[::-1]), 0, 0)); m.apply_translation([p0[0], p0[1], 0]); return m
+KE = (34.8, -1.5)      # elbow: keeps the link 1.8 mm clear of the servo case corner
+link = U(cyl("x", [XA, YSP, ZPIN], 1.9, LINK_T, 24), seg_plate((XA + 0.3, YSP), KE, 1.2, PL_Z0, PL_Z1), seg_plate(KE, (I0[0], I0[1]), 1.6, PL_Z0, PL_Z1),
+         cyl("z", [KE[0], KE[1], ZI], 0.8, PL_Z1 - PL_Z0, 16), cyl("z", [I0[0], I0[1], ZI], 1.8, PL_Z1 - PL_Z0, 24))
+link = D(link, cyl("x", [XA, YSP, ZPIN], 0.65, 3, 16), cyl("z", [I0[0], I0[1], ZI], 0.55, 4, 16))
+parts["Steering_Drag_Link"] = link
+CZ = (CK_Z0 + CK_Z1) / 2; CH = CK_Z1 - CK_Z0
+crank = U(cyl("z", [XP, YPC, CZ], 2.4, CH, 32), box(XP, XP + AO, YPC - 1.2, YPC + 1.2, CK_Z0, CK_Z1), cyl("z", [XP + AO, YPC, CZ], 1.8, CH, 24),
+          box(XP - AI, XP, YPC - 1.2, YPC + 1.2, CK_Z0, CK_Z1), cyl("z", [XP - AI, YPC, CZ], 1.8, CH, 24))
+crank = D(crank, cyl("z", [XP, YPC, CZ], 0.65, 4, 20), cyl("z", [XP + AO, YPC, CZ], 0.55, 4, 16), cyl("z", [XP - AI, YPC, CZ], 0.55, 4, 16))
+parts["Steering_BellCrank"] = crank
 
 def rod_mesh(p0, p1, w=2.0, t=ROD_T, eye=1.4):
     p0, p1 = np.array(p0, float), np.array(p1, float); L = np.linalg.norm(p1 - p0)
@@ -201,16 +226,23 @@ for i, (py_, pz_) in enumerate(PILOTS):
 refs["HW_Rack_Guide_Screw"] = U(cyl("z", [RACK_X, 0, 1.4], 0.55, 4.0, 14), cyl("z", [RACK_X, 0, 3.25], 0.9, 0.5, 14))
 refs["HW_Horn_Screw"] = U(cyl("x", [XC1 + 2.4, YSP, ZSP], 0.6, 2.0, 12), cyl("x", [XC1 + BOSS_H + 0.25, YSP, ZSP], 1.2, 0.5, 14))
 refs["HW_Link_Pin_A"] = U(cyl("x", [(HORN_X0 + 0.4 + LINK_X1) / 2, YSP, ZPIN], 0.6, LINK_X1 - HORN_X0 - 0.4, 12), cyl("x", [LINK_X1 + 0.2, YSP, ZPIN], 1.0, 0.4, 14))
-refs["HW_Link_Screw_B"] = U(cyl("x", [(LINK_X0 + RACK_X + 0.5) / 2, YB, ZPIN], 0.5, RACK_X + 0.5 - LINK_X0, 12), cyl("x", [LINK_X0 - 0.3, YB, ZPIN], 0.9, 0.6, 14))
+refs["HW_Crank_Pivot_Pin"] = U(cyl("z", [XP, YPC, -0.05], 0.6, 2.9, 14), cyl("z", [XP, YPC, CK_Z1 + 0.15], 1.1, 0.3, 16))      # Ø1.2 steel pin, pressed into the floor boss
+refs["HW_Crank_Out_Pin"] = U(cyl("z", [XP + AO, YPC, 1.5], 0.5, 3.0, 12), cyl("z", [XP + AO, YPC, PL_Z1 + 0.15], 0.9, 0.3, 14))     # Ø1.0 pin: crank hole -> rack slot
+refs["HW_Crank_In_Pin"] = U(cyl("z", [I0[0], I0[1], 1.5], 0.5, 3.0, 12), cyl("z", [I0[0], I0[1], PL_Z1 + 0.15], 0.9, 0.3, 14))      # Ø1.0 pin: crank hole -> drag-link eye
+# front driveshaft dogbone/U-joint couplers (Ø3.0 x 4) at both ends; gearbox-end seat is the gearbox output bore
+_sd = (np.array(WORM_IN) - np.array([GBX_X, 0, GBX_SHAFT_Z])); _sd = _sd / np.linalg.norm(_sd)
+refs["HW_Front_Driveshaft_UJ_Gbx"] = seg_cyl([GBX_X, 0, GBX_SHAFT_Z], np.array([GBX_X, 0, GBX_SHAFT_Z]) + _sd * 4.0, 1.5)
+refs["HW_Front_Driveshaft_UJ_Worm"] = seg_cyl(np.array(WORM_IN) - _sd * 4.0, WORM_IN, 1.5)
 refs["Ref_Front_Driveshaft"] = seg_cyl([GBX_X, 0, GBX_SHAFT_Z], WORM_IN, 1.1)
 refs["Ref_Gearbox_Spec_Box"] = box(-11.5, 11.5, -13.0, 13.0, -4.9, 23.1)
 refs["Rail_Box_L"] = box(-64.0, 36.0, 13.5, 18.5, -2.8, 23.1)
 refs["Rail_Box_R"] = box(-64.0, 36.0, -18.5, -13.5, -2.8, 23.1)
 
-CVD_S = np.array([KX, 10.3, ZH]); CVD_J0 = np.array([KX, YS, ZH])
-cvd_in = U(cyl("y", [KX, (10.3 + YS) / 2, ZH], 1.0, YS - 10.3, 20), trimesh.creation.icosphere(radius=1.7, subdivisions=2).apply_translation(CVD_J0))
+CVD_S = np.array([KX, DOG_J1_Y, ZH]); CVD_J0 = np.array([KX, YS, ZH])
+cvd_in = U(cyl("y", [KX, (DOG_J1_Y + YS) / 2, ZH], 1.0, YS - DOG_J1_Y, 20), trimesh.creation.icosphere(radius=1.7, subdivisions=2).apply_translation(CVD_J0))
 cvd_out = U(cyl("y", [KX, (YS + 43.3) / 2, ZH], 0.98, 43.3 - YS, 20))
-brg = D(cyl("y", [KX, 40.7, ZH], 2.0, 1.6, 32), cyl("y", [KX, 40.7, ZH], 0.99, 3, 20))
+brg = D(cyl("y", [KX, BRG_OUT_Y, ZH], 2.0, 1.6, 32), cyl("y", [KX, BRG_OUT_Y, ZH], 0.99, 3, 20))
+brg_in = D(cyl("y", [KX, BRG_IN_Y, ZH], 2.0, 1.6, 32), cyl("y", [KX, BRG_IN_Y, ZH], 0.99, 3, 20))
 hw_hinge = {  # X-axis hinge pins at arm outer ends
     "HW_Front_Lower_Outer_Pin_L": cyl("x", [KX, PL[0], PL[1]], PIN_HINGE_D / 2, 8.0, 14),
     "HW_Front_Upper_Outer_Pin_L": cyl("x", [KX, PU[0], PU[1]], PIN_HINGE_D / 2, 8.0, 14)}
@@ -225,7 +257,7 @@ L_names = ["IFS_Lower_Arm_L", "IFS_Upper_Arm_L", "Front_Carrier_L", "Front_Spind
 printable = {}
 for n in L_names:
     printable[n] = parts[n]; printable[rn(n)] = mirror(parts[n])
-for n in ["IFS_Bulkhead_Convertible", "Steering_Rack", "Servo_Horn", "Steering_Link"]: printable[n] = parts[n]
+for n in ["IFS_Bulkhead_Convertible", "Steering_Rack", "Servo_Horn", "Steering_Drag_Link", "Steering_BellCrank"]: printable[n] = parts[n]
 
 # ---------------------------------------------------------------- static scene
 replaced = ("IFS_Lower_Arm_", "IFS_Upper_Arm_", "IFS_Knuckle_", "IFS_Bulkhead", "Servo_Ref", "Servo_Horn", "Drag_Link", "HW_Drag",
@@ -255,7 +287,7 @@ moving = {"IFS_Lower_Arm_L": ("arm_l", parts["IFS_Lower_Arm_L"]), "IFS_Upper_Arm
           "Front_Carrier_L": ("car", parts["Front_Carrier_L"]), "Front_Spindle_L": ("spin", parts["Front_Spindle_L"]),
           "Ref_Wheel_FL": ("spin", allb["Ref_Wheel_FL"].copy().apply_translation([0, WHEEL_SHIFT, 0])),
           "HW_Front_Wheel_Nut_L": ("spin", allb["HW_Front_Wheel_Nut_L"].copy().apply_translation([0, WHEEL_SHIFT, 0])),
-          "CVD_Outer_L": ("spin", cvd_out), "Front_Bearing_L": ("spin", brg),
+          "CVD_Outer_L": ("spin", cvd_out), "Front_Bearing_L": ("spin", brg), "Front_Bearing_Inner_L": ("spin", brg_in),
           "HW_Front_Upper_Kingpin_L": ("car", hw_kp["HW_Front_Upper_Kingpin_L"]), "HW_Front_Lower_Kingpin_L": ("car", hw_kp["HW_Front_Lower_Kingpin_L"]),
           "HW_Front_Lower_Outer_Pin_L": ("car", hw_hinge["HW_Front_Lower_Outer_Pin_L"]), "HW_Front_Upper_Outer_Pin_L": ("car", hw_hinge["HW_Front_Upper_Outer_Pin_L"]),
           "HW_TieRod_Outer_Screw_L": ("spin", hw_tr["HW_TieRod_Outer_Screw_L"]),
@@ -267,7 +299,7 @@ for k in ("Ref_Wheel_FL", "HW_Front_Wheel_Nut_L", "Ref_Shock_FL"): pass
 rest_all = dict(static)
 for n, (g, m) in moving.items():
     rest_all[n] = m; rest_all[rn(n)] = mirror(m) if n != "Ref_Shock_FL" else allb["Ref_Shock_FR"]
-rest_all["Steering_Rack"] = parts["Steering_Rack"]; rest_all["Servo_Horn"] = parts["Servo_Horn"]; rest_all["Steering_Link"] = parts["Steering_Link"]
+rest_all["Steering_Rack"] = parts["Steering_Rack"]; rest_all["Servo_Horn"] = parts["Servo_Horn"]; rest_all["Steering_Drag_Link"] = parts["Steering_Drag_Link"]; rest_all["Steering_BellCrank"] = parts["Steering_BellCrank"]
 
 from trimesh.collision import CollisionManager
 def check(scene, label, ignore=()):
@@ -325,15 +357,20 @@ for s in (-3, -2.75, -2.5, -2, -1, 0, 1, 2, 2.5, 2.75, 3):
     print(" s=%+.1f  left=%s  right=%s" % (s, None if dl is None else round(math.degrees(dl), 1), None if dr is None else round(-math.degrees(dr), 1)))
 print(" (positive left angle = wheel turns left; right shown with same sign convention)")
 # horn angle to deliver s
+def crank_psi(s): return math.asin(max(-1.0, min(1.0, s / AO)))     # rack offset s = AO sin(psi) (output pin follows the rack slot)
+def I_of(psi): return np.array([XP - AI * math.cos(psi), YPC - AI * math.sin(psi), ZI])
+def A_of(a): return np.array([XA, YSP + HORN_R * math.sin(a), ZSP - HORN_R * math.cos(a)])
 def horn_angle(s):
-    """horn angle (rad, about +X through the spline) that puts the rack at offset s (crank-slider, link length LINK_L0)"""
-    if abs(s) < 1e-9: return 0.0
-    f = lambda a: math.hypot((YSP + HORN_R * math.sin(a)) - (YB + s), (ZSP - HORN_R * math.cos(a)) - ZPIN) - LINK_L0
-    return brentq(f, 0.0, 1.3) if s > 0 else brentq(f, -1.3, 0.0)
+    """horn angle (rad, about +X through the spline) for rack offset s: |A(a) - I(psi)| = drag-link length"""
+    I_ = I_of(crank_psi(s)); f = lambda a: float(np.linalg.norm(A_of(a) - I_)) - LD
+    xs = np.linspace(-1.2, 1.2, 241); fv = [f(x) for x in xs]; roots = []
+    for i in range(len(xs) - 1):
+        if fv[i] * fv[i + 1] <= 0: roots.append(brentq(f, xs[i], xs[i + 1]))
+    return min(roots, key=abs)
 def link_T(s):
-    a = horn_angle(s); A = np.array([YSP + HORN_R * math.sin(a), ZSP - HORN_R * math.cos(a)]); B = np.array([YB + s, ZPIN])
-    d = B - A; dl = math.atan2(d[1], d[0]) - math.atan2(0.0, -1.0)      # rest link points -Y
-    return tr([0, A[0] - YSP, A[1] - ZPIN]) @ rotx(dl, YSP, ZPIN)
+    a = horn_angle(s); A = A_of(a); I_ = I_of(crank_psi(s)); d0 = I0 - A0; d = I_ - A
+    R = trimesh.geometry.align_vectors(d0 / np.linalg.norm(d0), d / np.linalg.norm(d)); return tr(A) @ R @ tr(-A0)
+def crank_T(s): return rotz(crank_psi(s), XP, YPC)
 print(" servo horn angle for s=+/-2.6 mm: %.1f deg ; s=+/-3.0: %.1f deg" % (math.degrees(horn_angle(2.6)), math.degrees(horn_angle(3.0))))
 
 # bump steer: toe change over travel with rack centred
@@ -350,7 +387,7 @@ def pose_scene(theta_deg, s):
     sol = solve_front(theta_deg); sc = {n: (m, I) for n, m in static.items()}
     for n in ("Steering_Rack",): pass
     sc["Servo_Horn"] = (parts["Servo_Horn"], rotx(horn_angle(s), YSP, ZSP))
-    sc["Steering_Link"] = (parts["Steering_Link"], link_T(s))
+    sc["Steering_Drag_Link"] = (parts["Steering_Drag_Link"], link_T(s)); sc["Steering_BellCrank"] = (parts["Steering_BellCrank"], crank_T(s))
     sc["Steering_Rack"] = (parts["Steering_Rack"], tr([0, s, 0]))
     for side, sgn in (("L", 1), ("R", -1)):
         ss = s if side == "L" else -s
@@ -373,7 +410,7 @@ def pose_scene(theta_deg, s):
             put(n, mesh, T)
         # CVD inner: from fixed S to joint J
         J = (sol["Tc"] @ np.append(CVD_J0, 1))[:3]; S = CVD_S; v = J - S
-        L0 = YS - 10.3; Tcv = tr(S - CVD_S) @ trimesh.geometry.align_vectors([0, 1, 0], v / np.linalg.norm(v))
+        L0 = YS - DOG_J1_Y; Tcv = tr(S - CVD_S) @ trimesh.geometry.align_vectors([0, 1, 0], v / np.linalg.norm(v))
         Tcv = tr(S) @ trimesh.geometry.align_vectors([0, 1, 0], v / np.linalg.norm(v)) @ tr(-S)
         put("CVD_Inner_L", cvd_in, Tcv)
         sc["_plunge_" + side] = (trimesh.creation.box(extents=[0.01] * 3), tr([0, np.linalg.norm(v) - L0, 0]))
@@ -395,20 +432,32 @@ for th_ in (-8, -6, -4, -2, 0, 2, 4, 6, 8):
     for s_ in np.linspace(-3.0, 3.0, 7):
         sc_, sol_ = pose_scene(th_, s_)
         if sc_ is None: continue
-        for k_ in ("Steering_Rack", "Servo_Horn", "Steering_Link", "Tie_Rod_L", "Tie_Rod_R"):
+        for k_ in ("Steering_Rack", "Servo_Horn", "Steering_Drag_Link", "Steering_BellCrank", "Tie_Rod_L", "Tie_Rod_R"):
             m_, T_ = sc_[k_]; mm_ = m_.copy(); mm_.apply_transform(T_); sweep.append(mm_)
 for s_ in np.linspace(-3.4, 3.4, 35):
-    for k_, m_, T_ in (('h', parts['Servo_Horn'], rotx(horn_angle(s_), YSP, ZSP)), ('l', parts['Steering_Link'], link_T(s_)), ('r', parts['Steering_Rack'], tr([0, s_, 0]))):
+    for k_, m_, T_ in (('h', parts['Servo_Horn'], rotx(horn_angle(s_), YSP, ZSP)), ('l', parts['Steering_Drag_Link'], link_T(s_)), ('c', parts['Steering_BellCrank'], crank_T(s_)), ('r', parts['Steering_Rack'], tr([0, s_, 0]))):
         mm_ = m_.copy(); mm_.apply_transform(T_); sweep.append(mm_)
 # upper arm (+ bump to +12 deg, droop to -4) sweeps through the cradle floor: cut it so the floor can sit low
 for th_ in np.arange(-4, 12.1, 2):
     sol_ = solve_front(float(th_)); mm_ = parts["IFS_Upper_Arm_L"].copy(); mm_.apply_transform(rotx(sol_["phi"], *AU)); sweep.append(mm_)
 cutv = U(*sweep)
 # inflate by 0.25 mm: union of slightly shifted copies
-infl = U(*[cutv.copy().apply_translation(d_) for d_ in ([0.35, 0, 0], [-0.35, 0, 0], [0, 0.35, 0], [0, -0.35, 0], [0, 0, 0.35], [0, 0, -0.35], [0, 0, 0])])
+infl = U(*[cutv.copy().apply_translation(d_) for d_ in ([0.3517, 0.0013, 0.0007], [-0.3483, -0.0011, 0.0009], [0.0006, 0.3521, -0.0008], [-0.0004, -0.3479, 0.0012], [0.0010, 0.0005, 0.3513], [-0.0007, 0.0003, -0.3487], [0, 0, 0])])
 bk = D(parts["IFS_Bulkhead_Convertible"], infl)
 bk = max(bk.split(only_watertight=False), key=lambda s: s.volume)   # drop zero-volume slivers
 bk = D(bk, cyl("z", [RACK_X, 0.0, 0.3], 0.55, 4.8, 16))   # rack guide-screw pilot (opened after the rack channel is cut)
+# --- tub mounting: 4 vertical M1.6 screws through the floor (Ø1.8 hole, Ø3.2 x 1.0 counterbore from the top), in the solid floor outside all sweeps
+# bell-crank pivot boss (re-added after the relief; the crank sweep would otherwise shave it) with Ø1.1 pin pilot; wire-clip pad with two pilots and a cable groove
+bk = D(bk, box(35.0, 37.0, 3.5, 4.8, -0.5, 0.4))   # removes a tangent sliver left between the horn-boss and link sweeps (non-manifold edge after STL roundtrip)
+bk = D(bk, cyl("z", [XP, YPC, 1.05], 3.0, 2.0, 40))   # clears the crank hub disc (tangent slivers between the rotated sweep copies)
+bk = U(bk, cyl("z", [XP, YPC, -0.95], 2.4, 1.9, 32), box(24.2, 28.6, Y_E + 0.15, 13.4, 8.0, 10.5))
+bk = D(bk, cyl("z", [XP, YPC, -0.65], 0.55, 1.3, 16), cyl("z", [24.9, 12.65, 9.3], 0.45, 2.4, 14), cyl("z", [27.9, 12.65, 9.3], 0.45, 2.4, 14), cyl("y", [26.4, 12.65, 10.5], 0.7, 3.0, 16))
+BH_HOLES = [(44.5, 3.5), (44.5, -3.5), (52.0, 3.5), (52.0, -3.5)]
+BH_FLOOR_Z0, BH_FLOOR_Z1 = -1.9, 0.5
+for (hx_, hy_) in BH_HOLES:
+    ok_ = bool(bk.contains([[hx_ + 1.3, hy_, 0.0], [hx_ - 1.3, hy_, 0.0], [hx_, hy_ + 1.3, 0.0], [hx_, hy_ - 1.3, 0.0]]).all())
+    print("   tub screw hole (%.1f, %.1f): floor solid around it at Z 0? %s" % (hx_, hy_, ok_))
+    bk = D(bk, cyl("z", [hx_, hy_, (BH_FLOOR_Z0 + BH_FLOOR_Z1) / 2], 0.9, 3.4, 20), cyl("z", [hx_, hy_, BH_FLOOR_Z1 - 0.4 + 0.5], 1.6, 1.8, 24))
 for (py_, pz_) in PILOTS:   # re-open the ear-screw pilots (along X) and verify the front wall still carries them
     bk = D(bk, cyl("x", [XC1 + 1.35, py_, pz_], 0.45, 2.4, 14))
     print("   ear pilot (Y %.1f, Z %.1f): wall solid 0.6 mm beside it? %s" % (py_, pz_, bool(bk.contains([[XC1 + 1.35, py_ + 0.95, pz_]])[0])))
@@ -477,6 +526,15 @@ print(" max CVD plunge/extension needed over free travel: %.2f mm" % max(PL_ or 
 
 # ---------------------------------------------------------------- write STLs + roundtrip watertight check
 printable["IFS_Bulkhead_Convertible"] = parts["IFS_Bulkhead_Convertible"]   # the RELIEVED bulkhead (was exported unrelieved)
+def _rt_ok(m, tag="_rtchk"):
+    f_ = os.path.join(OUT, tag + ".stl"); m.export(f_); ok_ = trimesh.load(f_).is_watertight; os.remove(f_); return ok_
+_bk = printable["IFS_Bulkhead_Convertible"]
+if not _rt_ok(_bk):
+    for dec_ in (3, 2):   # quantise vertices (float32-STL safe) and drop degenerate faces
+        q_ = trimesh.Trimesh(np.round(_bk.vertices, dec_), _bk.faces, process=True); q_.update_faces(q_.nondegenerate_faces()); q_.remove_unreferenced_vertices()
+        q_ = max(q_.split(only_watertight=False), key=lambda s: s.volume) if len(q_.faces) else q_
+        print("  bulkhead roundtrip repair: quantise %d dec -> watertight after roundtrip %s, vol %.1f" % (dec_, _rt_ok(q_), q_.volume))
+        if _rt_ok(q_): printable["IFS_Bulkhead_Convertible"] = q_; break
 for n, m in printable.items(): m.export(os.path.join(OUT, n + ".stl"))
 rt = {n: trimesh.load(os.path.join(OUT, n + ".stl")) for n in printable}
 print("\nROUNDTRIP watertight:", {n: bool(m.is_watertight) for n, m in rt.items() if not m.is_watertight} or "all printed parts OK", " (", len(rt), "parts )")
@@ -493,15 +551,141 @@ for n in sorted(printable):
 print("\n--- ENVELOPE CHECK vs stl/v3 cage, shell, rails, gearbox ---")
 envd = os.path.join(os.path.dirname(__file__), "..", "stl", "v3")
 env = {n: trimesh.load(os.path.join(envd, n + ".stl")) for n in ("Roll_Cage", "Tacoma_Trophy_Body_Shell", "Chassis_Rail_L", "Chassis_Rail_R", "Ref_Gearbox")}
-sw_ = {"horn": [], "link": [], "rack": []}
+sw_ = {"horn": [], "link": [], "crank": [], "rack": []}
 for s_ in np.linspace(-3.0, 3.0, 13):
-    for k_, m_, T_ in (("horn", parts["Servo_Horn"], rotx(horn_angle(s_), YSP, ZSP)), ("link", parts["Steering_Link"], link_T(s_)), ("rack", parts["Steering_Rack"], tr([0, s_, 0]))):
+    for k_, m_, T_ in (("horn", parts["Servo_Horn"], rotx(horn_angle(s_), YSP, ZSP)), ("link", parts["Steering_Drag_Link"], link_T(s_)), ("crank", parts["Steering_BellCrank"], crank_T(s_)), ("rack", parts["Steering_Rack"], tr([0, s_, 0]))):
         mm_ = m_.copy(); mm_.apply_transform(T_); sw_[k_].append(mm_)
 mine = {"Servo_Ref": refs["Servo_Ref"], "HW_Servo_Mount_Screw_L": refs["HW_Servo_Mount_Screw_L"], "HW_Servo_Mount_Screw_R": refs["HW_Servo_Mount_Screw_R"],
-        "Bulkhead": parts["IFS_Bulkhead_Convertible"], "horn_sweep": U(*sw_["horn"]), "link_sweep": U(*sw_["link"]), "rack_sweep": U(*sw_["rack"]), "Tie_Rod_L": parts["Tie_Rod_L"]}
+        "Bulkhead": parts["IFS_Bulkhead_Convertible"], "horn_sweep": U(*sw_["horn"]), "link_sweep": U(*sw_["link"]), "crank_sweep": U(*sw_["crank"]), "rack_sweep": U(*sw_["rack"]), "Tie_Rod_L": parts["Tie_Rod_L"]}
 for en, em in env.items():
     for mn, mm in mine.items():
         try: x_ = trimesh.boolean.intersection([em, mm], engine=ENG); v_ = x_.volume if len(x_.faces) else 0.0
         except Exception: v_ = -1
         if v_ > 0.02 or v_ < 0: print("   %-22s x %-24s %.2f mm3  bounds %s" % (en, mn, v_, np.round(x_.bounds, 1).tolist() if v_ > 0 else ""))
 print(" (no line above = no overlap)  servo case X %.1f..%.1f Y %.1f..%.1f Z %.1f..%.1f ; ears to Y %.2f ; boss tip X %.1f" % (XC0, XC1, Y_N, Y_E, ZC0, ZC1, Y_E + EAR_OUT, XC1 + BOSS_H))
+
+# ---------------------------------------------------------------- tub screws: hardware + head/driver clearance vs static bodies
+print("\n--- TUB SCREW HOLES (floor Z %.1f..%.1f; Ø1.8 through, Ø3.2 counterbore 1.0 deep from the top) ---" % (BH_FLOOR_Z0, BH_FLOOR_Z1))
+for (hx_, hy_) in BH_HOLES:
+    col = cyl("z", [hx_, hy_, 5.0], 1.7, 11.0, 24)     # driver/head column from the floor top up to Z 10.5
+    hits = []
+    for n_, m_ in static.items():
+        if n_.startswith(("IFS_Bulkhead", "HW_")): continue
+        try: x_ = trimesh.boolean.intersection([m_, col], engine=ENG); v_ = x_.volume if len(x_.faces) else 0.0
+        except Exception: v_ = -1
+        if v_ > 0.01 or v_ < 0: hits.append((n_, round(v_, 2)))
+    print("   hole (%.1f, %.1f): driver column hits: %s" % (hx_, hy_, hits or "none"))
+bkc = parts["IFS_Bulkhead_Convertible"]
+print(" bulkhead final: shells %d, watertight %s, volume %.0f" % (len(bkc.split(only_watertight=False)), bkc.is_watertight, bkc.volume))
+
+# ================================================================ FULL-TRAVEL CHECK (shock stroke, hard stops, env contacts, wheel envelope)
+print("\n=== FULL TRAVEL: shock stroke, stops, env contacts ===")
+UP_ = np.array([58.6, 9.2, 10.4]); LO0_ = np.array([58.6, 24.0, 2.5])
+def shock_L(th_deg): return float(np.linalg.norm((rotx(math.radians(th_deg), *AL) @ np.append(LO0_, 1))[:3] - UP_))
+SHOCK_STROKE = 7.0      # ASSUMED (no front shock stroke in the model: mesh shows 5.0 mm exposed rod + 2.0 mm) ; mid-stroke at the neutral pose
+TH_N = -4.0             # neutral (mid-stroke, spring neutral) arm angle: lower arm 4 deg down, hub Z 1.47 = rear 1.5
+Lmid = shock_L(TH_N)
+print(" shock eye-eye at neutral (mid-stroke) %.2f mm, stroke %.1f assumed -> bottom-out at L=%.2f, full extension L=%.2f" % (Lmid, SHOCK_STROKE, Lmid - SHOCK_STROKE / 2, Lmid + SHOCK_STROKE / 2))
+for th in (-14, -12, -10, -8, -4, 0, 4, 6, 8, 12):
+    hz = 3.0 + (AL[0] * 0 + math.sin(math.radians(th)) * (PL[0] - AL[0]))
+    print("   arm %+3d deg: hub Z %+5.2f  shock L %.2f (%+.2f from mid)" % (th, hz, shock_L(th), shock_L(th) - Lmid))
+th_b = brentq(lambda t: shock_L(t) - (Lmid - SHOCK_STROKE / 2), TH_N, 40); th_d = brentq(lambda t: shock_L(t) - (Lmid + SHOCK_STROKE / 2), -60, TH_N)
+print(" shock bottoms at arm %+.1f deg (hub Z %.2f), fully extends at arm %+.1f deg (hub Z %.2f)" % (th_b, 3 + math.sin(math.radians(th_b)) * (PL[0] - AL[0]), th_d, 3 + math.sin(math.radians(th_d)) * (PL[0] - AL[0])))
+
+envf = {}
+for n_ in ("Chassis_Tub", "Roll_Cage", "Tacoma_Trophy_Body_Shell"):
+    for d_ in ("v4", "v3"):
+        f_ = os.path.join(os.path.dirname(__file__), "..", "stl", d_, n_ + ".stl")
+        if os.path.exists(f_): envf[n_] = trimesh.load(f_); print("  env %s from stl/%s" % (n_, d_)); break
+env_scene = {("Env_" + k): (v, I) for k, v in envf.items()}
+def scan(th, s):
+    sc, sol = pose_scene(th, s)
+    if sc is None: return None
+    sc = {k: v for k, v in sc.items() if not k.startswith("_plunge")}
+    sc.update(env_scene)
+    return sc
+base = set(tuple(sorted(p)) for p in check(scan(TH_N, 0.0), "base"))
+print(" baseline (neutral, straight) pairs incl. env: %d" % len(base))
+print(" matrix: first NEW real contacts (not in baseline, boolean overlap >= 0.05 mm3). rows arm angle, cols rack s")
+for th in (-14, -12, -10, -8, -6, -4, 0, 4, 6, 8):
+    row = []
+    for s in (0.0, 2.8, 3.0):
+        sc = scan(th, s)
+        if sc is None: row.append("s=%.1f: steer-solve fails" % s); continue
+        pr = [q for q in check(sc, "m") if q not in base and not any(n_.startswith("HW_") for n_ in q) and not touching_only(sc, q)]
+        pr = [q for q in pr if not (any(n_.startswith("Ref_Shock") for n_ in q) and not any(n_.startswith(("Env_", "IFS_Bulkhead")) for n_ in q))]
+        row.append("s=%.1f: %s" % (s, "clear" if not pr else str([(a.replace("Tacoma_Trophy_Body_Shell", "Shell"), b.replace("Tacoma_Trophy_Body_Shell", "Shell")) for a, b in pr[:3]])))
+    print("  arm %+3d | " % th + " | ".join(row))
+
+# min clearances at the stops
+print(" min clearances (mm) wheel/arms/tie rod vs env + bulkhead at selected poses")
+def mind(sc, a, b):
+    cm = trimesh.collision.CollisionManager(); m_, T_ = sc[b]; cm.add_object(b, m_, transform=T_)
+    m2, T2 = sc[a]; return cm.min_distance_single(m2, transform=T2)
+for th, s in ((-4.0, 0.0), (-12, 0.0), (4, 0.0), (-8, 3.0), (4, 3.0)):
+    sc = scan(th, s)
+    if sc is None: continue
+    out = []
+    for a in ("Ref_Wheel_FL", "Ref_Wheel_FR", "IFS_Lower_Arm_L", "IFS_Upper_Arm_L", "Tie_Rod_L"):
+        for b in ("Env_Chassis_Tub", "Env_Tacoma_Trophy_Body_Shell", "Env_Roll_Cage", "IFS_Bulkhead_Convertible"):
+            if a in sc and b in sc: out.append("%s/%s %.2f" % (a.replace("Ref_Wheel_", "W").replace("IFS_", "").replace("Tie_Rod_L", "Rod"), b.replace("Env_Tacoma_Trophy_Body_Shell", "Shell").replace("Env_", "").replace("IFS_Bulkhead_Convertible", "Bulk"), mind(sc, a, b)))
+    print("  arm %+.0f s=%.1f: %s" % (th, s, "; ".join(out)))
+
+# wheel envelope over the usable range: union of per-pose convex hulls, both wheels
+env_meshes = []
+for th in (-12, -10, -8, -6, -4, -2, 0, 2, 4):
+    for s in (-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0):
+        sc, _ = pose_scene(th, s)
+        if sc is None: continue
+        for k_ in ("Ref_Wheel_FL", "Ref_Wheel_FR"):
+            m_, T_ = sc[k_]; mm_ = m_.copy(); mm_.apply_transform(T_); env_meshes.append(mm_.convex_hull)
+wenv = U(*env_meshes)
+wenv.export(os.path.join(OUT, "Front_Wheel_Envelope.stl"))
+print(" Front_Wheel_Envelope.stl (stl/v3): arm -12..+4 deg x rack +/-3.0 mm, both wheels, union of per-pose convex hulls; vol %.0f, watertight %s, bounds %s" % (wenv.volume, wenv.is_watertight, np.round(wenv.bounds, 1).tolist()))
+for n_, m_ in envf.items():
+    try: x_ = trimesh.boolean.intersection([m_, wenv], engine=ENG); print("   envelope x %s: %.1f mm3" % (n_, x_.volume if len(x_.faces) else 0))
+    except Exception as e_: print("   envelope x %s: boolean not possible (%s; watertight %s)" % (n_, e_, m_.is_watertight))
+
+# ================================================================ bump stops (shock rod rings), wire-clip lid, fastener list
+print("\n=== BUMP STOPS / CLIP / HARDWARE ===")
+ax_ = (LO0_ - UP_) / np.linalg.norm(LO0_ - UP_)
+ring = D(seg_cyl(UP_ + ax_ * 10.61, UP_ + ax_ * 12.91, 2.0), seg_cyl(UP_ + ax_ * 10.0, UP_ + ax_ * 13.5, 0.75))     # on the exposed shock rod: stops compression at arm +4 deg
+lid = D(box(24.2, 28.6, Y_E + 0.15, 13.4, 10.5, 11.7), cyl("y", [26.4, 12.65, 10.5], 0.7, 3.0, 16), cyl("z", [24.9, 12.65, 11.0], 0.55, 3.0, 14), cyl("z", [27.9, 12.65, 11.0], 0.55, 3.0, 14))
+extra = {"Front_Bump_Stop_L": ring, "Front_Bump_Stop_R": mirror(ring), "Servo_Wire_Clip": lid}
+for n_, m_ in extra.items(): m_.export(os.path.join(OUT, n_ + ".stl"))
+for n_, m_ in extra.items():
+    rt_ = trimesh.load(os.path.join(OUT, n_ + ".stl")); print("  %-20s watertight %s vol %.1f" % (n_, rt_.is_watertight, rt_.volume))
+old_ = os.path.join(OUT, "Steering_Link.stl")
+if os.path.exists(old_): os.remove(old_); print("  removed stl/v3/Steering_Link.stl (replaced by Steering_Drag_Link + Steering_BellCrank)")
+print(" servo horn angle (rack +/-2.8): %.1f deg ; crank psi %.1f deg ; drag-link length %.2f" % (math.degrees(horn_angle(2.8)), math.degrees(crank_psi(2.8)), LD))
+for nme, m_ in (("HW_Front_Driveshaft_UJ_Gbx", refs["HW_Front_Driveshaft_UJ_Gbx"]), ("HW_Front_Driveshaft_UJ_Worm", refs["HW_Front_Driveshaft_UJ_Worm"])):
+    x_ = trimesh.boolean.intersection([m_, refs["Servo_Ref"]], engine=ENG); print("  %s x servo case: %.2f mm3" % (nme, x_.volume if len(x_.faces) else 0))
+
+
+# ================================================================ DOGBONE ANGLES (joint at BOTH ends) and plunge
+print("\n=== DOGBONE: per-end joint angle over steering lock x hub travel ===")
+def dog_state(th, s, j1y=None, dy=None):
+    j1y = DOG_J1_Y if j1y is None else j1y; dy = DOG_J2_DY if dy is None else dy
+    sol = solve_front(th); d = steer_from_rack(sol, s, "L")
+    if d is None: return None
+    Tsp = sol["Tc"] @ rotz(d, KX, YS)
+    J2 = (Tsp @ np.array([KX, YS + dy, ZH, 1.0]))[:3]; u = Tsp[:3, :3] @ np.array([0, 1.0, 0]); J1 = np.array([KX, j1y, ZH]); v = J2 - J1; L = np.linalg.norm(v); v = v / L
+    ang = lambda a, b: math.degrees(math.acos(max(-1, min(1, float(np.dot(a, b))))))
+    return ang(v, np.array([0, 1.0, 0])), ang(v, u), L, math.degrees(d)
+def dog_report(j1y, dy, ths, ss):
+    r_ = [(th, s, dog_state(th, s, j1y, dy)) for th in ths for s in ss]; r_ = [x for x in r_ if x[2]]
+    L0_ = dog_state(TH_N, 0.0, j1y, dy)[2]
+    m1 = max(r_, key=lambda x: x[2][0]); m2 = max(r_, key=lambda x: x[2][1])
+    pl = [x[2][2] - L0_ for x in r_]
+    return m1, m2, L0_, min(pl), max(pl)
+RIDE = [TH_N]; TRAVEL = [-12, -8, -4, 0, 4]; BUMPX = [-12, -8, -4, 0, 4, 8, 12]
+SS = [-2.8, -2.0, -1.0, 0.0, 1.0, 2.0, 2.8]
+for j1y, dy in ((DOG_J1_Y, DOG_J2_DY), (10.3, 2.0), (14.0, 0.0), (18.0, 0.0)):
+    for lab, ths in (("travel -12..+4", TRAVEL), ("travel -12..+12", BUMPX)):
+        m1, m2, L0_, pmin, pmax = dog_report(j1y, dy, ths, SS)
+        print(" J1_Y=%.1f J2_dy=%.1f  %-15s: dogbone L(neutral)=%.2f ; max diff-end %.1f deg (arm %+d, s %+.1f) ; max knuckle-end %.1f deg (arm %+d, s %+.1f, wheel %.1f deg) ; plunge %+.2f..%+.2f mm"
+              % (j1y, dy, lab, L0_, m1[2][0], m1[0], m1[1], m2[2][1], m2[0], m2[1], m2[2][3], pmin, pmax))
+print(" slot engagement DOG_SLOT=%.1f mm per end -> plunge capacity about +/-%.1f mm; joint centre on the kingpin axis keeps steering from changing the length" % (DOG_SLOT, DOG_SLOT - 0.5))
+
+_m = max(dog_report(DOG_J1_Y, DOG_J2_DY, BUMPX, SS)[i][2][k] for i, k in ((0, 0), (1, 1)))
+print(" Injora %s: max per-end angle %.1f deg vs rating %.0f deg -> %s, margin %.1f deg" % (INJORA_PN, _m, DOG_RATING_DEG, "PASS" if _m < DOG_RATING_DEG else "FAIL", DOG_RATING_DEG - _m))

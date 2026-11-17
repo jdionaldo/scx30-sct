@@ -46,3 +46,8 @@ def hits(sc):
     for n,(m,T) in sc.items(): cm.add_object(n,m,transform=T)
     h,nm=cm.in_collision_internal(return_names=True)
     return {tuple(sorted(p)) for p in nm}
+
+def shift_rear(dx):
+    """v4 wheelbase change: translate the rear-end reference bodies (axle, wheels, shocks, driveshaft, sway bar) by -dx in X"""
+    for n,m in M.items():
+        if n.startswith(("Ref_Rear","Ref_Wheel_R","Ref_Shock_R")) or n.startswith("HW_Rear"): m.apply_translation([-dx,0,0])
