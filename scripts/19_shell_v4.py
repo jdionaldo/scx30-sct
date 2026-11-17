@@ -8,15 +8,18 @@ from scipy.optimize import brentq
 from trimesh.collision import CollisionManager
 BD = os.environ["BODY_DIR"]; V3 = "stl/v3/"; V4 = "stl/v4/"
 sys.path.insert(0, "scripts"); import rearlib as R
-SH = float(os.environ.get("REAR_SHIFT", 9.0)); R.shift_rear(SH); ROOF_LIFT = float(os.environ.get("ROOF_LIFT", 28.1))      # = 18_tub.py
+SH = float(os.environ.get("REAR_SHIFT", 9.0)); R.shift_rear(SH); ROOF_LIFT = float(os.environ.get("ROOF_LIFT", 3.2))      # = 18_tub.py: rigid shell lift (min dZ: ESC shelf/shock eye/motor clamp/bulkhead nose >= 1.5 mm, transmission top +6)
 def _ss(t): t = np.clip(t, 0, 1); return t*t*(3 - 2*t)
 def lift(m, H=None):
     H = ROOF_LIFT if H is None else H; m = m.copy(); v = m.vertices.copy(); x, z = v[:, 0], v[:, 2]
     fx = _ss((x + 46.0)/10.0)*(1 - 0.85*_ss((x - 8.0)/16.0)); v[:, 2] += H*_ss((z - 17.0)/12.0)*fx; m.vertices = v; return m
+SILL_Z = 6.7; SILL_BAND = 8.0     # original sill height; the lower body is stretched over this band so the sill stays put while everything above rises rigidly by ROOF_LIFT
+def lowlift(m, H=None):
+    H = ROOF_LIFT if H is None else H; m = m.copy(); v = m.vertices.copy(); v[:, 2] += H*_ss((v[:, 2] - SILL_Z)/SILL_BAND); m.vertices = v; return m
 def shift_tail(m):
     m = m.copy(); v = m.vertices.copy(); v[:, 0] -= SH*_ss((-30.0 - v[:, 0])/10.0); m.vertices = v; return m
 PL = np.array([-26.0 - SH, float(os.environ.get("PL_Z", 2.4))]); PU = np.array([-24.53 - SH, float(os.environ.get("PU_Z", 12.0))]); R.PL = PL; R.PU = PU; R.A = np.array([-59.0 - SH, -0.5]); R.Bp = np.array([-57.5 - SH, 8.85])   # = 18_tub.py
-RAIL_DY = float(os.environ.get("RAIL_DY", 4.0)); WARP_DY = RAIL_DY + 0.1; CLR = float(os.environ.get("CLR", 0.3))
+RAIL_DY = float(os.environ.get("RAIL_DY", 4.0)); SHELL_MARGIN = float(os.environ.get("SHELL_MARGIN", 1.5)); WARP_DY = RAIL_DY + SHELL_MARGIN; CLR = float(os.environ.get("CLR", 0.3))
 GBX_X, GBX_Y, GBX_Z0, GBX_Z1, SHAFT_Z = 6.0, 12.5, -4.9, 23.1, 4.1; MOTOR_R, MOTOR_L, MOTOR_Z = 8.5, 10.0, 18.1; MOTOR_X1 = -(GBX_X + 0.1); MOTOR_X0 = MOTOR_X1 - MOTOR_L; MC_PX = (-14.5, -10.0)
 BAR_X, BAR_Z, BAR_Y, BAR_E_X = -78.5 - SH, 16.3 + 4.2, 19.75, -46.75 - SH; TAB_X, TAB_TOP_Z, LINK_INS = -46.75 - SH, 4.9, 0.8; WIRE_R, LINK_R = 0.4, 0.45
 def box(x0, x1, y0, y1, z0, z1): return trimesh.creation.box(bounds=[[x0, y0, z0], [x1, y1, z1]])
@@ -25,8 +28,8 @@ def D(a, bs): return trimesh.boolean.difference([a] + list(bs), engine="manifold
 def ld(n, d=V4): return trimesh.load(d + n + ".stl")
 def dil(m, c):
     ms = [m]
-    for d in ([c, 0, 0], [-c, 0, 0], [0, c, 0], [0, -c, 0], [0, 0, c], [0, 0, -c]) + tuple([c*a_/math.sqrt(2), c*b_/math.sqrt(2), 0] for a_ in (1, -1) for b_ in (1, -1)) + tuple([c*a_/math.sqrt(2), 0, c*b_/math.sqrt(2)] for a_ in (1, -1) for b_ in (1, -1)) + tuple([0, c*a_/math.sqrt(2), c*b_/math.sqrt(2)] for a_ in (1, -1) for b_ in (1, -1)):   # 18 directions (axes + edge diagonals): thin parts left diagonal gaps with only 6
-        k = m.copy(); k.apply_translation(d); ms.append(k)
+    for d in ([c, 0, 0], [-c, 0, 0], [0, c, 0], [0, -c, 0], [0, 0, c], [0, 0, -c]) + tuple([c*a_/math.sqrt(2), c*b_/math.sqrt(2), 0] for a_ in (1, -1) for b_ in (1, -1)) + tuple([c*a_/math.sqrt(2), 0, c*b_/math.sqrt(2)] for a_ in (1, -1) for b_ in (1, -1)) + tuple([0, c*a_/math.sqrt(2), c*b_/math.sqrt(2)] for a_ in (1, -1) for b_ in (1, -1)) + tuple([c*a_/math.sqrt(3), c*b_/math.sqrt(3), c*e_/math.sqrt(3)] for a_ in (1, -1) for b_ in (1, -1) for e_ in (1, -1)):   # 26 directions (+8 cube corners: the 18 left a notch at box corners)   # 18 directions (axes + edge diagonals): thin parts left diagonal gaps with only 6
+        for f_ in (1.0, 0.5): k = m.copy(); k.apply_translation([q*f_ for q in d]); ms.append(k)      # shifts at c and c/2: knife-edge slivers of the cage left gaps with the c-shift alone
     return U(ms)
 def posed(m, T): m = m.copy(); m.apply_transform(T); return m
 def vol(a, b):
@@ -47,12 +50,18 @@ def stretch_tail(m, xb=-48.0, ext=17.0):
     """lengthen the rear of the body: x < xb is stretched linearly so the tail end moves back by ext (planes of constant Y/Z stay planar)"""
     m = m.copy(); v = m.vertices.copy(); x0 = v[:, 0].min(); k = (xb - x0 + ext)/(xb - x0); sel = v[:, 0] < xb; v[sel, 0] = xb - (xb - v[sel, 0])*k; m.vertices = v; return m
 TAIL_EXT = float(os.environ.get("TAIL_EXT", 18.0))
-BASE = lift(warp(stretch_tail(shift_tail(trimesh.load("stl/tacoma_trophy_shell.stl")), xb=-48.0 - SH, ext=TAIL_EXT), WARP_DY))         # no hood scoop, no rails: only the widened original body
+TAIL_E = float(os.environ.get("TAIL_E", 17.0))      # total rear lengthening (original tail end X -61.5 -> -61.5 - TAIL_E)
+def lengthen(m, E=None, xa=-50.0, xb=-22.0):
+    """clean lengthening: the fastback/bed zone X xa..xb is stretched uniformly in X (planes stay planes), everything behind xa (tail panel, blade, bed end) moves back rigidly by E, the cab (X > xb) is untouched"""
+    E = TAIL_E if E is None else E; m = m.copy(); v = m.vertices.copy(); x = v[:, 0]; k = 1.0 + E/(xb - xa)
+    v[:, 0] = np.where(x >= xb, x, np.where(x >= xa, xb - (xb - x)*k, x - E)); m.vertices = v; return m
+BASE = lowlift(warp(lengthen(trimesh.load("stl/tacoma_trophy_shell.stl")), WARP_DY))         # no hood scoop, no rails: only the widened original body
 print("base shell: vol %.0f bounds %s watertight %s" % (BASE.volume, BASE.bounds.round(1).tolist(), BASE.is_watertight))
 
 # ---- static keepouts (v4 parts) ----
-STATIC = {n: ld(n) for n in ("Chassis_Tub", "Rear_Cage_Hoop", "Rear_Cage_Stay_L", "Rear_Cage_Stay_R", "Ref_ESC_G40", "Ref_Receiver", "Ref_Battery_2S", "Ref_Servo_Envelope", "Roll_Cage", "ESC_RX_Shelf_L", "ESC_RX_Shelf_R")}
+STATIC = {n: ld(n) for n in ("Chassis_Tub", "Rear_Cage_Hoop", "Rear_Cage_Stay_L", "Rear_Cage_Stay_R", "Ref_ESC_G40", "Ref_Servo_Envelope", "Roll_Cage", "ESC_RX_Shelf_L", "ESC_RX_Shelf_R")}
 STATIC["IFS_Bulkhead_Convertible"] = ld("IFS_Bulkhead_Convertible", V3)
+STATIC["Ref_Receiver"] = box(14.0, 36.0, -7.0, 7.0, 24.4, 31.4); STATIC["Ref_Battery_2S"] = box(-74.9, -29.6, -10.5, 10.5, 18.1, 29.3)      # keep-out volumes only (= 18_tub.py RX_BOX / BATT_BOX), not exported
 for n in ("Ref_Shock_RL", "Ref_Shock_RR", "Ref_Shock_Eye_L", "Ref_Shock_Eye_R"): STATIC[n] = ld(n)
 
 # ---- rear sweep poses (same maths as 18_tub.py) ----
@@ -128,13 +137,26 @@ use = []
 for n, m in STATIC.items():
     v = vol(BASE, m); print("  base shell vs %-26s %.2f mm3" % (n, v))
     _o = CollisionManager(); _o.add_object('m', m); _cs = CollisionManager(); _cs.add_object('s', BASE)
-    if v > 0.01 or _cs.min_distance_other(_o) < CLR + 0.5: use.append(m)      # also parts that merely graze the shell      # incl. the cage lugs (the v3 cage itself never touched the shell)
+    if os.environ.get("STATIC_CUTS") and (v > 0.01 or _cs.min_distance_other(_o) < CLR + 0.5): use.append(m)      # also parts that merely graze the shell      # incl. the cage lugs (the v3 cage itself never touched the shell)
 print("  base shell vs gearbox+motor pocket: %.1f mm3" % vol(BASE, pocket(0.0)))
 
 def build(c):
-    cuts = [dil(m, c + 0.9) for m in use] + [pocket(0.4 + (c - 0.3)*0.5)]        # static parts (cage, bulkhead, ...) get +0.3 extra: >= 0.8 mm opening
-    cuts += [dil(m, c) for m in sweep] + [dil(w, c) for w in RELIEF_FW]
+    cuts = [dil(m, c + 0.9) for m in use] + ([pocket(0.4 + (c - 0.3)*0.5)] if use else [])        # static parts (cage, bulkhead, ...) get +0.3 extra: >= 0.8 mm opening
+    ARCH_X = float(os.environ.get("ARCH_X", 0.25))      # polyhedral dilation under-cuts by ~0.15: arches get a little extra so the wheels clear >= 0.8
+    cuts += [dil(m, c + ARCH_X) for m in sweep] + [dil(w, c + ARCH_X) for w in RELIEF_FW]
     out = D(BASE, [U(cuts)])
+    for _pass in range(3 if os.environ.get("PATCH") else 0):      # patch pass: translated-copy dilation misses knife edges of thin parts; cut a small sphere around every cage/mover point that is still < CLR+0.04 from the shell
+        pts = trimesh.sample.sample_surface(out, 150000)[0]; balls = []
+        for T in list(use) + list(sweep) + list(RELIEF_FW):
+            lo, hi = T.bounds[0] - CLR - 0.2, T.bounds[1] + CLR + 0.2; sel = pts[np.all((pts > lo) & (pts < hi), axis=1)]      # only shell samples near this part's box
+            if len(sel) == 0: continue
+            cm_ = CollisionManager(); cm_.add_object("t", T); cp_, dd_, _t = trimesh.proximity.closest_point(T, sel); bad = dd_ < CLR + 0.09
+            if bad.any():
+                q = np.unique(np.round(cp_[bad]/0.4).astype(int), axis=0)*0.4
+                for c_ in q: b_ = trimesh.creation.icosphere(subdivisions=2, radius=CLR + 0.3); b_.apply_translation(c_); balls.append(b_)
+        print("    patch pass %d: %d spheres" % (_pass, len(balls)))
+        if not balls: break
+        out = D(out, [U(balls)])
     sh = sorted(out.split(only_watertight=False), key=lambda q: -abs(q.volume)); big = sh[0]
     print("  relief clr %.3f: vol %.0f -> %.0f, shells %d, dropped %s" % (c, BASE.volume, big.volume, len(sh), [(round(abs(q.volume), 1), q.bounds.round(1).tolist()) for q in sh[1:5]]))
     return big

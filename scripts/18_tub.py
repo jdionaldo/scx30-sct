@@ -7,7 +7,7 @@ from scipy.optimize import brentq
 sys.path.insert(0, "scripts"); import rearlib as R
 SH = float(os.environ.get("REAR_SHIFT", 9.0))      # wheelbase +SH (107.5 -> 116.5): everything behind the transmission zone moves back; front untouched
 R.shift_rear(SH)
-ROOF_LIFT = float(os.environ.get("ROOF_LIFT", 28.1))   # cabin/roof lift (shell roof Z 31.9 -> 60.0)
+ROOF_LIFT = float(os.environ.get("ROOF_LIFT", 3.2))   # rigid shell lift (roof Z 31.9 -> 35.1); the cage top tubes follow it
 def _ss(t): t = np.clip(t, 0, 1); return t*t*(3 - 2*t)
 def lift(m, H=None):
     H = ROOF_LIFT if H is None else H; m = m.copy(); v = m.vertices.copy(); x, z = v[:, 0], v[:, 2]
@@ -42,7 +42,7 @@ TUB_OUT = 17.9                       # outer half width (arms start at 18.0; she
 WALL = 1.5; GBX_IN = 13.5            # gearbox/front zone inner half width; tail inner = TUB_OUT-WALL
 TAIL_IN = TUB_OUT - WALL
 RIM_Z = 8.0                          # cage lower tubes start at Z 8.1 -> they sit on this rim
-TUB_X0, TUB_X1 = -46.0 - SH, 36.0         # floor/walls end (floor ends before the axle housing, X>-47)
+TUB_X0, TUB_X1 = -46.0, 36.0         # floor/walls end (floor ends before the axle housing, X>-47)
 GBX_ZONE_X0 = -31.0                  # walls are 'gearbox zone' (inner 13.5) from here forward
 # gearbox foot holes: GUESS (4 x M1.4 pilots, 20 x 20 mm square about the gearbox centre) -> measure and edit
 FOOT_HOLES = [(-4.8, -9.4), (4.8, 9.4)]; FOOT_THRU_D = 1.7; FOOT_CB_D = 3.2; FOOT_CB_DEPTH = 1.0   # Modrax photo: 2 feet on the case bottom, diagonal (one per case half); M1.4 from below
@@ -63,7 +63,8 @@ CHAMF = 3.2; BUMP_X0, BUMP_X1, BUMP_Z0 = -67.5, -61.0, 7.2       # lower-edge ch
 BAY_CLR = 0.4
 # ESC / RX: two identical flat floor pockets (26.4 across Y x 18.4 along X, sunk 2 mm) under the shaft line, behind the transmission
 # rear deck (battery + receiver) over the axle housing, bridge sits on it
-DECK_X1, DECK_X0 = -26.9, -82.5 - SH; DECK_Z0, DECK_Z1 = 14.7, 16.3   # raised so the axle-top bracket (top Z ~11 + 4 bump) clears
+X_FOOT, Y_FOOT = -43.0, 13.7
+DECK_X1, DECK_X0 = -26.9, -35.0; DECK_Z0, DECK_Z1 = 14.7, 16.3   # raised so the axle-top bracket (top Z ~11 + 4 bump) clears
 DECK_BOT_RIB = 0.0; BEAM_Y0 = 14.5; BEAM_Z0 = 11.2
 BATT_X1 = -29.4; BATT_X0 = BATT_X1 - BATT_L - BAY_CLR; BATT_Y1 = (BATT_W + 0.8)/2; BATT_Y0 = -BATT_Y1     # 44.5 along X, 20 across Y, 10.5 tall, centred on the deck
 # side bays (identical, left + right of the motor): ESC upright on the floor, shelf above it carries the receiver upright (either part fits either level)
@@ -99,10 +100,11 @@ def cylX(y, z, r, x0, x1, n=32):
     c.apply_translation([(x0 + x1)/2, y, z]); return c
 def motor_ref(): return cylX(MOTOR_Y, MOTOR_Z, MOTOR_R, MOTOR_X0, MOTOR_X1, 48)
 ESC_BOX = box(EL_CX - ESC_W/2, EL_CX + ESC_W/2, -(BAY_Y0 + 0.3 + ESC_H), -(BAY_Y0 + 0.3), FLOOR_TOP, FLOOR_TOP + ESC_L)     # ESC upright in the right (-Y) bay
-RX_BOX = box(EL_CX - RX_W/2, EL_CX + RX_W/2, -(BAY_Y0 + 0.6 + RX_H), -(BAY_Y0 + 0.6), SH_Z1, SH_Z1 + RX_L)               # receiver upright on the right shelf
-BATT_BOX = box(BATT_X0 + BAY_CLR/2, BATT_X1 - BAY_CLR/2, BATT_Y0 + 0.4, BATT_Y1 - 0.4, DECK_Z1, DECK_Z1 + BATT_H)
+RX_BOX = box(14.0, 36.0, -7.0, 7.0, 24.4, 31.4)      # receiver 22 x 14 x 7 lying FLAT above the centreline in front of the transmission (the shelf bay is only 7 mm wide); keep-out only, mount not modelled
+PACK_Z0 = DECK_Z1 + 1.8                       # pack floor: rests on 2 deck ribs (front) and 3 cradle rungs (behind the deck end)
+BATT_BOX = box(BATT_X0 + BAY_CLR/2, BATT_X1 - BAY_CLR/2, BATT_Y0 + 0.4, BATT_Y1 - 0.4, PACK_Z0, PACK_Z0 + BATT_H)
 P["Ref_Gearbox"] = gbx_ref(); P["Ref_Motor_GM1614"] = motor_ref()
-P["Ref_ESC_G40"] = ESC_BOX; P["Ref_Receiver"] = RX_BOX; P["Ref_Battery_2S"] = BATT_BOX
+P["Ref_ESC_G40"] = ESC_BOX      # RX_BOX / BATT_BOX are internal keep-out volumes only (cage/deck/shell clearance), NOT exported as bodies
 
 # ---------------- the tub ----------------
 def build_tub():
@@ -122,11 +124,13 @@ def build_tub():
         y0, y1 = yy(PAD_Y0, TAIL_IN + 0.01)
         parts.append(box(PL[0] - LUG_X - 1.0, PU[0] + LUG_X + 0.5, y0, y1, FLOOR_TOP - 0.01, PU[1] + 2.6))   # corner link block: lower pivot low/outer, upper pivot above it
         # step wall between gearbox zone and tail (closes the cavity behind the gearbox, keeps motor/shaft open above)
-    parts.append(box(DECK_X0, DECK_X1, -TUB_OUT, TUB_OUT, DECK_Z0, DECK_Z1))             # deck
+    parts.append(box(DECK_X0, DECK_X1, -TUB_OUT, TUB_OUT, DECK_Z0, DECK_Z1))             # deck (ends at the link pads: the rear cage is cantilevered behind it)
+    for s_ in (1, -1):
+        parts.append(box(DECK_X0 + 0.5, -30.5, *ysp(s_, 4.5, 8.5), DECK_Z1 - 0.01, PACK_Z0))                       # pack ribs on the deck
     for s_ in (1, -1): parts.append(box(BUMP_X0, BUMP_X1, *ysp(s_, 10.0, 14.0), BUMP_Z0, DECK_Z0 + 0.01))      # bump stops under the deck: axle top touches at ta +7
     for s_ in (1, -1):
         parts.append(box(BULK_X0 - 1.0, BULK_X0 - 0.1, min(s_*11.9, s_*GBX_IN + s_*0.3), max(s_*11.9, s_*GBX_IN + s_*0.3), FLOOR_TOP - 0.01, -1.0))       # bulkhead rear stop (X) beside each wall; floor is the Z seat
-        parts.append(box(DECK_X0, -50.0, min(s_*BEAM_Y0, s_*TUB_OUT), max(s_*BEAM_Y0, s_*TUB_OUT), BEAM_Z0, DECK_Z0 + 0.01))       # side beam under the extended deck (cage feet screw into it)
+        if DECK_X0 < -50.0: parts.append(box(DECK_X0, -50.0, min(s_*BEAM_Y0, s_*TUB_OUT), max(s_*BEAM_Y0, s_*TUB_OUT), BEAM_Z0, DECK_Z0 + 0.01))       # side beam under the extended deck (cage feet screw into it)
     # skid nose under the bulkhead: sloped kick-up (profile in XZ, extruded across Y)
     nose = trimesh.convex.convex_hull(np.array([[x, y, z] for (x, z) in ((TUB_X1 - 0.5, FLOOR_BOT), (TUB_X1 + NOSE_L - NOSE_RISE_L, FLOOR_BOT), (TUB_X1 + NOSE_L, FLOOR_TOP - 0.4), (TUB_X1 + NOSE_L, FLOOR_TOP), (TUB_X1 - 0.5, FLOOR_TOP)) for y in (-NOSE_W, NOSE_W)]))
     parts.append(nose)
@@ -162,7 +166,10 @@ def cage_warp(m):
     dyz = np.interp(v[:, 2], [11.0, 19.0, 28.0], [7.0, 4.0, 2.8])
     wx = np.clip((x + 46.0)/15.0, 0, 1)*np.clip((24.0 - x)/16.0, 0, 1)
     v[:, 1] += np.sign(v[:, 1])*dyz*np.clip((a - 8.0)/2.0, 0, 1)*wx; m.vertices = v; return m
-CAGE = lift(cage_warp(ld("Roll_Cage")))
+CAGE_TOP_DROP = float(os.environ.get("CAGE_TOP_DROP", 2.6))     # top tubes / pillar heads sit inside the roof (shell is NOT cut for the cage): lowered smoothly above Z 24
+def squash_top(m, d=None):
+    d = CAGE_TOP_DROP if d is None else d; m = m.copy(); v = m.vertices.copy(); v[:, 2] -= d*_ss((v[:, 2] - 24.0)/8.0); m.vertices = v; return m
+CAGE = squash_top(lift(cage_warp(ld("Roll_Cage"))))
 CAGE = D(CAGE, [box(BATT_X0 - 1.5, BATT_X1 + 1.5, -(BATT_Y1 + 1.5), BATT_Y1 + 1.5, DECK_Z1 - 0.5, 70.0)])      # nothing of the main cage crosses the battery column (pack + 1.5 mm)
 SHK_UX, SHK_UZ = -26.0 - SH, 21.5                                          # rear shock upper pin (X,Z), M1.6 along Y
 CAGE = D(U([CAGE] + [box(SHK_UX - 2.5, SHK_UX + 2.5, *ysp(s_, 16.0, 18.1), 17.0, SHK_UZ + 1.6) for s_ in (1, -1)]),
@@ -206,10 +213,9 @@ MC_SCREWS = [(px, sg*MC_Y) for px in MC_PX for sg in (1, -1)]
 EL_PIL = [(sg, (x0_ + x1_)/2, (y0_ + y1_)/2) for sg in (1, -1) for (x0_, x1_) in EL_PX for (y0_, y1_) in EL_PY]       # pillar centres (side, X, |Y|)
 EL_PILLARS = [box(x0_, x1_, *ysp(sg, y0_, y1_), FLOOR_TOP - 0.01, SH_Z0 + 0.01) for sg in (1, -1) for (x0_, x1_) in EL_PX for (y0_, y1_) in EL_PY]
 RAIL_Y = 12.0; XF = -28.2; HOOK_Y = 6.5; HOOK_SX = -28.1; HOOK_SY = 9.2          # battery cradle rail line (|Y|) and its two deck feet
-RAIL_BOSS = [box(-29.3, -26.9, *ysp(sg, HOOK_SY - 1.7, HOOK_SY + 1.7), DECK_Z0 - 3.0, DECK_Z0 + 0.01) for sg in (1, -1)]
+RAIL_BOSS = []      # no battery hooks any more (cradle removed)
 TUB = U([TUB, SADDLE] + EL_PILLARS + RAIL_BOSS)
 TUB = D(TUB, [cylZ(x_, y_, 0.6, MOTOR_Z - 4.5, MOTOR_Z - 0.04, 12) for x_, y_ in MC_SCREWS] + [cylZ(px_, sg_*py_, 0.6, SH_Z0 - 4.5, SH_Z0 + 0.02, 12) for sg_, px_, py_ in EL_PIL]
-        + [cylZ(HOOK_SX, sg*HOOK_SY, 0.6, DECK_Z0 - 2.8, DECK_Z1 + 0.01, 12) for sg in (1, -1)]
         + [cylZ(bx, by, BFS_PILOT_D/2, FLOOR_BOT - 1.0, FLOOR_TOP + 0.01, 12) for bx, by in BFS])
 TUB = single('Chassis_Tub', TUB); P["Chassis_Tub"] = TUB; print("cage feet columns added:", len(FEET))
 
@@ -289,6 +295,10 @@ for k in KEEP:
     P[k] = ld(k)
     if k == "Ref_Rear_Driveshaft": P[k] = _stretch_ds(P[k])
     else: P[k].apply_translation([-SH, 0, 0])
+# rear unsprung bodies that used to be picked up from the per-body folder at the OLD wheelbase: export the shifted copies (R.shift_rear(SH) already applied to R.M), rest pose = identity
+REAR_UNSPRUNG = ["Ref_Rear_Axle", "Ref_Wheel_RL", "Ref_Wheel_RR", "HW_Rear_Wheel_Nut_L", "HW_Rear_Wheel_Nut_R", "HW_Rear_Upper_Link_Axle_Nut_L", "HW_Rear_Upper_Link_Axle_Nut_R",
+                 "HW_Rear_Upper_Link_Axle_Screw_L", "HW_Rear_Upper_Link_Axle_Screw_R", "HW_Rear_Shock_Lower_Nut_L", "HW_Rear_Shock_Lower_Nut_R"]
+for k in REAR_UNSPRUNG: P[k] = R.M[k].copy()
 # ---- axle-top bracket (printed, sits on the pumpkin) + vertical pin; links ride on the pin ----
 BR_PLATE_Z0, BR_PLATE_Z1 = 7.0, BP[1] - 0.6 - BR_EYE_T/2 - 0.2      # plate sits on the two axle-top ridges (|Y| 1.7..3+, Z 7.0), 0.1 under the lower eye
 BR_KEY = (BP[0] - 1.0, BP[0] + 1.0, -1.55, 1.55, 3.2, BR_PLATE_Z0)      # key drops into the 3.5 mm groove between the ridges (locates in Y, pin goes through it)
@@ -305,10 +315,12 @@ TAB_X, TAB_TOP_Z, LINK_INS = -46.75 - SH, 4.9, 0.8; WIRE_R, LINK_R, TUN_R = 0.4,
 PXP = -65.0; FOOT_SCREW_D = 0.6                       # side post X
 XA, YF = PXH + 6.0, 16.4                              # hoop joint plate centre (X) and frame line (Y)
 XK = -58.5                                            # end of the horizontal upper rail, drop diagonal starts
-XN, YN, ZN = -54.0, 16.9, 20.7                        # frame end over the main-cage lug (horizontal lap, vertical screws)
-JT_Z0, JT_Z1 = DECK_Z1 + 0.4, DECK_Z1 + 8.7           # hoop joint plate Z
-HJ_SCREWS = [(XA - 1.2, 19.5), (XA + 1.2, 23.0)]; NJ_SCREWS = [(-50.6, 16.9), (-48.4, 16.9)]
+XN, YN, ZN = -54.0, 16.2, 20.7                        # frame end over the main-cage lug (horizontal lap, vertical screws)
+JT_Z0, JT_Z1 = 12.5, 22.5           # hoop joint plate Z
+HJ_SCREWS = [(XA - 1.2, 15.5), (XA + 1.2, 19.5)]; NJ_SCREWS = [(-50.6, 16.9), (-48.4, 16.9)]
 RAIL_Z = DECK_Z1 + 1.25; CRAIL_Z = 24.4; RAIL_X0 = -75.5       # RAIL_Z: deck rails; CRAIL_Z: battery cradle rails (mid pack height, above the main-cage rail tops at Z 20.7) with front hooks down to the deck
+BUMP_POST_FOOT = float(os.environ.get("BUMP_FOOT", 6.7)); BUMP_POST_X, BUMP_POST_Y, BUMP_POST_Z = -71.0, 11.8, BUMP_POST_FOOT + 1.15      # bump stops hang from the cradle rung over the axle (the deck that carried the old pads is gone)
+RUNG_X = (-72.0, -62.0, -52.0); RUNG_E = 1.8     # rungs end 1.8 mm from the centre line (L/R halves stay apart)
 STRAP_X = (-69.0, -61.5); STRAP_SX = 1.8; STRAP_BARS = False     # open top deck: no cage tubes across the pack; the pack is strapped through deck slots              # strap bar X positions; lap screws at X +-STRAP_SX
 def tube(p0, p1, r=TUBE_R):
     p0, p1 = np.array(p0, float), np.array(p1, float)
@@ -316,72 +328,55 @@ def tube(p0, p1, r=TUBE_R):
     for q in (p0, p1): ms.append(trimesh.creation.icosphere(subdivisions=2, radius=r*1.03)); ms[-1].apply_translation(q)
     return U(ms)
 def ysp(sg, a_, b_): return (min(sg*a_, sg*b_), max(sg*a_, sg*b_))
-# ---- piece 1: hoop (legs, top bar, sway collars + tunnel, low cross/pack stop, X braces, tail bumper bar with struts, feet, joint tabs)
+# ---- Rev 22: rear cage rebuilt like the ORIGINAL roll cage tail (stl/roll_cage.stl): a wedge of two tubes that converge from the main-cage rear node down to a low tail,
+# ladder rungs and a plan-view diagonal, no tall hoop / pack cradle / bumper bar; still cantilevered (node plates on the main-cage lugs + hoop joint plates), no deck under it
+HZ0, HZ1 = 12.0, 23.0                                 # tail frame (hoop) leg bottom / top Z (old cage: tail tip Z 12.5)
+def zlow(x): return ZN + (13.5 - ZN)*(XN - x)/(XN - XA)       # lower tube height along X (node -> hoop joint)
+def ztop(x): return ZN + (22.0 - ZN)*(XN - x)/(XN - XA)       # upper tube height along X
+RUNG_X = (-71.0, -62.0); RUNG_E = 1.8
 parts = []
-BUMP_X, BUMP_Z = PXH - 6.0, DECK_Z1 + 4.0
 for sg in (1, -1):
-    parts.append(tube((PXH, sg*HOOP_Y, DECK_Z1 + 1.3), (PXH, sg*HOOP_Y, HOOP_TOP)))
-    parts.append(box(PXH - 3.5, PXH + 1.4, *ysp(sg, 13.2, 17.8), DECK_Z1, DECK_Z1 + 1.2))                                      # hoop foot pad on the deck
+    parts.append(tube((PXH, sg*HOOP_Y, HZ0), (PXH, sg*HOOP_Y, HZ1)))                                                           # leg
     parts.append(cylZ(PXH, sg*HOOP_Y, 2.4, BAR_Z - 2.4, BAR_Z + 2.4, 28))                                                      # bar collar on the leg
     parts.append(box(PXH + 0.5, XA + 2.5, *ysp(sg, 13.7, 15.2), JT_Z0, JT_Z1))                                                 # joint tab (side frame screws on from outside)
-    parts.append(tube((PXH, sg*HOOP_Y, BAR_Z + 2.4), (PXH, 0.0, HOOP_TOP)))                                                    # X brace (upper)
-    parts.append(tube((PXH, sg*HOOP_Y, DECK_Z1 + 1.25), (PXH, 0.0, BAR_Z - 2.0)))                                              # X brace (lower)
-    parts.append(tube((PXH, sg*HOOP_Y, HOOP_TOP - 0.5), (BUMP_X, sg*HOOP_Y, BUMP_Z)))                                          # tail strut (top)
-    parts.append(tube((PXH, sg*HOOP_Y, BAR_Z), (BUMP_X, sg*HOOP_Y, BUMP_Z)))                                                   # tail strut (collar)
-parts.append(tube((PXH, -HOOP_Y, HOOP_TOP), (PXH, HOOP_Y, HOOP_TOP)))
+    parts.append(tube((PXH, sg*HOOP_Y, BAR_Z + 2.4), (PXH, 0.0, HZ1)))                                                         # X brace (upper)
+    parts.append(tube((PXH, sg*HOOP_Y, HZ0), (PXH, 0.0, BAR_Z - 2.0)))                                                         # X brace (lower)
+parts.append(tube((PXH, -HOOP_Y, HZ1), (PXH, HOOP_Y, HZ1)))
 parts.append(tube((PXH, -HOOP_Y, BAR_Z - 2.0), (PXH, HOOP_Y, BAR_Z - 2.0)))
 parts.append(box(PXH - 1.8, PXH + 1.8, -2.0, 2.0, BAR_Z - 3.0, BAR_Z + 1.6))
-parts.append(tube((PXH, -HOOP_Y, DECK_Z1 + 1.25), (PXH, HOOP_Y, DECK_Z1 + 1.25)))
-parts.append(tube((BUMP_X, -HOOP_Y, BUMP_Z), (BUMP_X, HOOP_Y, BUMP_Z)))
+parts.append(tube((PXH, -HOOP_Y, HZ0), (PXH, HOOP_Y, HZ0)))
 HOOP = U(parts)
-HOOP = D(HOOP, [cylY(PXH, BAR_Z, TUN_R, -HOOP_Y - 4, HOOP_Y + 4, 24)] + [cylZ(PXH - 2.6, sg*HOOP_Y, 0.8, DECK_Z1 - 0.5, DECK_Z1 + 1.3, 12) for sg in (1, -1)]
+HOOP = D(HOOP, [cylY(PXH, BAR_Z, TUN_R, -HOOP_Y - 4, HOOP_Y + 4, 24)]
             + [cylY(x_, z_, 0.6, sg*13.8, sg*15.9, 12) for sg in (1, -1) for x_, z_ in HJ_SCREWS])
 P["Rear_Cage_Hoop"] = HOOP
-# ---- pieces 2/3: side frames
+# ---- pieces 2/3: side frames (wedge: upper + lower tube from the node to the hoop joint, mid post, rungs, plan diagonal, bump-stop post)
 for n, sg in (("L", 1), ("R", -1)):
     fr = []
     fr.append(box(XA - 2.5, XA + 2.5, *ysp(sg, 15.8, 17.0), JT_Z0, JT_Z1))                                                    # hoop joint plate (outer)
-    fr.append(tube((XA, sg*YF, JT_Z1 - 0.5), (XA, sg*YF, CRUN_Z)))                                                              # riser
-    fr.append(tube((XA, sg*YF, CRUN_Z), (XK, sg*YF, CRUN_Z)))                                                                  # upper rail
-    fr.append(tube((XK, sg*YF, CRUN_Z), (XN, sg*YN, ZN)))                                                                      # drop diagonal to the main-cage lug
-    fr.append(tube((PXP, sg*YF, RAIL_Z), (PXP, sg*YF, CRUN_Z)))                                                                # post
-    fr.append(box(PXP - 2.0, PXP + 4.2, *ysp(sg, YF - 2.2, YF + 1.7), DECK_Z1, DECK_Z1 + 1.2))                                 # post foot pad
-    fr.append(tube((XA, sg*YF, RAIL_Z), (PXP, sg*YF, RAIL_Z)))                                                                 # deck rail
-    fr.append(tube((XA, sg*YF, CRUN_Z), (PXP, sg*YF, RAIL_Z)))                                                                 # diagonal brace
-    fr.append(tube((XK, sg*YF, CRUN_Z), (PXP, sg*YF, RAIL_Z)))                                                                 # second diagonal (triangulates the panel)
-    fr.append(box(-54.0, -46.8, *ysp(sg, 15.6, 18.2), 20.1, 21.3))                                                            # main-cage joint plate (lies on the cage lug)
-    # battery cradle: rail at the pack side, rear/post ties down to the frame, front hook down to a deck foot
-    fr.append(tube((RAIL_X0, sg*RAIL_Y, CRAIL_Z), (XF, sg*RAIL_Y, CRAIL_Z)))
-    fr.append(tube((XF, sg*RAIL_Y, CRAIL_Z), (XF, sg*HOOK_Y, CRAIL_Z)))
-    fr.append(tube((XF, sg*HOOK_Y, CRAIL_Z), (XF, sg*HOOK_Y, RAIL_Z)))
-    fr.append(box(-29.3, -26.9, *ysp(sg, HOOK_Y - 1.7, HOOK_SY + 1.7), DECK_Z1, DECK_Z1 + 1.2))
-    fr.append(tube((-68.4, sg*YF, CRAIL_Z), (-68.4, sg*RAIL_Y, CRAIL_Z)))
-    fr.append(tube((PXP, sg*YF, CRAIL_Z), (PXP, sg*RAIL_Y, CRAIL_Z)))
-    # half strap bars over the pack: L half carries the lower lap plate, R half the upper plate (screws from the top, at Y 0)
-    for sx in (STRAP_X if STRAP_BARS else ()):
-        if sg == 1:
-            fr.append(tube((sx, YF, CRUN_Z), (sx, 3.0, CRUN_Z))); fr.append(box(sx - 3.0, sx + 3.0, -2.0, 3.0, CRUN_Z - 1.0, CRUN_Z + 0.6))
-        else:
-            fr.append(tube((sx, -YF, CRUN_Z), (sx, -3.6, CRUN_Z))); fr.append(box(sx - 3.0, sx + 3.0, -4.6, 2.0, CRUN_Z + 0.6, CRUN_Z + 1.8)); fr.append(box(sx - 1.5, sx + 1.5, -4.6, -2.4, CRUN_Z - 0.5, CRUN_Z + 1.81))
+    fr.append(tube((XA, sg*YF, JT_Z0 + 1.0), (XA, sg*YF, JT_Z1 - 1.0)))                                                       # end post
+    fr.append(tube((XA, sg*YF, ztop(XA)), (XN, sg*YN, ZN)))                                                                    # upper tube
+    fr.append(tube((XA, sg*YF, zlow(XA)), (XN, sg*YN, ZN)))                                                                    # lower tube (the sloping tail line of the old cage)
+    fr.append(tube((PXP, sg*YF, zlow(PXP)), (PXP, sg*YF, ztop(PXP))))                                                          # mid post
+    for xr_ in RUNG_X:      # ladder rungs at the lower tube height (bump-stop post hangs from the first one)
+        fr.append(tube((xr_, sg*YF, zlow(xr_)), (xr_, sg*RUNG_E, zlow(xr_))))
+    fr.append(tube((XA, sg*YF, zlow(XA)), (RUNG_X[0], sg*RUNG_E, zlow(RUNG_X[0]))))                                            # plan-view diagonal (old cage: X triangle at the tail)
+    fr.append(tube((BUMP_POST_X, sg*BUMP_POST_Y, BUMP_POST_Z), (BUMP_POST_X, sg*BUMP_POST_Y, zlow(BUMP_POST_X))))             # bump-stop post (rounded foot)
+    fr.append(box(-54.0, -46.8, *ysp(sg, 15.6, 17.8), 20.1, 21.3))                                                            # main-cage joint plate (lies on the cage lug)
     m = U(fr)
-    cuts_ = [cylZ(PXP + 2.8, sg*YF, 0.8, DECK_Z1 - 0.5, DECK_Z1 + 1.3, 12)] + [cylY(x_, z_, 0.8, sg*15.5, sg*17.5, 14) for x_, z_ in HJ_SCREWS] + [cylZ(x_, sg*y_, 0.8, 19.9, 21.5, 14) for x_, y_ in NJ_SCREWS]
-    cuts_ += [cylZ(HOOK_SX, sg*HOOK_SY, 0.8, DECK_Z1 - 0.5, DECK_Z1 + 1.3, 12)]
-    for sx in (STRAP_X if STRAP_BARS else ()):
-        for q in (-1, 1):
-            cuts_.append(cylZ(sx + q*STRAP_SX, 0.0, 0.8 if sg == -1 else 0.6, CRUN_Z + 0.55 if sg == -1 else CRUN_Z - 0.3, CRUN_Z + 1.9 if sg == -1 else CRUN_Z + 0.61, 12))
+    cuts_ = [cylY(x_, z_, 0.8, sg*15.5, sg*17.5, 14) for x_, z_ in HJ_SCREWS] + [cylZ(x_, sg*y_, 0.8, 19.9, 21.5, 14) for x_, y_ in NJ_SCREWS]
     m = D(m, cuts_)
     P[f"Rear_Cage_Stay_{n}"] = m
 # lugs welded to the main Roll_Cage rear nodes (applied after the cage relief below)
 CAGE_LUGS = [box(-52.4, -44.4, *ysp(sg, 15.4, 18.4), 17.8, 20.0) for sg in (1, -1)]; CAGE_CUT_X = -46.2    # main cage is trimmed to X >= -46.2 and gets these lugs
 CAGE_T = U([P["Rear_Cage_Hoop"], P["Rear_Cage_Stay_L"], P["Rear_Cage_Stay_R"]])     # keep-out only, not exported
-FOOT_SCREWS = {"L": (1, PXH - 2.6, HOOP_Y), "R": (-1, PXH - 2.6, HOOP_Y), "Post_L": (1, PXP + 2.8, YF), "Post_R": (-1, PXP + 2.8, YF)}
+FOOT_SCREWS = {}      # no feet: the rear cage is cantilevered (node plates on the main-cage lugs + front hooks into the deck)
+FOOT_DEPTH = 9.0
 for n, (sg, fx, fy) in FOOT_SCREWS.items():
-    P[f"HW_Rear_Cage_Screw_{n}"] = U([cylZ(fx, sg*fy, 0.7, DECK_Z1 - 3.5, DECK_Z1 + 1.3, 12), cylZ(fx, sg*fy, 1.3, DECK_Z1 + 1.2, DECK_Z1 + 1.9, 16)])
-P["Chassis_Tub"] = D(P["Chassis_Tub"], [cylZ(fx, sg*fy, FOOT_SCREW_D, DECK_Z1 - 3.4, DECK_Z1 + 0.01, 12) for (sg, fx, fy) in FOOT_SCREWS.values()])
+    P[f"HW_Rear_Cage_Screw_{n}"] = U([cylZ(fx, sg*fy, 0.7, DECK_Z1 - FOOT_DEPTH + 0.5, RAIL_Z + 0.4, 12), cylZ(fx, sg*fy, 1.3, RAIL_Z + 0.3, RAIL_Z + 1.0, 16)])
+if FOOT_SCREWS: P["Chassis_Tub"] = D(P["Chassis_Tub"], [cylZ(fx, sg*fy, FOOT_SCREW_D, DECK_Z1 - FOOT_DEPTH, DECK_Z1 + 0.01, 12) for (sg, fx, fy) in FOOT_SCREWS.values()])
 for sg, nm in ((1, "L"), (-1, "R")):
     _top = np.array([-38.2, sg*20.25, 19.4]); _ey = sg*20.25
     P[f"Ref_Shock_Eye_{nm}"] = D(trimesh.convex.convex_hull(np.vstack([cylY(SHK_UX, SHK_UZ, 1.8, *ysp(sg, 18.3, 22.2), 28).vertices, cylY(_top[0], _top[2], 1.0, *ysp(sg, 18.3, 22.2), 16).vertices])), [cylY(SHK_UX, SHK_UZ, 0.75, *ysp(sg, 18.0, 22.5), 14)])    # rod end: stem from the shock top to the pin eye
-    P[f"HW_Battery_Hook_Screw_{nm}"] = U([cylZ(HOOK_SX, sg*HOOK_SY, 0.7, DECK_Z0 - 2.6, DECK_Z1 + 1.3, 12), cylZ(HOOK_SX, sg*HOOK_SY, 1.3, DECK_Z1 + 1.2, DECK_Z1 + 1.9, 16)])
     for k_, (x_, z_) in enumerate(HJ_SCREWS, 1): P[f"HW_Rear_Cage_Joint_Hoop_{nm}{k_}"] = U([cylY(x_, z_, 1.3, sg*17.0, sg*18.0, 16), cylY(x_, z_, 0.7, sg*14.3, sg*17.1, 12)])
     for k_, (x_, y_) in enumerate(NJ_SCREWS, 1): P[f"HW_Rear_Cage_Joint_Node_{nm}{k_}"] = U([cylZ(x_, sg*y_, 1.3, 21.3, 22.3, 16), cylZ(x_, sg*y_, 0.7, 18.6, 21.4, 12)])
 for a_, sx in zip("AB", STRAP_X if STRAP_BARS else ()):
@@ -424,7 +419,7 @@ for nm, sg in (("L", 1), ("R", -1)):
     pl = box(EL_X0, EL_X1, *ysp(sg, 10.9, BAY_Y1), SH_Z0, SH_Z1)
     fx0, fx1 = EL_CX - RX_W/2 - 0.4, EL_CX + RX_W/2 + 0.4; fy0, fy1 = BAY_Y0 + 0.2, BAY_Y0 + 0.6 + RX_H + 0.4
     ring = D(box(fx0 - 1.2, fx1 + 1.2, *ysp(sg, fy0 - 1.2, fy1 + 1.2), SH_Z1 - 0.01, SH_Z1 + FENCE_H), [box(fx0, fx1, *ysp(sg, fy0, fy1), SH_Z1 - 0.02, SH_Z1 + FENCE_H + 0.1)])
-    m = U([pl, ring])
+    m = pl      # no receiver fence any more (receiver lives above the centreline, see RX_BOX)
     cs = [cylZ(px_, sg*py_, 0.8, SH_Z0 - 1, SH_Z1 + 1, 12) for sg_, px_, py_ in EL_PIL if sg_ == sg]
     cs += [box(EL_X0 + 0.6, EL_X0 + 3.4, *ysp(sg, 13.9, 16.9), SH_Z0 - 1, SH_Z1 + 1)]     # wire slot (between the rear pillars)
     cs += [box(EL_CX - 4.0, EL_CX + 4.0, *ysp(sg, 18.0, BAY_Y1 + 0.5), SH_Z0 - 1, SH_Z1 + 1)]    # finger notch at the outer edge
@@ -440,7 +435,7 @@ for t in (-14, -10, 0, 7):
     for sg in (1, -1): SW_BAR += [posed(lever(sg), R.roty(th_, BAR_X, BAR_Z)), drop_link(E_, T_, sg)]
 SW_BAR = U(SW_BAR)
 KEEPOUT = {"Axle_top_sweep": SW_AX, "Bar_sweep": SW_BAR, "Links_sweep": U([posed(P[f"Rear_Upper_Link_{n_}"], R.roty(R.solve(t)[1], PU[0], PU[1])) for t in (-14, 0, 7) for n_ in "LR"]), "Chassis_Tub": P["Chassis_Tub"], "Ref_Battery_2S": BATT_BOX, "Ref_Receiver": RX_BOX, "Ref_ESC_G40": ESC_BOX, "Ref_Gearbox": P["Ref_Gearbox"], "Ref_Motor_GM1614": P["Ref_Motor_GM1614"], "Motor_Clamp": P["Motor_Clamp"], "ESC_RX_Shelf_L": P["ESC_RX_Shelf_L"], "ESC_RX_Shelf_R": P["ESC_RX_Shelf_R"],
-           "Rear_Cage_Tail": CAGE_T, "HW_Rear_Cage_Screw_L": P["HW_Rear_Cage_Screw_L"], "HW_Rear_Cage_Screw_R": P["HW_Rear_Cage_Screw_R"], "HW_Rear_Cage_Screw_Post_L": P["HW_Rear_Cage_Screw_Post_L"], "HW_Rear_Cage_Screw_Post_R": P["HW_Rear_Cage_Screw_Post_R"]}
+           "Rear_Cage_Tail": CAGE_T}
 def dil(m, c):
     ms = [m]
     for d in ([c, 0, 0], [-c, 0, 0], [0, c, 0], [0, -c, 0], [0, 0, c], [0, 0, -c]) + tuple([c*a_/math.sqrt(2), c*b_/math.sqrt(2), 0] for a_ in (1, -1) for b_ in (1, -1)) + tuple([c*a_/math.sqrt(2), 0, c*b_/math.sqrt(2)] for a_ in (1, -1) for b_ in (1, -1)) + tuple([0, c*a_/math.sqrt(2), c*b_/math.sqrt(2)] for a_ in (1, -1) for b_ in (1, -1)):   # 18 directions (axes + edge diagonals): thin parts left diagonal gaps with only 6
@@ -483,12 +478,13 @@ print("exported", len(rep), "parts; not clean (watertight/open edges/shells):", 
 # ---------------- sweep: moving rear bodies vs everything ----------------
 R.PL = PL; R.PU = PU
 FIX = {n: ld(n, OUT) for n in ("Chassis_Tub", "Roll_Cage", "Tacoma_Trophy_Body_Shell", "Rear_Cage_Hoop", "Rear_Cage_Stay_L", "Rear_Cage_Stay_R", "Ref_Servo_Envelope", 
-                              "Ref_Gearbox", "Ref_Motor_GM1614", "Ref_ESC_G40", "Ref_Receiver", "Ref_Battery_2S", "Ref_Shock_RL", "Ref_Shock_RR", "HW_Rear_Cage_Screw_L", "HW_Rear_Cage_Screw_R", "HW_Rear_Cage_Screw_Post_L", "HW_Rear_Cage_Screw_Post_R")}
+                              "Ref_Gearbox", "Ref_Motor_GM1614", "Ref_ESC_G40", "Ref_Shock_RL", "Ref_Shock_RR")}
 MOVE_ARM = {n: ld(n, OUT) for n in ("Rear_Trailing_Arm_L", "Rear_Trailing_Arm_R", "HW_Rear_Trailing_Pivot_Screw_L", "HW_Rear_Trailing_Pivot_Screw_R")}
 MOVE_UL = {n: ld(n, OUT) for n in ("Rear_Upper_Link_L", "Rear_Upper_Link_R", "HW_Rear_Upper_Link_Pivot_Screw_L", "HW_Rear_Upper_Link_Pivot_Screw_R")}
 AXG = {n: R.M[n] for n in ("Ref_Rear_Axle", "Ref_Wheel_RL", "Ref_Wheel_RR") if n in R.M}; AXG["Rear_Axle_Top_Bracket"] = ld("Rear_Axle_Top_Bracket", OUT); AXG["HW_Rear_Axle_Top_Pin"] = ld("HW_Rear_Axle_Top_Pin", OUT)
 for n in ("HW_Rear_Trailing_Axle_Nut_L", "HW_Rear_Trailing_Axle_Nut_R", "HW_Rear_Trailing_Axle_Screw_L", "HW_Rear_Trailing_Axle_Screw_R"): AXG[n] = ld(n, OUT)
 FIX["IFS_Bulkhead_Convertible"] = ld("IFS_Bulkhead_Convertible")
+FIX["Ref_Receiver"] = RX_BOX; FIX["Ref_Battery_2S"] = BATT_BOX      # keep-out volumes for the overlap/sweep checks only
 for n_ in P:
     if n_.startswith(("HW_Battery_Hook", "HW_Rear_Cage_Strap", "HW_Bulkhead_Floor", "HW_Rear_Cage_Joint", "HW_Pocket", "HW_Motor", "Pocket_Clip", "Motor_Clamp")) and n_ not in FIX: FIX[n_] = ld(n_, OUT)
 for n_ in ("IFS_Lower_Arm_L", "IFS_Lower_Arm_R", "IFS_Upper_Arm_L", "IFS_Upper_Arm_R", "Steering_Rack", "Servo_Horn", "Front_Carrier_L", "Front_Carrier_R", "Front_Spindle_L", "Front_Spindle_R"): FIX[n_] = ld(n_)
@@ -550,7 +546,18 @@ def dense_sweep(t0=-14, t1=7):
     for n, (d, nm, ta) in sorted(worst.items(), key=lambda kv: kv[1][0]):
         print("  %-30s %-28s %6.2f at ta %3d %s" % (n, nm, d, ta, "  <-- within 1 mm" if d < 1.0 else ""))
 dense_sweep()
-_cmt = CollisionManager(); _cmt.add_object("tub", P["Chassis_Tub"])
+_cmc = CollisionManager()
+for _n in ("Rear_Cage_Hoop", "Rear_Cage_Stay_L", "Rear_Cage_Stay_R", "Roll_Cage", "Ref_Shock_RL", "Ref_Shock_RR", "Ref_Shock_Eye_L", "Ref_Shock_Eye_R"): _cmc.add_object(_n, P[_n] if _n in P else FIX[_n])
+_wc = {}
+for _ta in range(-14, 8):
+    for _n, (_m, _T) in scene(_ta).items():
+        if _n.startswith("HW_") or not (_n in MOVE_ARM or _n in MOVE_UL or _n in AXG or _n.startswith(("Bar_lever", "Bar_link"))): continue
+        _mm = _m.copy(); _mm.apply_transform(_T); _d, _nm = _cmc.min_distance_single(_mm, return_name=True)
+        if _n not in _wc or _d < _wc[_n][0]: _wc[_n] = (_d, _nm, _ta)
+print("--- rear cage / shock clearance of every mover over ta -14..+7 (nearest cage/shock body; mm) ---")
+for _n, (_d, _nm, _ta) in sorted(_wc.items(), key=lambda kv: kv[1][0]): print("  %-28s %-22s %6.2f at ta %3d%s" % (_n, _nm, _d, _ta, "  <-- under 1.5" if _d < 1.5 else ""))
 for _ta in (0, 3, 5, 6, 7):
     _m = posed(R.M["Ref_Rear_Axle"], R.solve(_ta)[2]); _o = CollisionManager(); _o.add_object("ax", _m)
-    print("bump pad: axle vs tub at ta %d = %.2f mm" % (_ta, _cmt.min_distance_other(_o)))
+    _po = CollisionManager()
+    for _sg in (1, -1): _po.add_object("post%d" % _sg, tube((BUMP_POST_X, _sg*BUMP_POST_Y, BUMP_POST_Z), (BUMP_POST_X, _sg*BUMP_POST_Y, BUMP_POST_Z + 3.0)))
+    print("bump stop: axle vs rear cage (all) at ta %d = %.2f mm; vs the bump post foot only = %.2f mm" % (_ta, _cmc.min_distance_other(_o), _po.min_distance_other(_o)))
