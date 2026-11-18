@@ -93,8 +93,14 @@ DOG_J1_Y = 10.3                 # diff-side joint centre Y (slotted end of the a
 DOG_J2_DY = 0.0                 # knuckle-side joint centre offset along the stub axle from the kingpin axis (0 = joint centre ON the kingpin axis)
 DOG_SLOT = 2.5                  # assumed slot engagement depth per end (plunge capacity each way = this minus 0.5 retention)
 BRG_IN_Y, BRG_OUT_Y = 40.5, 42.1  # stub-axle bearings in the knuckle (Ø4 x 1.6, back to back): one in the wall, one in the hub sleeve
+# wire clip (pad on the bulkhead + lid): wall >= 0.8 mm between groove, screw holes and edges
+CLIP_X0, CLIP_X1, CLIP_GX, CLIP_GR, CLIP_ZT = 22.9, 29.9, 26.4, 0.7, 12.0   # lid roof over the groove = CLIP_ZT-10.5-CLIP_GR = 0.8
+CLIP_SX = (24.3, 28.5)            # screw x: groove wall = 2.1-0.55-0.7 = 0.85 ; edge wall 24.3-0.55-22.9 = 0.85
 GBX_SHAFT_Z = 4.1               # UNVERIFIED gearbox output-shaft height (spec update 3)
-GBX_X = 11.5                    # gearbox X face (box rotated 90: X +-11.5, Y +-13)
+GBX_STUB_X = 15.5               # end of the gearbox output stub (Ref_Gearbox mesh: Ø3 stub on Y0 / Z4.1, case face X6, stub end X15.5)
+GBX_STUB_R = 1.5                # stub radius (mesh)
+CPL_LEN, CPL_OD, CPL_BORE_R, CPL_CAP = 3.5, 3.5, 1.55, 1.0   # coupler sleeve: slides over the stub (bore Ø3.1), 1.0 mm cap; the shaft starts on the cap face
+GBX_X = GBX_STUB_X + CPL_CAP      # front shaft start (coupler cap face), X16.5
 WORM_IN = (39.8, 0.0, 6.85)     # front worm input (existing Ref_Front_Input_Worm_Gear)
 TUN_R = 1.6                     # shaft tunnel radius (Ø2.2 shaft + 0.5)
 RACK_X, ROD_Y0, ROD_Z, ROD_T = 37.8, 6.0, 3.95, 1.1   # rack cross-bar BEHIND the horn pin (stem reaches forward): tie rods stay behind the arms (X<41) like v2
@@ -231,7 +237,7 @@ refs["HW_Crank_Out_Pin"] = U(cyl("z", [XP + AO, YPC, 1.5], 0.5, 3.0, 12), cyl("z
 refs["HW_Crank_In_Pin"] = U(cyl("z", [I0[0], I0[1], 1.5], 0.5, 3.0, 12), cyl("z", [I0[0], I0[1], PL_Z1 + 0.15], 0.9, 0.3, 14))      # Ø1.0 pin: crank hole -> drag-link eye
 # front driveshaft dogbone/U-joint couplers (Ø3.0 x 4) at both ends; gearbox-end seat is the gearbox output bore
 _sd = (np.array(WORM_IN) - np.array([GBX_X, 0, GBX_SHAFT_Z])); _sd = _sd / np.linalg.norm(_sd)
-refs["HW_Front_Driveshaft_UJ_Gbx"] = seg_cyl([GBX_X, 0, GBX_SHAFT_Z], np.array([GBX_X, 0, GBX_SHAFT_Z]) + _sd * 4.0, 1.5)
+refs["HW_Front_Driveshaft_UJ_Gbx"] = D(seg_cyl([GBX_STUB_X - CPL_LEN + CPL_CAP, 0, GBX_SHAFT_Z], [GBX_X, 0, GBX_SHAFT_Z], CPL_OD / 2), seg_cyl([GBX_STUB_X - CPL_LEN + CPL_CAP - 0.5, 0, GBX_SHAFT_Z], [GBX_STUB_X, 0, GBX_SHAFT_Z], CPL_BORE_R))   # sleeve over the Ø3 gearbox stub (seat), cap end at X16.5
 refs["HW_Front_Driveshaft_UJ_Worm"] = seg_cyl(np.array(WORM_IN) - _sd * 4.0, WORM_IN, 1.5)
 refs["Ref_Front_Driveshaft"] = seg_cyl([GBX_X, 0, GBX_SHAFT_Z], WORM_IN, 1.1)
 refs["Ref_Gearbox_Spec_Box"] = box(-11.5, 11.5, -13.0, 13.0, -4.9, 23.1)
@@ -268,8 +274,9 @@ replaced = ("IFS_Lower_Arm_", "IFS_Upper_Arm_", "IFS_Knuckle_", "IFS_Bulkhead", 
 allb = {os.path.basename(f)[:-4]: trimesh.load(f) for f in glob.glob(os.path.join(BODY_DIR, "*.stl"))}
 static = {k: v for k, v in allb.items() if not k.startswith(replaced)}
 # keep inner hinge pins (inboard end unchanged) but trim: reuse originals clipped to Y<=14 -> simply reuse
+PIN_TRIM_X0 = 40.2               # lower hinge pins: inboard tip trimmed to X>=40.2 so it clears the bell-crank hub (>=0.2 mm)
 for k in ("HW_Front_Lower_Hinge_Pin_L", "HW_Front_Lower_Hinge_Pin_R", "HW_Front_Upper_Hinge_Pin_L", "HW_Front_Upper_Hinge_Pin_R"):
-    static[k] = allb[k]
+    static[k] = allb[k] if "Upper" in k else D(allb[k], box(30.0, PIN_TRIM_X0, -30.0, 30.0, -10.0, 10.0))
 static["IFS_Bulkhead_Convertible"] = bk
 static["Servo_Ref"] = refs["Servo_Ref"]
 for s in ("L", "R"):
@@ -428,7 +435,7 @@ def pose_scene(theta_deg, s):
 
 # ---------- swept steering relief in the bulkhead (rack, horn+pin, tie rods over steering x travel), then final rest check
 sweep = []
-for th_ in (-8, -6, -4, -2, 0, 2, 4, 6, 8):
+for th_ in (-12, -10, -8, -6, -4, -2, 0, 2, 4, 6, 8):
     for s_ in np.linspace(-3.0, 3.0, 7):
         sc_, sol_ = pose_scene(th_, s_)
         if sc_ is None: continue
@@ -450,8 +457,8 @@ bk = D(bk, cyl("z", [RACK_X, 0.0, 0.3], 0.55, 4.8, 16))   # rack guide-screw pil
 # bell-crank pivot boss (re-added after the relief; the crank sweep would otherwise shave it) with Ø1.1 pin pilot; wire-clip pad with two pilots and a cable groove
 bk = D(bk, box(35.0, 37.0, 3.5, 4.8, -0.5, 0.4))   # removes a tangent sliver left between the horn-boss and link sweeps (non-manifold edge after STL roundtrip)
 bk = D(bk, cyl("z", [XP, YPC, 1.05], 3.0, 2.0, 40))   # clears the crank hub disc (tangent slivers between the rotated sweep copies)
-bk = U(bk, cyl("z", [XP, YPC, -0.95], 2.4, 1.9, 32), box(24.2, 28.6, Y_E + 0.15, 13.4, 8.0, 10.5))
-bk = D(bk, cyl("z", [XP, YPC, -0.65], 0.55, 1.3, 16), cyl("z", [24.9, 12.65, 9.3], 0.45, 2.4, 14), cyl("z", [27.9, 12.65, 9.3], 0.45, 2.4, 14), cyl("y", [26.4, 12.65, 10.5], 0.7, 3.0, 16))
+bk = U(bk, cyl("z", [XP, YPC, -0.95], 2.4, 1.9, 32), box(CLIP_X0, CLIP_X1, Y_E + 0.15, 13.4, 8.0, 10.5))
+bk = D(bk, cyl("z", [XP, YPC, -0.65], 0.55, 1.3, 16), cyl("z", [CLIP_SX[0], 12.65, 9.3], 0.45, 2.4, 14), cyl("z", [CLIP_SX[1], 12.65, 9.3], 0.45, 2.4, 14), cyl("y", [CLIP_GX, 12.65, 10.5], CLIP_GR, 3.0, 16))
 BH_HOLES = [(44.5, 3.5), (44.5, -3.5), (52.0, 3.5), (52.0, -3.5)]
 BH_FLOOR_Z0, BH_FLOOR_Z1 = -1.9, 0.5
 for (hx_, hy_) in BH_HOLES:
@@ -463,6 +470,23 @@ for (py_, pz_) in PILOTS:   # re-open the ear-screw pilots (along X) and verify 
     print("   ear pilot (Y %.1f, Z %.1f): wall solid 0.6 mm beside it? %s" % (py_, pz_, bool(bk.contains([[XC1 + 1.35, py_ + 0.95, pz_]])[0])))
 bk = max(bk.split(only_watertight=False), key=lambda s: s.volume)   # drop slivers again
 parts["IFS_Bulkhead_Convertible"] = bk; static["IFS_Bulkhead_Convertible"] = bk; rest_all["IFS_Bulkhead_Convertible"] = bk
+# ---------- lower-arm relief: spindle swept over droop (-12..-8) x steering lock, cut from the lower arm (window around the contact only)
+ARM_RELIEF_CLR = 0.15
+_sp = []
+for th_ in (-12, -11, -10, -9, -8):
+    for s_ in (-3.0, -2.8, -2.0, -1.0, 0.0, 1.0, 2.0, 2.8, 3.0):
+        sc_, sol_ = pose_scene(th_, s_)
+        if sc_ is None: continue
+        Tr_ = np.linalg.inv(sc_["IFS_Lower_Arm_L"][1]) @ sc_["Front_Spindle_L"][1]; m_ = parts["Front_Spindle_L"].copy(); m_.apply_transform(Tr_); _sp.append(m_)
+_sw = U(*_sp); _o = ARM_RELIEF_CLR
+_sw = U(*[_sw.copy().apply_translation(d_) for d_ in ([_o, 0.0011, 0.0007], [-_o, -0.0011, 0.0009], [0.0006, _o, -0.0008], [-0.0004, -_o, 0.0012], [0.0010, 0.0005, _o], [-0.0007, 0.0003, -_o])])
+_win = box(43.0, 47.5, 26.5, 32.0, -1.0, 4.5)   # arm-local frame (arm at rest)
+_cut = trimesh.boolean.intersection([_sw, _win], engine=ENG)
+print("  relief cut: %d faces, vol %.3f" % (len(_cut.faces), _cut.volume if len(_cut.faces) else 0))
+_la = D(parts["IFS_Lower_Arm_L"], _cut) if len(_cut.faces) else parts["IFS_Lower_Arm_L"]; _la = max(_la.split(only_watertight=False), key=lambda s: s.volume)
+print(" lower-arm relief: removed %.2f mm3 (spindle sweep, droop -12..-8 x lock +/-3, clearance %.2f)" % (parts["IFS_Lower_Arm_L"].volume - _la.volume, _o))
+parts["IFS_Lower_Arm_L"] = _la; moving["IFS_Lower_Arm_L"] = ("arm_l", _la); printable["IFS_Lower_Arm_L"] = _la; printable["IFS_Lower_Arm_R"] = mirror(_la)
+rest_all["IFS_Lower_Arm_L"] = _la; rest_all["IFS_Lower_Arm_R"] = mirror(_la)
 print("bulkhead after steering relief: shells %d, vol %.0f mm3 (original %.0f)" % (len(bk.split(only_watertight=False)), bk.volume, V_ORIG))
 for i_, s_ in enumerate(bk.split(only_watertight=False)): print("   shell", i_, "vol %.1f" % s_.volume, s_.bounds.round(1).tolist())
 rest_scene = {n: (m, I) for n, m in rest_all.items()}
@@ -583,6 +607,8 @@ print("\n=== FULL TRAVEL: shock stroke, stops, env contacts ===")
 UP_ = np.array([58.6, 9.2, 10.4]); LO0_ = np.array([58.6, 24.0, 2.5])
 def shock_L(th_deg): return float(np.linalg.norm((rotx(math.radians(th_deg), *AL) @ np.append(LO0_, 1))[:3] - UP_))
 SHOCK_STROKE = 7.0      # ASSUMED (no front shock stroke in the model: mesh shows 5.0 mm exposed rod + 2.0 mm) ; mid-stroke at the neutral pose
+SHOCK_BODY_FACE = 10.0   # axis distance from the upper eye to the end face of the shock body (Ref_Shock mesh profile)
+TH_STOP = 4.0           # end of clear travel (bump stop contact), arm angle
 TH_N = -4.0             # neutral (mid-stroke, spring neutral) arm angle: lower arm 4 deg down, hub Z 1.47 = rear 1.5
 Lmid = shock_L(TH_N)
 print(" shock eye-eye at neutral (mid-stroke) %.2f mm, stroke %.1f assumed -> bottom-out at L=%.2f, full extension L=%.2f" % (Lmid, SHOCK_STROKE, Lmid - SHOCK_STROKE / 2, Lmid + SHOCK_STROKE / 2))
@@ -649,8 +675,10 @@ for n_, m_ in envf.items():
 # ================================================================ bump stops (shock rod rings), wire-clip lid, fastener list
 print("\n=== BUMP STOPS / CLIP / HARDWARE ===")
 ax_ = (LO0_ - UP_) / np.linalg.norm(LO0_ - UP_)
-ring = D(seg_cyl(UP_ + ax_ * 10.61, UP_ + ax_ * 12.91, 2.0), seg_cyl(UP_ + ax_ * 10.0, UP_ + ax_ * 13.5, 0.75))     # on the exposed shock rod: stops compression at arm +4 deg
-lid = D(box(24.2, 28.6, Y_E + 0.15, 13.4, 10.5, 11.7), cyl("y", [26.4, 12.65, 10.5], 0.7, 3.0, 16), cyl("z", [24.9, 12.65, 11.0], 0.55, 3.0, 14), cyl("z", [27.9, 12.65, 11.0], 0.55, 3.0, 14))
+RING_OFF = SHOCK_BODY_FACE + (shock_L(0.0) - shock_L(TH_STOP))      # ring face on the rod touches the body face when the shock has shortened from L(0) to L(TH_STOP)
+print(" bump stop: ring face %.2f mm from the upper eye; touches the shock body (face at %.1f) at arm %+.1f deg = shock L %.2f (%.2f above bottom-out at L %.2f)" % (RING_OFF, SHOCK_BODY_FACE, TH_STOP, shock_L(TH_STOP), shock_L(TH_STOP) - (Lmid - SHOCK_STROKE / 2), Lmid - SHOCK_STROKE / 2))
+ring = D(seg_cyl(UP_ + ax_ * RING_OFF, UP_ + ax_ * (RING_OFF + 2.3), 2.0), seg_cyl(UP_ + ax_ * 10.0, UP_ + ax_ * 13.5, 0.75))     # on the exposed shock rod: stops compression at arm +4 deg
+lid = D(box(CLIP_X0, CLIP_X1, Y_E + 0.15, 13.4, 10.5, CLIP_ZT), cyl("y", [CLIP_GX, 12.65, 10.5], CLIP_GR, 3.0, 16), cyl("z", [CLIP_SX[0], 12.65, 11.0], 0.55, 3.0, 14), cyl("z", [CLIP_SX[1], 12.65, 11.0], 0.55, 3.0, 14))
 extra = {"Front_Bump_Stop_L": ring, "Front_Bump_Stop_R": mirror(ring), "Servo_Wire_Clip": lid}
 for n_, m_ in extra.items(): m_.export(os.path.join(OUT, n_ + ".stl"))
 for n_, m_ in extra.items():
@@ -660,6 +688,12 @@ if os.path.exists(old_): os.remove(old_); print("  removed stl/v3/Steering_Link.
 print(" servo horn angle (rack +/-2.8): %.1f deg ; crank psi %.1f deg ; drag-link length %.2f" % (math.degrees(horn_angle(2.8)), math.degrees(crank_psi(2.8)), LD))
 for nme, m_ in (("HW_Front_Driveshaft_UJ_Gbx", refs["HW_Front_Driveshaft_UJ_Gbx"]), ("HW_Front_Driveshaft_UJ_Worm", refs["HW_Front_Driveshaft_UJ_Worm"])):
     x_ = trimesh.boolean.intersection([m_, refs["Servo_Ref"]], engine=ENG); print("  %s x servo case: %.2f mm3" % (nme, x_.volume if len(x_.faces) else 0))
+_gb = trimesh.load(os.path.join(os.path.dirname(__file__), "..", "stl", "v4", "Ref_Gearbox.stl")); _wm = allb["Ref_Front_Input_Worm_Gear"]
+print(" front shaft: gearbox output stub axis Y0 Z%.2f, stub end X%.1f -> coupler cap X%.1f ; shaft (%.1f,%.1f) -> worm (%.1f,%.1f): length %.2f, angle %.1f deg ; UJ at each end (stock/Injora UJ ok to ~20 deg)" % (GBX_SHAFT_Z, GBX_STUB_X, GBX_X, GBX_X, GBX_SHAFT_Z, WORM_IN[0], WORM_IN[2], float(np.linalg.norm(np.array(WORM_IN) - np.array([GBX_X, 0, GBX_SHAFT_Z]))), math.degrees(math.atan2(WORM_IN[2] - GBX_SHAFT_Z, WORM_IN[0] - GBX_X))))
+for nme, m_ in (("Ref_Front_Driveshaft", refs["Ref_Front_Driveshaft"]), ("HW_Front_Driveshaft_UJ_Gbx", refs["HW_Front_Driveshaft_UJ_Gbx"]), ("HW_Front_Driveshaft_UJ_Worm", refs["HW_Front_Driveshaft_UJ_Worm"])):
+    for on_, om_ in (("Ref_Gearbox", _gb), ("Ref_Front_Input_Worm_Gear", _wm), ("Servo_Ref", refs["Servo_Ref"])):
+        x_ = trimesh.boolean.intersection([m_, om_], engine=ENG); cm_ = trimesh.collision.CollisionManager(); cm_.add_object("o", om_)
+        print("  %-28s x %-26s overlap %.3f mm3, min distance %.2f mm" % (nme, on_, x_.volume if len(x_.faces) else 0, cm_.min_distance_single(m_)))
 
 
 # ================================================================ DOGBONE ANGLES (joint at BOTH ends) and plunge
@@ -689,3 +723,34 @@ print(" slot engagement DOG_SLOT=%.1f mm per end -> plunge capacity about +/-%.1
 
 _m = max(dog_report(DOG_J1_Y, DOG_J2_DY, BUMPX, SS)[i][2][k] for i, k in ((0, 0), (1, 1)))
 print(" Injora %s: max per-end angle %.1f deg vs rating %.0f deg -> %s, margin %.1f deg" % (INJORA_PN, _m, DOG_RATING_DEG, "PASS" if _m < DOG_RATING_DEG else "FAIL", DOG_RATING_DEG - _m))
+
+# ================================================================ export the NON-printed front bodies I changed/added (rest pose) so downstream (integration / .sc) overrides the stale per-body ones
+print("\n=== EXPORT front reference/hardware bodies to stl/v3 (rest pose) ===")
+exported = []
+_skip = ("Rail_Box", "Ref_Gearbox_Spec_Box", "Env_")
+cand = dict(rest_all); cand["Ref_Front_Center_Driveshaft"] = refs["Ref_Front_Driveshaft"]      # same name as the stale body: now the fixed shaft (the only front shaft body; Ref_Front_Driveshaft is NOT exported = would duplicate it)
+cand.pop("Ref_Front_Driveshaft", None)
+KEEP_FROM_FOLDER = ("Ref_Front_Diff_Ring_Gear", "Ref_Front_Input_Worm_Gear", "HW_Front_Lower_Hinge_Pin_L", "HW_Front_Lower_Hinge_Pin_R", "HW_Front_Upper_Hinge_Pin_L", "HW_Front_Upper_Hinge_Pin_R",
+                    "HW_Front_Shock_Upper_Screw_L", "HW_Front_Shock_Upper_Screw_R", "HW_Front_Shock_Lower_Screw_L", "HW_Front_Shock_Lower_Screw_R", "Ref_Shock_FL", "Ref_Shock_FR", "Front_Pin_Retainer_Plate_L", "Front_Pin_Retainer_Plate_R", "HW_Front_Retainer_Screw_L", "HW_Front_Retainer_Screw_R")   # retainer plate+screw keep the inboard hinge pins (X57, touching bulkhead/pin, no overlap): still valid, printed plate
+for k_ in KEEP_FROM_FOLDER:
+    if k_ in allb: static.get(k_, allb[k_]).export(os.path.join(OUT, k_ + ".stl")); exported.append(k_ + " (unchanged copy from per-body folder)")
+for k_, m_ in refs.items():
+    if k_.startswith(("HW_", "Ref_Front", "Servo_Ref")) and k_ != "Ref_Front_Driveshaft": cand[k_] = m_
+for n_, m_ in cand.items():
+    if n_ in printable or n_.startswith(_skip) or n_ in ("Ref_Gearbox",): continue
+    if n_ in allb and abs(allb[n_].volume - m_.volume) < 1e-3 and np.allclose(allb[n_].bounds, m_.bounds, atol=1e-3): continue
+    if not len(m_.faces): continue
+    m_.export(os.path.join(OUT, n_ + ".stl")); exported.append(n_)
+print(" exported %d: %s" % (len(exported), ", ".join(sorted(exported))))
+_g = trimesh.load(os.path.join(os.path.dirname(__file__), "..", "stl", "v4", "Ref_Gearbox.stl")); _c = trimesh.load(os.path.join(OUT, "Ref_Front_Center_Driveshaft.stl")); _u = trimesh.load(os.path.join(OUT, "HW_Front_Driveshaft_UJ_Gbx.stl"))
+for nm_, mm_ in (("Ref_Front_Center_Driveshaft", _c), ("HW_Front_Driveshaft_UJ_Gbx", _u)):
+    x_ = trimesh.boolean.intersection([_g, mm_], engine=ENG); print("  exported %s x stl/v4 Ref_Gearbox: %.3f mm3" % (nm_, x_.volume if len(x_.faces) else 0))
+
+_cr = trimesh.load(os.path.join(OUT, "Steering_BellCrank.stl")); _dmin = 9.0
+for s_ in np.linspace(-3.0, 3.0, 13):
+    for k_ in ("HW_Front_Lower_Hinge_Pin_L", "HW_Front_Lower_Hinge_Pin_R"):
+        cm_ = trimesh.collision.CollisionManager(); cm_.add_object("p", static[k_]); mc_ = _cr.copy(); mc_.apply_transform(crank_T(s_)); _dmin = min(_dmin, cm_.min_distance_single(mc_))
+print(" lower hinge pin tip (trimmed at X%.1f) vs bell crank over lock: min distance %.2f mm" % (PIN_TRIM_X0, _dmin))
+OBSOLETE = ("Ref_Front_Driveshaft", "Ref_Front_CVD_", "HW_Drag_Link_", "Kingpin_Nut", "HW_Front_TieRod_Screw", "HW_Steering_TieRod_Inner_Screw", "Steering_Link", "IFS_Knuckle", "Ref_Servo_Envelope")
+_bad = [f for f in os.listdir(OUT) if f.endswith(".stl") and any(o in f for o in OBSOLETE)]
+print(" obsolete names present in stl/v3: %s" % (_bad or "none"))

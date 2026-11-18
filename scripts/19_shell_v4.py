@@ -21,7 +21,7 @@ def shift_tail(m):
 PL = np.array([-26.0 - SH, float(os.environ.get("PL_Z", 2.4))]); PU = np.array([-24.53 - SH, float(os.environ.get("PU_Z", 12.0))]); R.PL = PL; R.PU = PU; R.A = np.array([-59.0 - SH, -0.5]); R.Bp = np.array([-57.5 - SH, 8.85])   # = 18_tub.py
 RAIL_DY = float(os.environ.get("RAIL_DY", 4.0)); SHELL_MARGIN = float(os.environ.get("SHELL_MARGIN", 1.5)); WARP_DY = RAIL_DY + SHELL_MARGIN; CLR = float(os.environ.get("CLR", 0.3))
 GBX_X, GBX_Y, GBX_Z0, GBX_Z1, SHAFT_Z = 6.0, 12.5, -4.9, 23.1, 4.1; MOTOR_R, MOTOR_L, MOTOR_Z = 8.5, 10.0, 18.1; MOTOR_X1 = -(GBX_X + 0.1); MOTOR_X0 = MOTOR_X1 - MOTOR_L; MC_PX = (-14.5, -10.0)
-BAR_X, BAR_Z, BAR_Y, BAR_E_X = -78.5 - SH, 16.3 + 4.2, 19.75, -46.75 - SH; TAB_X, TAB_TOP_Z, LINK_INS = -46.75 - SH, 4.9, 0.8; WIRE_R, LINK_R = 0.4, 0.45
+BAR_X, BAR_Z, BAR_Y, BAR_E_X = float(os.environ.get("PXH", -78.0)), 16.3 + 4.2, 19.1, -46.75 - SH; LINK_Y = 19.75; TAB_X, TAB_TOP_Z, LINK_INS = -46.75 - SH, 4.9, 0.8; WIRE_R, LINK_R = 0.4, 0.45
 def box(x0, x1, y0, y1, z0, z1): return trimesh.creation.box(bounds=[[x0, y0, z0], [x1, y1, z1]])
 def U(ms): return trimesh.boolean.union(list(ms), engine="manifold")
 def D(a, bs): return trimesh.boolean.difference([a] + list(bs), engine="manifold")
@@ -55,13 +55,20 @@ def lengthen(m, E=None, xa=-50.0, xb=-22.0):
     """clean lengthening: the fastback/bed zone X xa..xb is stretched uniformly in X (planes stay planes), everything behind xa (tail panel, blade, bed end) moves back rigidly by E, the cab (X > xb) is untouched"""
     E = TAIL_E if E is None else E; m = m.copy(); v = m.vertices.copy(); x = v[:, 0]; k = 1.0 + E/(xb - xa)
     v[:, 0] = np.where(x >= xb, x, np.where(x >= xa, xb - (xb - x)*k, x - E)); m.vertices = v; return m
-BASE = lowlift(warp(lengthen(trimesh.load("stl/tacoma_trophy_shell.stl")), WARP_DY))         # no hood scoop, no rails: only the widened original body
+FRONT_EXT = float(os.environ.get("FRONT_EXT", 8.0))      # Rev 33: nose/hood lengthened forward (the original hood was NOT truncated, X 55.5 in the original too; it only reads short next to the taller/longer body)
+def extend_nose(m, E, xa=47.0, xb=53.0):
+    m = m.copy(); v = m.vertices.copy(); v[:, 0] += E*_ss((v[:, 0] - xa)/(xb - xa)); m.vertices = v; return m
+BASE = lowlift(warp(extend_nose(lengthen(trimesh.load("stl/tacoma_trophy_shell.stl")), FRONT_EXT), WARP_DY))         # no hood scoop, no rails: only the widened original body
+SHELL_LIFT = float(os.environ.get("SHELL_LIFT", 11.0))     # Rev 29: rigid lift of the WHOLE shell; the extra height is added at the BOTTOM only (sill band 1 mm stretched into a straight skirt), roof/pillars/arch shapes keep the original faceted form
+def skirt_lift(m, H, band=1.0):
+    m = m.copy(); v = m.vertices.copy(); v[:, 2] += H*_ss((v[:, 2] - SILL_Z)/band); m.vertices = v; return m
+if SHELL_LIFT > 0: BASE = skirt_lift(BASE, SHELL_LIFT)
 print("base shell: vol %.0f bounds %s watertight %s" % (BASE.volume, BASE.bounds.round(1).tolist(), BASE.is_watertight))
 
 # ---- static keepouts (v4 parts) ----
-STATIC = {n: ld(n) for n in ("Chassis_Tub", "Rear_Cage_Hoop", "Rear_Cage_Stay_L", "Rear_Cage_Stay_R", "Ref_ESC_G40", "Ref_Servo_Envelope", "Roll_Cage", "ESC_RX_Shelf_L", "ESC_RX_Shelf_R")}
+STATIC = {n: ld(n) for n in ("Chassis_Tub", "Cage", "Ref_ESC_G40", "Ref_Servo_Envelope", "ESC_RX_Shelf_L", "ESC_RX_Shelf_R")}
 STATIC["IFS_Bulkhead_Convertible"] = ld("IFS_Bulkhead_Convertible", V3)
-STATIC["Ref_Receiver"] = box(14.0, 36.0, -7.0, 7.0, 24.4, 31.4); STATIC["Ref_Battery_2S"] = box(-74.9, -29.6, -10.5, 10.5, 18.1, 29.3)      # keep-out volumes only (= 18_tub.py RX_BOX / BATT_BOX), not exported
+STATIC["Ref_Receiver"] = box(0.0, 22.0, -7.0, 7.0, 24.2, 31.2); STATIC["Ref_Battery_2S"] = box(-74.9, -29.6, -10.5, 10.5, 18.1, 29.3)      # keep-out volumes only (= 18_tub.py RX_BOX / BATT_BOX), not exported
 for n in ("Ref_Shock_RL", "Ref_Shock_RR", "Ref_Shock_Eye_L", "Ref_Shock_Eye_R"): STATIC[n] = ld(n)
 
 # ---- rear sweep poses (same maths as 18_tub.py) ----
@@ -81,7 +88,7 @@ MOVE_ARM = {n: ld(n) for n in ("Rear_Trailing_Arm_L", "Rear_Trailing_Arm_R", "HW
 MOVE_UL = {n: ld(n) for n in ("Rear_Upper_Link_L", "Rear_Upper_Link_R", "HW_Rear_Upper_Link_Pivot_Screw_L", "HW_Rear_Upper_Link_Pivot_Screw_R")}
 AXG = {n: R.M[n] for n in ("Ref_Rear_Axle", "Ref_Wheel_RL", "Ref_Wheel_RR")}
 for n in ("Rear_Axle_Top_Bracket", "HW_Rear_Axle_Top_Pin", "HW_Rear_Trailing_Axle_Nut_L", "HW_Rear_Trailing_Axle_Nut_R", "HW_Rear_Trailing_Axle_Screw_L", "HW_Rear_Trailing_Axle_Screw_R"): AXG[n] = ld(n)
-LEV = {sg: wcyl((BAR_X, sg*BAR_Y, BAR_Z), (BAR_E_X, sg*BAR_Y, BAR_Z), WIRE_R) for sg in (1, -1)}
+LEV = {sg: trimesh.util.concatenate([wcyl((BAR_X, sg*BAR_Y, BAR_Z), (BAR_E_X, sg*BAR_Y, BAR_Z), WIRE_R), wcyl((BAR_E_X, sg*BAR_Y, BAR_Z), (BAR_E_X, sg*LINK_Y, BAR_Z), WIRE_R)]) for sg in (1, -1)}
 CROSS = wcyl((BAR_X, -BAR_Y - 0.4, BAR_Z), (BAR_X, BAR_Y + 0.4, BAR_Z), WIRE_R)
 def rear_movers(ta):
     a, u, T = R.solve(ta); th, E_, T_ = bar_state(ta); sc = {}
@@ -89,7 +96,7 @@ def rear_movers(ta):
     for n, m in MOVE_UL.items(): sc[n] = posed(m, R.roty(u, PL[0] if False else PU[0], PU[1]))
     for n, m in AXG.items(): sc[n] = posed(m, T)
     for n, sg in (("L", 1), ("R", -1)):
-        sc["Bar_lever_" + n] = posed(LEV[sg], R.roty(th, BAR_X, BAR_Z)); sc["Bar_link_" + n] = wcyl((E_[0], sg*BAR_Y, E_[1]), (T_[0], sg*BAR_Y, T_[1]), LINK_R)
+        sc["Bar_lever_" + n] = posed(LEV[sg], R.roty(th, BAR_X, BAR_Z)); sc["Bar_link_" + n] = wcyl((E_[0], sg*LINK_Y, E_[1]), (T_[0], sg*LINK_Y, T_[1]), LINK_R)
     sc["Bar_cross"] = CROSS; return sc
 TA = [float(t) for t in np.arange(-14, 7.01, 1.0)]
 touch = set(); POSES = {}
@@ -144,7 +151,7 @@ def build(c):
     cuts = [dil(m, c + 0.9) for m in use] + ([pocket(0.4 + (c - 0.3)*0.5)] if use else [])        # static parts (cage, bulkhead, ...) get +0.3 extra: >= 0.8 mm opening
     ARCH_X = float(os.environ.get("ARCH_X", 0.25))      # polyhedral dilation under-cuts by ~0.15: arches get a little extra so the wheels clear >= 0.8
     cuts += [dil(m, c + ARCH_X) for m in sweep] + [dil(w, c + ARCH_X) for w in RELIEF_FW]
-    out = D(BASE, [U(cuts)])
+    out = D(BASE, [U(cuts)]) if (cuts and os.environ.get("ARCH_CUTS")) else BASE.copy()      # Rev 29: NO wheel-arch cuts; the wheels clear the intact arches by the lift
     for _pass in range(3 if os.environ.get("PATCH") else 0):      # patch pass: translated-copy dilation misses knife edges of thin parts; cut a small sphere around every cage/mover point that is still < CLR+0.04 from the shell
         pts = trimesh.sample.sample_surface(out, 150000)[0]; balls = []
         for T in list(use) + list(sweep) + list(RELIEF_FW):
