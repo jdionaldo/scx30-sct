@@ -64,7 +64,7 @@ def pt(ax, view, p, text, dx=0, dy=0, color='k', fs=7, arrow=True, ha='left'):
                 bbox=dict(boxstyle='round,pad=0.15', fc='white', ec=color, lw=0.4, alpha=0.9))
 
 FRONT = ['IFS_Bulkhead_Convertible', 'IFS_Lower_Arm_L', 'IFS_Lower_Arm_R', 'IFS_Upper_Arm_L', 'IFS_Upper_Arm_R', 'Front_Carrier_L', 'Front_Carrier_R',
-         'Front_Spindle_L', 'Front_Spindle_R', 'Front_Pin_Retainer_Plate_L', 'Front_Pin_Retainer_Plate_R', 'Front_Bump_Stop_L', 'Front_Bump_Stop_R']
+         'Front_Spindle_L', 'Front_Spindle_R', 'Front_Pin_Retainer_Plate_L', 'Front_Pin_Retainer_Plate_R', 'Front_Bump_Stop_L', 'Front_Bump_Stop_R', 'Front_Bumper', 'Front_Y_Brace']
 STEER = ['Steering_Rack', 'Steering_BellCrank', 'Steering_Drag_Link', 'Tie_Rod_L', 'Tie_Rod_R', 'Servo_Horn', 'Servo_Wire_Clip']
 REAR = ['Rear_Trailing_Arm_L', 'Rear_Trailing_Arm_R', 'Rear_Upper_Link_L', 'Rear_Upper_Link_R', 'Rear_Axle_Top_Bracket']
 def many(names, col, alpha=1.0): return [(L(n), col, alpha) for n in names]
@@ -79,7 +79,7 @@ def hw(prefixes):
 
 def fig_overview():
     fig, axs = plt.subplots(2, 2, figsize=(16, 10))
-    items = (many(['Chassis_Tub'], C['tub']) + many(['Cage'], C['cage']) + many(FRONT, C['front']) + many(STEER, C['steer']) + many(REAR, C['rear']) +
+    items = (many(['Chassis_Tub'], C['tub']) + many(['Cage', 'Cabin_Cage'], C['cage']) + many(FRONT, C['front']) + many(STEER, C['steer']) + many(REAR, C['rear']) +
              many(['ESC_RX_Shelf_L', 'ESC_RX_Shelf_R'], C['motor']) +
              [(L(n), C['ref'], 0.9) for n in ['Ref_Gearbox', 'Ref_Motor_GM1614', 'Ref_Rear_Axle', 'Ref_Wheel_RL', 'Ref_Wheel_RR', 'Ref_Wheel_FL', 'Ref_Wheel_FR', 'Servo_Ref', 'Ref_ESC_G40'] if L(n) is not None])
     render(axs[0][0], items, 'iso'); axs[0][0].set_title('Overview (iso, shell removed; grey = purchased / stock bodies)')
@@ -126,7 +126,7 @@ def fig_rear():
 
 def fig_fasteners():
     fig, ax = plt.subplots(figsize=(16, 7))
-    it = many(['Chassis_Tub'], C['tub'], 0.55) + many(['Cage'], C['cage'], 0.6) + many(['ESC_RX_Shelf_L', 'ESC_RX_Shelf_R'], C['motor'], 0.8) + many(['IFS_Bulkhead_Convertible'], C['front'], 0.7)
+    it = many(['Chassis_Tub'], C['tub'], 0.55) + many(['Cage', 'Cabin_Cage'], C['cage'], 0.6) + many(['ESC_RX_Shelf_L', 'ESC_RX_Shelf_R'], C['motor'], 0.8) + many(['IFS_Bulkhead_Convertible'], C['front'], 0.7)
     render(ax, it, 'top')
     groups = [('HW_Bulkhead_Floor', '#ff7f0e', 'bulkhead floor screws (x4, 1.6-1.8 mm thread in the 1.8 mm floor: TEST FIRST)'), ('HW_Bulkhead_Screw', '#1f77b4', 'bulkhead wall screws (x3)'),
               ('HW_Shelf', '#2ca02c', 'ESC/RX shelf screws (x8)'), ('HW_Cage_Screw', '#d62728', 'cage screws (3 per side)'),

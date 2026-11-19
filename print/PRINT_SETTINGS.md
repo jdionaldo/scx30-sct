@@ -29,12 +29,14 @@ The `plate_N.3mf` files already carry, per object, `layer_height`, `wall_loops`,
 ## 3. Per profile / per plate
 | Plate | Profile | Layer | Walls | Infill | Notes |
 |---|---|---|---|---|---|
-| 1 | front end + steering | **0.12 mm** | 5-6 (4 on the 0.7 mm retainer plates, 5 on 1.1-1.6 mm links) | 100 % (rectilinear / concentric, +-45 deg) | thin parts are solid anyway; first layer 0.2 |
-| 2 | rear suspension | **0.16 mm** | 6 | 100 % | |
+| 1 | front end + steering | **0.12 mm** | 5-6 (4 on the 0.7 mm retainer plates, 5 on 1.1-1.6 mm links; the Y-brace is 4) | 100 % (rectilinear / concentric, +-45 deg) | thin parts are solid anyway; first layer 0.2 |
+| 2 | rear suspension + front bumper + servo wire clip | **0.16 mm** | 6 | 100 % | the bumper (2.6 mm square tube) is on this plate on purpose, see the note below |
 | 3 | bump stops (TPU) | 0.16 mm | 3 | 100 % | |
 | 4 | tub + shelves | **0.20 mm** | 4 | 100 % (it is mostly walls: 1.4-1.8 mm) | |
-| 5 | cage | **0.16 mm** | 4 (the 2.3 mm tubes are 100 % walls) | 100 % | slow first layers |
+| 5 | cage + cabin cage | **0.16 mm** | 4 (the 2.4 mm chamfered square tubes are 100 % walls) | 100 % | Cage inverted: the roof arch tube is now the highest point (Z 36.2) so it lies on the bed and the roof rails hang 4.6 mm above it (plate supports under them); Cabin_Cage feet down (125 mm2 on the bed), its posts are vertical so print slow and hot |
 | 6 | shell | **0.20 mm** | 3 | 10 % gyroid | cooling 70 % |
+
+**Plate-split note (Bambu Studio CLI): keep plate 1 at 18 objects or fewer (the 19th object, whichever it is, was moved to a second plate).** with the Front_Bumper on plate 1 the headless slicer pushed the two thin retainer plates (and later the servo wire clip) onto a second plate for no visible reason (20 objects, no overlap, all inside the bed); with the bumper on plate 2 both plates slice as one plate each. If Studio ever shows an extra plate, drag the objects back or move the bumper, the 3MF layouts do not overlap.
 
 Per object: arms, carriers, spindles, bulkhead, trailing arms: 6 walls; links, rack, bell crank, drag link, tie rods, horn: 5 walls; plates/bracket: 4-5. Anything thinner than ~3 mm is 100 % infill (rule from the brief); the 3MF sets 100 % on every object except the shell.
 
@@ -43,7 +45,7 @@ Use the same recipe wherever a part is marked "build-plate" or "tree" in `PLATES
 | Setting (Studio key) | Value |
 |---|---|
 | Type (`support_type`) | normal(auto) for arms/links/bulkhead pockets; **tree(auto)** where `PLATES.md` says tree (shell, tub, spindles, carriers, bulkhead, cage) |
-| On build plate only (`support_on_build_plate_only`) | **on** for the parts marked build-plate (arms, upper link R, drag link, shell, cage tail); **off** for the parts whose overhang lies on the part itself (listed "tree-any": bulkhead, tub, carriers, spindles, trailing arms, cage) - there the tree tips touch the part |
+| On build plate only (`support_on_build_plate_only`) | **on** for the parts marked build-plate (arms, upper links, drag link, shell, cage tail); **off** for the parts whose overhang lies on the part itself (listed "tree-any": bulkhead, front bumper, tub, carriers, spindles, trailing arms, cage) - there the tree tips touch the part |
 | Threshold angle (`support_threshold_angle`) | 45 deg |
 | Top Z distance (`support_top_z_distance`) | **0.22 mm** (0.2 for 0.12 mm layers, 0.25 for 0.2 mm layers) |
 | Bottom Z distance | 0.22 mm |
@@ -51,7 +53,7 @@ Use the same recipe wherever a part is marked "build-plate" or "tree" in `PLATES
 | Interface spacing (`support_interface_spacing`) | **0.4 mm** |
 | Base pattern / spacing | rectilinear (normal) 2.5 mm or tree, base 0.2 mm line spacing off |
 | Raft layers | 0 |
-| Brim | outer only: bulkhead 5, spindles 3, drag link 4, tub 8, cage 6, shell 8 mm (`brim_type` outer_only, `brim_width`) |
+| Brim | outer only: bulkhead 5, spindles 3, drag link 4, bumper 3, tub 8, cage 6, shell 8 mm (`brim_type` outer_only, `brim_width`) |
 **Keep supports off hinge, bore and mating surfaces:** in Bambu Studio add a *support blocker* cylinder (or paint "block") in every pin bore, the hinge-pin tunnels of the bulkhead, the bearing seats, the servo-spline bore and the cage foot plates' mating faces; add a *support enforcer* only under the drag-link stem, the tub rear deck and the cage tail frame. The bulkhead's hinge-pin bores and floor pilots are vertical in this orientation, so they need no support at all.
 
 ## 5. Holes, press fits and reaming

@@ -3,9 +3,9 @@
 
     python print/make_plates.py [--bed 256 256] [--out print] [--check]
 
-Needs numpy, scipy, trimesh.  Reads the part meshes from stl/v4, stl/v3 or
-print/parts (first hit wins; all three hold the same geometry, in the assembly
-frame X fwd / Y left / Z up).  Writes print/plate_N.3mf, print/oriented/*.stl
+Needs numpy, scipy, trimesh.  Reads the part meshes from stl/v4, then stl/v3 (assembly
+frame X fwd / Y left / Z up) and mirrors exactly the printable set into
+print/parts/ (copies, rewritten on every run; do not edit them).  Writes print/plate_N.3mf, print/oriented/*.stl
 and print/plates_report.json.  Bed size is a parameter: pass --bed 350 320 and
 plates with the same (material, layer, profile) key are merged automatically.
 
@@ -44,23 +44,26 @@ PARTS = {
  'Steering_Drag_Link':(Z,'front',5,100,'build-plate','4','Flat; the pin bosses stand proud so a few small support dots are needed under the stem.'),
  'Tie_Rod_L':(Z,'front',5,100,'none','0','Flat 1.1 mm, tension/compression is in the layer plane, vertical bores.'),
  'Tie_Rod_R':(Z,'front',5,100,'none','0','Flat 1.1 mm.'),
+ 'Front_Bumper':(Z,'rear',6,100,'build-plate','3','Oval skid loop and centre plate flat on the bed (Z down), hoop arches up: the tubes are chamfered square 2.6 mm so layers run along them; small supports only under the hoop arch; keep supports out of the Ø2.8 bolt counterbores.'),
+ 'Front_Y_Brace':((0,0,1),'front',4,100,'none','0','Upside down (feet up) so the 1.6 mm plate lies flat on the bed; vertical bores.'),
  'Servo_Horn':((1,0,0),'front',5,100,'none','0','Flat (1.5 mm), vertical spline bore (print 0.1 mm undersize and drill/ream to 3.9 mm).'),
- 'Servo_Wire_Clip':((0,0,1),'front',4,100,'none','0','Flat, no support.'),
+ 'Servo_Wire_Clip':((0,0,1),'rear',4,100,'none','0','Flat, no support.'),
  # --- rear (0.16 mm)
  'Rear_Trailing_Arm_L':((0,-1,0),'rear',6,100,'build-plate','0','Side face (Y) down: long axis and the vertical bending load are both in the layer plane; the pivot / axle / shock bores run vertically.'),
  'Rear_Trailing_Arm_R':((0,1,0),'rear',6,100,'build-plate','0','Mirror of the L arm.'),
- 'Rear_Upper_Link_L':((0.043,0,-0.999),'rear',6,100,'build-plate','0','Flat (3.5 mm tall): link is a plate loaded axially, vertical pivot bores.'),
- 'Rear_Upper_Link_R':((-0.141,0,0.99),'rear',6,100,'build-plate','0','Flat on its large facet, vertical bores.'),
+ 'Rear_Upper_Link_L':((0,0,1),'rear',6,100,'build-plate','0','Flat: link is a plate loaded axially, three vertical D1.5 pilots (anti-squat holes) on the tub-end stadium boss.'),
+ 'Rear_Upper_Link_R':((0,0,1),'rear',6,100,'build-plate','0','Flat, same as L.'),
  'Rear_Axle_Top_Bracket':((0,0,1),'rear',5,100,'none','0','Upside down so the broad foot is on the bed; the vertical pin bore stays vertical.'),
  # --- bump stops (TPU)
  'Front_Bump_Stop_L':((0,-0.72,0.70),'tpu',3,100,'none','0','Ring flat on the bed (axis vertical).'),
  'Front_Bump_Stop_R':((0,0.72,0.70),'tpu',3,100,'none','0','Ring flat on the bed (axis vertical).'),
  # --- tub and shelves (0.20 mm)
  'Chassis_Tub':(Z,'tub',4,100,'build-plate','8','Floor on the bed. Rear deck / tail overhang and the arch tops need support from the plate; supports off every bore and pocket.'),
- 'ESC_RX_Shelf_L':(Z,'tub',4,100,'none','0','Flat 1.2 mm plate.'),
- 'ESC_RX_Shelf_R':(Z,'tub',4,100,'none','0','Flat 1.2 mm plate.'),
+ 'ESC_RX_Shelf_L':(Z,'tub',4,100,'none','0','Flat 1.0 mm lid plate, countersunk screw holes up.'),
+ 'ESC_RX_Shelf_R':(Z,'tub',4,100,'none','0','Flat 1.0 mm lid plate, countersunk screw holes up.'),
  # --- cage (0.16 mm)
  'Cage':((0,0,1),'cage',4,100,'build-plate','6','Upside down: roof rails and cross tube lie on the bed (tube axes in the layer plane, so tubes are not cleaved by layer lines), legs grow up from them, foot plates print last. In the assembly orientation only ~2 mm2 would touch the bed. Brim 6 mm; supports from the plate under the tail frame and rungs.'),
+ 'Cabin_Cage':(Z,'cage',4,100,'build-plate','6','Feet down (best bed contact 125 mm2): the roof/A-pillar frame is an arch with almost no flat top, so roof-down would stand on 4 mm2. Posts are vertical (layer-wise): print slow and hot, 100 % walls. Tree supports from the plate under the hood rails and the A-pillar slope; the arch top needs none. Alternative: lie on its side (46 mm tall, supports land on the part).'),
  # --- shell (0.20 mm)
  'Tacoma_Trophy_Body_Shell':(Z,'shell',3,10,'tree-build-plate','8','Sill rim on the bed, roof up (39 mm tall, stable). Tree supports from the plate fill the cabin and hood underside. Alternative: nose down (X+), no support in the cabin but 142 mm tall and wobbly.'),
 }
@@ -81,8 +84,8 @@ RATE = {'front':1.5,'rear':2.5,'tpu':0.8,'tub':5.0,'cage':2.5,'shell':5.0}   # m
 LAYER_S = {'front':14,'rear':9,'tpu':10,'tub':6,'cage':8,'shell':6}              # s per layer overhead
 
 def find_src(name):
-    """Assembly-frame source: stl/v4 first, then stl/v3 (both are the settled CAD output).  print/parts is NOT used any
-    more: other sessions overwrite it with their own orientation (it is only a last-resort fallback)."""
+    """Assembly-frame source: stl/v4 first, then stl/v3 (both are the settled CAD output).  print/parts is a mirror written by
+    this script (last-resort fallback only)."""
     for d in ('stl/v4', 'stl/v3', 'print/parts'):
         p = os.path.join(REPO, d, name + '.stl')
         if os.path.exists(p): return p
@@ -292,6 +295,14 @@ def main():
     a = ap.parse_args()
     bw, bh = a.bed
     os.makedirs(os.path.join(a.out, 'oriented'), exist_ok=True)
+    # keep print/parts = exactly the printable set, copied from the CAD output (assembly pose)
+    import shutil
+    pp = os.path.join(REPO, 'print/parts'); os.makedirs(pp, exist_ok=True)
+    for f in os.listdir(pp):
+        if f.endswith('.stl') and f[:-4] not in PARTS: os.remove(os.path.join(pp, f))
+    for n in PARTS:
+        src = find_src(n)
+        if os.path.abspath(src) != os.path.abspath(os.path.join(pp, n + '.stl')): shutil.copyfile(src, os.path.join(pp, n + '.stl'))
     oriented, info = {}, {}
     for name in PARTS:
         m, d, yaw = orient(name)

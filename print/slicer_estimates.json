@@ -1,15 +1,15 @@
 {
  "1": {
-  "time": "3h 21m 26s",
-  "seconds": 12086,
-  "filament_mm3": 11768.89,
-  "layers": 348
+  "time": "3h 25m 52s",
+  "seconds": 12352,
+  "filament_mm3": 11807.73,
+  "layers": 358
  },
  "2": {
-  "time": "26m 11s",
-  "seconds": 1571,
-  "filament_mm3": 1953.21,
-  "layers": 40
+  "time": "43m 10s",
+  "seconds": 2590,
+  "filament_mm3": 3059.57,
+  "layers": 115
  },
  "3": {
   "time": "1m 12s",
@@ -18,21 +18,21 @@
   "layers": 12
  },
  "4": {
-  "time": "2h 29m 16s",
-  "seconds": 8956,
-  "filament_mm3": 13323.1,
-  "layers": 214
+  "time": "2h 30m 56s",
+  "seconds": 9056,
+  "filament_mm3": 13148.97,
+  "layers": 215
  },
  "5": {
-  "time": "1h 43m 9s",
-  "seconds": 6189,
-  "filament_mm3": 6811.05,
-  "layers": 157
+  "time": "3h 51m 54s",
+  "seconds": 13914,
+  "filament_mm3": 17133.95,
+  "layers": 289
  },
  "6": {
-  "time": "5h 37m 53s",
-  "seconds": 20273,
-  "filament_mm3": 29087.87,
+  "time": "5h 40m 36s",
+  "seconds": 20436,
+  "filament_mm3": 29426.5,
   "layers": 197
  }
 }

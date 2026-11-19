@@ -6,7 +6,7 @@ usage: BODY_DIR=<per-body stl dir> python scripts/19_shell_v4.py   (run scripts/
 import os, sys, math, io, contextlib, runpy, numpy as np, trimesh
 from scipy.optimize import brentq
 from trimesh.collision import CollisionManager
-BD = os.environ["BODY_DIR"]; V3 = "stl/v3/"; V4 = "stl/v4/"
+BD = os.environ["BODY_DIR"]; V3 = os.environ.get("V3_DIR", "stl/v3/"); V4 = "stl/v4/"
 sys.path.insert(0, "scripts"); import rearlib as R
 SH = float(os.environ.get("REAR_SHIFT", 9.0)); R.shift_rear(SH); ROOF_LIFT = float(os.environ.get("ROOF_LIFT", 3.2))      # = 18_tub.py: rigid shell lift (min dZ: ESC shelf/shock eye/motor clamp/bulkhead nose >= 1.5 mm, transmission top +6)
 def _ss(t): t = np.clip(t, 0, 1); return t*t*(3 - 2*t)
@@ -20,7 +20,8 @@ def shift_tail(m):
     m = m.copy(); v = m.vertices.copy(); v[:, 0] -= SH*_ss((-30.0 - v[:, 0])/10.0); m.vertices = v; return m
 PL = np.array([-26.0 - SH, float(os.environ.get("PL_Z", 2.4))]); PU = np.array([-24.53 - SH, float(os.environ.get("PU_Z", 12.0))]); R.PL = PL; R.PU = PU; R.A = np.array([-59.0 - SH, -0.5]); R.Bp = np.array([-57.5 - SH, 8.85])   # = 18_tub.py
 RAIL_DY = float(os.environ.get("RAIL_DY", 4.0)); SHELL_MARGIN = float(os.environ.get("SHELL_MARGIN", 1.5)); WARP_DY = RAIL_DY + SHELL_MARGIN; CLR = float(os.environ.get("CLR", 0.3))
-GBX_X, GBX_Y, GBX_Z0, GBX_Z1, SHAFT_Z = 6.0, 12.5, -4.9, 23.1, 4.1; MOTOR_R, MOTOR_L, MOTOR_Z = 8.5, 10.0, 18.1; MOTOR_X1 = -GBX_X; MOTOR_X0 = MOTOR_X1 - MOTOR_L
+DELTA = 5.8      # Rev 42: tub stack raised (= 18_tub.py)
+GBX_X, GBX_Y, GBX_Z0, GBX_Z1, SHAFT_Z = 6.0, 12.5, -4.9 + DELTA, 23.1 + DELTA, 4.1 + DELTA; MOTOR_R, MOTOR_L, MOTOR_Z = 8.5, 10.0, 18.1 + DELTA; MOTOR_X1 = -GBX_X; MOTOR_X0 = MOTOR_X1 - MOTOR_L
 BAR_X, BAR_Z, BAR_Y, BAR_E_X = float(os.environ.get("PXH", -78.0)), 16.3 + 4.2, 19.1, -46.75 - SH; LINK_Y = 19.75; TAB_X, TAB_TOP_Z, LINK_INS = -46.75 - SH, 4.9, 0.8; WIRE_R, LINK_R = 0.4, 0.45
 def box(x0, x1, y0, y1, z0, z1): return trimesh.creation.box(bounds=[[x0, y0, z0], [x1, y1, z1]])
 def U(ms): return trimesh.boolean.union(list(ms), engine="manifold")
@@ -64,10 +65,10 @@ if SHELL_LIFT > 0: BASE = skirt_lift(BASE, SHELL_LIFT)
 print("base shell: vol %.0f bounds %s watertight %s" % (BASE.volume, BASE.bounds.round(1).tolist(), BASE.is_watertight))
 
 # ---- static keepouts (v4 parts) ----
-STATIC = {n: ld(n) for n in ("Chassis_Tub", "Cage", "Ref_ESC_G40", "ESC_RX_Shelf_L", "ESC_RX_Shelf_R")}
-STATIC["Ref_Servo_Envelope"] = ld("Ref_Servo_Envelope") if os.path.exists(V4 + "Ref_Servo_Envelope.stl") else U([box(13.4, 33.5, 1.8, 11.7, -4.9, 10.8), box(32.3, 33.5, 11.7, 14.65, -3.8, 9.4)])      # = 18_tub.py (file no longer shipped in v7)
+STATIC = {n: ld(n) for n in ("Chassis_Tub", "Cage", "Cabin_Cage", "Ref_ESC_G40", "ESC_RX_Shelf_L", "ESC_RX_Shelf_R")}
+STATIC["Ref_Servo_Envelope"] = ld("Ref_Servo_Envelope") if os.path.exists(V4 + "Ref_Servo_Envelope.stl") else U([box(13.4, 33.5, 1.8, 11.7, -4.9 + DELTA, 10.8 + DELTA), box(32.3, 33.5, 11.7, 14.65, -3.8 + DELTA, 9.4 + DELTA)])      # = 18_tub.py (file no longer shipped in v7)
 STATIC["IFS_Bulkhead_Convertible"] = ld("IFS_Bulkhead_Convertible", V3)
-STATIC["Ref_Receiver"] = box(0.0, 20.0, -7.5, 7.5, 24.2, 31.2); STATIC["Ref_Battery_2S"] = box(-74.9, -29.6, -10.5, 10.5, 18.1, 29.3)      # keep-out volumes only (= 18_tub.py RX_BOX / BATT_BOX), not exported
+STATIC["Ref_Battery_2S"] = box(-74.9, -29.6, -10.5, 10.5, 18.1, 29.3)      # keep-out volumes only (= 18_tub.py RX_BOX / BATT_BOX), not exported
 for n in ("Ref_Shock_RL", "Ref_Shock_RR", "Ref_Shock_Eye_L", "Ref_Shock_Eye_R"): STATIC[n] = ld(n)
 
 # ---- rear sweep poses (same maths as 18_tub.py) ----
@@ -135,29 +136,45 @@ for nm in ("L", "R"):      # one hull per front wheel over every pose that touch
         if cm.in_collision_other(o) and (w.centroid[1] > 0) == (nm == "L"): ws.append(w)
     if ws: RELIEF_FW.append(hull_of(ws))
 
-_FE = trimesh.load("stl/v3/Front_Wheel_Envelope.stl")
+_FE = trimesh.load(V3 + "Front_Wheel_Envelope.stl")
 for _p in _FE.split(only_watertight=False):      # front-v3 envelope (lock x travel), non-watertight halves -> convex hull each, relieved with the same clearance CLR (>= 0.5)
     if len(_p.vertices) > 8: RELIEF_FW.append(trimesh.convex.convex_hull(_p.vertices))
 # ---- Rev 35: fender side panels closing the open gap between the cowl/A-pillar edge, the hood underside and the front wheel (planar facets, wall plane = the cab side wall) ----
 FENDER = os.environ.get("FENDER", "1") != "0"; FEN_CLR = float(os.environ.get("FEN_CLR", 1.5)) + float(os.environ.get("ARCH_X", 0.25)); FEN_XE = float(os.environ.get("FEN_XE", 50.0)); FEN_X0 = 14.5; FEN_Z0 = SILL_Z
 def _wall_y(z): return 25.18 + 0.0757*(z - 10.0)      # inner face of the cab side wall at X ~10..16 (slanted ~4.3 deg); wall is 1.25 thick
+def clean_panel(pan, sg, r=0.8):
+    """Rev 42: 2D opening of the panel silhouette (X,Z): removes every sliver/spike thinner than 2r, then re-extrudes between the slanted wall planes (planar facets, uniform 1.15 wall)."""
+    import manifold3d as m3d
+    v = pan.vertices.copy(); v[:, 1] = sg*v[:, 1] - (_wall_y(v[:, 2]) - 0.35)      # unshear: Y -> offset from the wall plane (0 .. 1.15)
+    mm = trimesh.Trimesh(np.c_[v[:, 0], v[:, 2], v[:, 1]], pan.faces.copy(), process=False); mm.invert()
+    cs = m3d.Manifold(m3d.Mesh(vert_properties=np.asarray(mm.vertices, np.float32), tri_verts=np.asarray(mm.faces, np.uint32))).project()
+    op = cs.offset(-r, m3d.JoinType.Miter, 2.0).offset(r, m3d.JoinType.Miter, 2.0)
+    ex = m3d.Manifold.extrude(op, 1.55); me = ex.to_mesh(); q = np.asarray(me.vert_properties)[:, :3].astype(float)
+    w = np.c_[q[:, 0], sg*(_wall_y(q[:, 1]) - 0.35 + q[:, 2]), q[:, 1]]
+    out = trimesh.Trimesh(w, np.asarray(me.tri_verts), process=False)
+    if out.volume < 0: out.invert()
+    if sg < 0: out.invert() if out.volume < 0 else None
+    print("    panel is_volume", out.is_volume, out.is_watertight, len(out.faces)); print("    panel cleaned: area %.1f -> %.1f mm2 (silhouette), vol %.0f -> %.0f" % (cs.area(), op.area(), pan.volume, out.volume))
+    return out
 if FENDER:
     _pan = []
     for sg in (1, -1):
-        xs = [24.0, 28.0, 32.0, 38.0, 44.0, FEN_XE]; top = []
+        xs = [FEN_X0, 17.0, 19.5, 22.0, 24.0, 28.0, 32.0, 38.0, 44.0, FEN_XE]; top = []      # Rev 42: profile follows the cowl/hood underside from the pillar on (was flat Z 24 to X 24 -> slit between panel and hood lid)
         for x in xs:
             L_, _, _ = BASE.ray.intersects_location([[x, sg*26.0, 0.0]], [[0, 0, 1.0]], multiple_hits=True); zz = sorted(z for z in L_[:, 2] if z > 20.0); top.append(zz[0] + 0.5)
-        prof = [(FEN_X0, 24.0), (22.0, 24.0)] + list(zip(xs, top))
+        prof = list(zip(xs, top))
         pieces = []
         for (xa, za), (xb, zb) in zip(prof[:-1], prof[1:]):
             pts = []
             for x_, zt_ in ((xa, za), (xb, zb)):
-                for z_ in (FEN_Z0, zt_): pts += [[x_, sg*(_wall_y(z_) + 0.05), z_], [x_, sg*(_wall_y(z_) + 1.20), z_]]
+                for z_ in (FEN_Z0, zt_): pts += [[x_, sg*(_wall_y(z_) - 0.35), z_], [x_, sg*(_wall_y(z_) + 1.20), z_]]
             pieces.append(trimesh.convex.convex_hull(np.array(pts)))
         pan = U(pieces)
         wv = np.vstack([m.vertices for m in FW if (m.centroid[1] > 0) == (sg > 0)] + [_FE_v for _FE_v in [np.vstack([q.vertices for q in _FE.split(only_watertight=False) if (q.centroid[1] > 0) == (sg > 0)])]])
         cutter = dil(trimesh.convex.convex_hull(wv), FEN_CLR)
         pan = D(pan, [cutter]); pan = sorted(pan.split(only_watertight=False), key=lambda q: -abs(q.volume))[0]
+        pan = clean_panel(pan, sg)
+        pan = D(pan, [cutter]); pan = sorted(pan.split(only_watertight=False), key=lambda q: -abs(q.volume))[0]      # re-cut: the 2D opening is a straight extrusion, the wheel clearance cut is slanted in Y
         print("  fender %s: vol %.0f mm3, X %.1f..%.1f Z %.1f..%.1f" % ("L" if sg > 0 else "R", pan.volume, pan.bounds[0][0], pan.bounds[1][0], pan.bounds[0][2], pan.bounds[1][2])); _pan.append(pan)
     _b0 = BASE.volume; BASE = U([BASE] + _pan); print("  base shell + fenders: vol %.0f -> %.0f, watertight %s shells %d" % (_b0, BASE.volume, BASE.is_watertight, len(BASE.split(only_watertight=False))))
 # ---- which static keepouts touch the base shell ----
