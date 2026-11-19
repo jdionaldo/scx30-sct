@@ -351,3 +351,55 @@ Cage clearances: shell 2.00; ESC 1.10; ESC shelves 1.15; shelf screw heads 1.05;
 
 * **Hood:** nothing was truncated: the original shell front is X 55.5 too, and the shell is the intact original (no arch or keep-out cuts since Rev 29). It reads short because the body grew (+14.2 Z lift, +17 rear, +5.5 Y) while the hood stayed 38 mm long. `FRONT_EXT` (default 8.0, `extend_nose` in 19) now blends the nose forward: front X 55.5 -> 63.5, hood length (cowl X 17 to nose) 38.5 -> 46.5. Shell watertight, 1 shell, front wheel clearance 1.77 (unchanged), receiver 1.57, tub 1.94, cage 2.00.
 * **Floor:** `FLOOR_T` 2.6 -> 1.8 (underside -7.5 -> -6.7), the 1.2 mm skid boss under the bulkhead floor screws removed (it was the lowest point, -8.7), floor screws shortened to end 0.2 above the underside (1.8 mm of thread engagement; to verify on a print). Tub 14995 -> 12236 mm3, 1 watertight shell. Lowest non-wheel point: tub underside -6.7 = 8.3 mm above ground (was 6.3). Next: rear axle -5.5 (9.5), servo -5.0, gearbox/ESC -4.9, bulkhead -4.8 (10.0-10.2).
+
+## Rev 34: rear fastener audit
+
+Removed as orphans: `HW_Rear_Shock_Lower_Nut_L/R` (the M1.6 lower shock screw is tapped into the arm's outer cheek, pilot through Y 21.5..23.4; its tip is now 23.3 = 1.8 mm engagement), `HW_Rear_Upper_Link_Axle_Screw/Nut_L/R` (they sat at Z 3.8..6.2, below the links at Z 8.9+; the links ride on `HW_Rear_Axle_Top_Pin`). Trailing-arm axle bolt rebuilt: M2, head outside the outer cheek (Y 21.6..22.7), shank through both cheeks and the axle ear, tip inside a hex nut (1.3 thick) seated on the arm's inner cheek face (Y 18.1, 0.15 clear). Pivot screws (trailing M1.4 into the tub pad pilot; upper link M1.4 through the pad into the tapped link eye) need no nuts; the `HW_Rear_*_Pivot_Nut_*` files in stl/v3 are leftovers of the v3 rail chassis (at X -9, never at the shifted pad) and should be deleted.
+
+## Rev 35: front fender panels (arch tightened)
+
+The open area outlined by the user (cowl/A-pillar edge, hood underside, tub top, front tyre) was the absence of any fender: the cab side wall stopped at the pillar edge (X 17.0 at the sill Z 6.7, 19.3 at Z 20) and the wheel rear edge is at X 28.4, so the tub showed through an 11 mm (X) gap behind the wheel and a 6 mm (Z, wheel top 22.5 to hood underside 28.5) gap above it. `fender` block in `scripts/19_shell_v4.py` (`FENDER=1`, `FEN_XE` 50, `FEN_CLR` 1.5 + 0.25 dilation allowance): one planar-facet panel per side in the plane of the cab side wall (same 4.3 deg slant, 1.15 mm thick vs the 1.25-1.4 mm wall; nested inside the wall where they meet), from the pillar edge forward to X 50, sill Z 6.7 up into the hood lid, cut by the convex hull of every front-wheel pose (lock x travel) + `Front_Wheel_Envelope`, dilated 1.5 mm. Result: gap behind the wheel 11 mm -> 1.5 mm to the wheel rear edge at every pose, gap above the wheel from 6 mm to the 1.5 mm worst-pose clearance; roof/pillars untouched, shell still 1 watertight shell (4 zero-volume sliver shells are now dropped after the STL roundtrip), vol 12588 -> 13593 mm3. Min clearances: front wheels 1.53 (was 1.77, now the arch sets it), receiver 1.57, tub 1.94, cage 2.00; every other front body (arms, CVD, spindle, rack) >= 4.4 mm. Not reducible: the lid/nose forward of X 50 and the area in front of the wheel (the tyre sticks out 4.5 mm ahead of the 8 mm-extended nose; closing it would need the panel to wrap the tyre front, which the lock sweep forbids at 1.5 mm); the wall bottom stays at the sill Z 6.7 because the tub rim sits behind it.
+
+## Rev 36: motor clamp deleted
+
+The GM1614 now mounts on the transmission's motor face only. Removed: `Motor_Clamp`, `HW_Motor_Clamp_Screw_1..4`, the tub saddle (two posts under the clamp ears + their floor feet), the four clamp screw pilots, the clamp keep-out and the clamp ears from the 19 gearbox/motor pocket. The motor can now sits flush on the gearbox face (X -16.0..-6.0 against the face at X -6.0; it was 0.1 mm off): overlap 0.0 mm3, gap 0.0. Nothing supports the motor's rear end (the outrunner hangs off the gearbox face; its nearest tub surface is 2.5 mm away). Cage cross tube moved X -3.4 -> -3.1 to keep >= 1.5 mm to the motor (1.5+). Tub 12236 -> 11283 mm3, 1 watertight shell; shell unchanged (1 shell, watertight); no new overlaps (only thread-in-pilot HW pairs).
+
+## Rev 37: ESC / RX resized to the measured parts
+
+Measured: ESC 30 L x 17 D x 6 H, RX 20 L x 15 D x 7 H (assumed upright, L vertical, D along X, H across Y). `Ref_ESC_G40` is now X -26.45..-9.45, Y 11.7..17.7 (L side), Z -4.9..25.1 and sits on the floor; the RX keep-out box is 20 x 15 x 7 (centreline, Z 24.2..31.2).
+
+**Side pockets (L/R identical, swappable ESC or RX):** pillar gap 19.1 in X (pillars X -29.5..-27.5 and -8.4..-6.4), Y pocket 10.2..19.2 = 9.0 wide (`BAY_Y0` 10.4 -> 10.2), Z -4.9 to shelf underside 26.1 = 31.0 high (`SH_Z0` = floor + ESC_L + 1.0, `SH_T` 1.0, shelf Z 26.1..27.1). Shelf screws now seat on the plate (the heads floated 0.8 mm above it before).
+
+**Clearances (ESC / RX simulated in the pocket):** shelf 1.0 / 1.0 (above), pillars + walls 1.05 / 1.0, gearbox 3.45 / 4.45, motor 3.2 / 3.1, cage 2.3 / 1.8.
+
+**Cage / shell:** cage rails raised CG_ZR 27.0 -> 30.4 (shelf plate is higher). Cage-shell 2.00 -> 1.59, cage-shelf 1.05, receiver-shell 1.74. Shell, tub, cage watertight, 1 shell each; no new part overlaps.
+
+## Rev 38: rear shock re-derived (generated in 18, no longer the v3 mesh)
+
+**Recommendation: LOS-07-class 35.5 mm eye-to-eye shock (travel assumed 7.5).** Geometry (X, Z): upper eye (-38.2, 27.8) on a hanger tab on the cage tail post (the old forearm hanger tube is gone), lower eye (-53, 0.5) in the existing arm clevis. Leans forward 28.6 degrees from vertical (Yeti reference: top forward). Eye-to-eye 34.48 (ta -14) / 31.05 (ride) / 29.18 (ta +7), i.e. 1.02 mm of stroke left at full droop and 1.18 at +7 (1.0 at the +7.5 bump-stop contact), ride sits 0.3 mm from mid-stroke. Stroke used 5.3 of 7.5 mm (it was 4.4).
+
+| option | fits? | numbers |
+|---|---|---|
+| 35.5 (7.5 travel) | yes | above |
+| Injora 40 (9 travel, 31 compressed) | no | needs ride about 33.6, upper pin at (-37, 30) = roof-rail height, eye top 31.8 above the rail so the shell clearance fails; only 5.4 of 9 mm used |
+| Injora 52 (12 travel, 40 compressed) | no | pin spacing available is about 33 mm max; 52 needs the upper pin near X -23 over the ESC shelf and uses only 4 of 12 mm |
+
+**Body size (assumption):** the slot between the cage tail tubes (ball nodes, Y outer 17.15) and the shell side wall (inner Y 25.4 above Z 14, 1.5 clear -> 23.9) is about 6 mm and the clevis gap is 2.4 mm wide, so the shock is modelled as barrel R 1.9 / spring envelope D 4.2 / rod D 1.5 on Y 20.3. A real D 9..10 spring does NOT fit here: it needs the cage tail tubes moved inboard (about 3 mm) and the tail lugs/foot plates reworked, or a shell relief. Flagged, not done.
+
+**Hardware:** `HW_Rear_Shock_Upper_Screw_L/R` regenerated (M1.6 shank through the tab pilot, spacer sleeve Y 18.55..19.35, head seated on the eye), lower screw unchanged. Tab Y 15.7..18.6 (pilot to Y 19.2).
+
+**Clearances:** shock - cage 1.10 (spring vs the rung-2 ball), tub 2.25, shell 3.04, wheel 7.5, axle 7.5, upper link 7.5, bar link 2.07 (posed with the arm). Arm clevis 0.20 (functional), upper eye - cage 0.75 (spacer joint, functional). No shock overlaps at rest or over ta -14..+7. Sweep now poses the shock with the arm (`shock_T`).
+
+**Travel:** the shock alone would allow about ta -16 .. +9.5 (35.0 / 28.5 limits), so it is not what limits travel: droop is limited by the upper link touching the tub (0.00 at -14) and the 12.6 degree driveshaft, bump by the bump-stop post (+7.5). Rear travel unchanged at -14..+7.
+
+Shell and cage unchanged (cage - shell 1.59), tub/cage/shock/eye watertight 1 shell.
+
+## Rev 39: real shock envelope (supersedes the D4.2 toy body of Rev 38)
+
+Shock = Injora 36 mm big bore class (36 eye-to-eye, 7..9 mm travel assumed; the 35.5 geometry of Rev 38 is unchanged: eye-to-eye 34.48 / 31.05 / 29.18 at ta -14 / 0 / +7). Body modelled as lower nylon end (eye boss R 2.2, **eye width 3.0 assumed**, bore D1.7), neck, D8 body, **D9.5 spring**, D2 rod, upper eye 3.0 wide. The lower eye sits at |Y| 20.4 (clevis), the upper eye at |Y| 18.2, so the shock axis tilts 2 degrees in Y and the spring stays 1.6 mm inside the shell wall.
+
+**Moved to make room (cage is ours, shell untouched):** cage tail section inboard from |Y| 15.7 to 11.5 between X -60 and the main-rail jog (roof rail, lower tail tube, tail post, rung 2), hoop legs unchanged (X -78); the tail post sits at X -35.4 with a foot link out to the lug screw; the hanger tab runs out from the inboard post to the eye (spacer sleeve under the eye, screw tapped into the tab pilot). Tail foot plate trimmed to X -37.4..-33.8, and a 1.0 mm keep-out swept by the spring over ta -14..+7.5 is cut from the tub lug block and the cage. The arm clevis was widened (outer slot to Y 22.1) and relieved under the eye (R 2.7).
+
+**Clearances (spring/body):** cage 1.25, tub 1.57, shell 1.55 (swept, posed with the arm; 1.61 at rest), wheel 5.7, axle 6.8, upper link 3.9, bar link 1.87, ESC shelf 10.3; eye to cage 0.80 and arm clevis 0.08 are the joints. No shock overlaps at rest or over ta -14..+7 (shock posed with the arm). Cage-shell 1.59, bump stop 4.00 at ride, travel unchanged. Tub, cage, shocks, eyes watertight 1 shell; shell 1 shell.
+
+Open: the D9.5 spring only fits because of the tilt and the lug relief; a D10 spring would break the 1.5 shell margin by 0.1. New files: `HW_Rear_Shock_Upper_Screw` re-seated on the inboard tab.

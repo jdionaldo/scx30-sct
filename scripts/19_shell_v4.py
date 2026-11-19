@@ -20,7 +20,7 @@ def shift_tail(m):
     m = m.copy(); v = m.vertices.copy(); v[:, 0] -= SH*_ss((-30.0 - v[:, 0])/10.0); m.vertices = v; return m
 PL = np.array([-26.0 - SH, float(os.environ.get("PL_Z", 2.4))]); PU = np.array([-24.53 - SH, float(os.environ.get("PU_Z", 12.0))]); R.PL = PL; R.PU = PU; R.A = np.array([-59.0 - SH, -0.5]); R.Bp = np.array([-57.5 - SH, 8.85])   # = 18_tub.py
 RAIL_DY = float(os.environ.get("RAIL_DY", 4.0)); SHELL_MARGIN = float(os.environ.get("SHELL_MARGIN", 1.5)); WARP_DY = RAIL_DY + SHELL_MARGIN; CLR = float(os.environ.get("CLR", 0.3))
-GBX_X, GBX_Y, GBX_Z0, GBX_Z1, SHAFT_Z = 6.0, 12.5, -4.9, 23.1, 4.1; MOTOR_R, MOTOR_L, MOTOR_Z = 8.5, 10.0, 18.1; MOTOR_X1 = -(GBX_X + 0.1); MOTOR_X0 = MOTOR_X1 - MOTOR_L; MC_PX = (-14.5, -10.0)
+GBX_X, GBX_Y, GBX_Z0, GBX_Z1, SHAFT_Z = 6.0, 12.5, -4.9, 23.1, 4.1; MOTOR_R, MOTOR_L, MOTOR_Z = 8.5, 10.0, 18.1; MOTOR_X1 = -GBX_X; MOTOR_X0 = MOTOR_X1 - MOTOR_L
 BAR_X, BAR_Z, BAR_Y, BAR_E_X = float(os.environ.get("PXH", -78.0)), 16.3 + 4.2, 19.1, -46.75 - SH; LINK_Y = 19.75; TAB_X, TAB_TOP_Z, LINK_INS = -46.75 - SH, 4.9, 0.8; WIRE_R, LINK_R = 0.4, 0.45
 def box(x0, x1, y0, y1, z0, z1): return trimesh.creation.box(bounds=[[x0, y0, z0], [x1, y1, z1]])
 def U(ms): return trimesh.boolean.union(list(ms), engine="manifold")
@@ -42,9 +42,7 @@ def pocket(c):
     a = box(-GBX_X - c, GBX_X + c, -GBX_Y - c, GBX_Y + c, GBX_Z0 - c, GBX_Z1 + c)
     m = trimesh.creation.cylinder(radius=MOTOR_R + c, height=MOTOR_L + 2*c, sections=48); m.apply_transform(trimesh.transformations.rotation_matrix(math.pi/2, [0, 1, 0]))
     m.apply_translation([(MOTOR_X0 + MOTOR_X1)/2, 0, MOTOR_Z])
-    cl = box(MC_PX[0] - 1.6 - c, MC_PX[1] + 1.6 + c, -10.4 - c, 10.4 + c, MOTOR_Z, MOTOR_Z + 3.2 + c)      # clamp ears + screw heads
-    cl2 = box(MC_PX[0] - 1.6 - c, MC_PX[1] + 1.6 + c, -MOTOR_R - 2.0 - c, MOTOR_R + 2.0 + c, MOTOR_Z, MOTOR_Z + MOTOR_R + 2.0 + c)
-    return U([a, m, cl, cl2, box(-15.5 - c, 15.5 + c, -2.1, 2.1, SHAFT_Z - 2.1, SHAFT_Z + 2.1)])
+    return U([a, m, box(-15.5 - c, 15.5 + c, -2.1, 2.1, SHAFT_Z - 2.1, SHAFT_Z + 2.1)])
 
 def stretch_tail(m, xb=-48.0, ext=17.0):
     """lengthen the rear of the body: x < xb is stretched linearly so the tail end moves back by ext (planes of constant Y/Z stay planar)"""
@@ -66,9 +64,10 @@ if SHELL_LIFT > 0: BASE = skirt_lift(BASE, SHELL_LIFT)
 print("base shell: vol %.0f bounds %s watertight %s" % (BASE.volume, BASE.bounds.round(1).tolist(), BASE.is_watertight))
 
 # ---- static keepouts (v4 parts) ----
-STATIC = {n: ld(n) for n in ("Chassis_Tub", "Cage", "Ref_ESC_G40", "Ref_Servo_Envelope", "ESC_RX_Shelf_L", "ESC_RX_Shelf_R")}
+STATIC = {n: ld(n) for n in ("Chassis_Tub", "Cage", "Ref_ESC_G40", "ESC_RX_Shelf_L", "ESC_RX_Shelf_R")}
+STATIC["Ref_Servo_Envelope"] = ld("Ref_Servo_Envelope") if os.path.exists(V4 + "Ref_Servo_Envelope.stl") else U([box(13.4, 33.5, 1.8, 11.7, -4.9, 10.8), box(32.3, 33.5, 11.7, 14.65, -3.8, 9.4)])      # = 18_tub.py (file no longer shipped in v7)
 STATIC["IFS_Bulkhead_Convertible"] = ld("IFS_Bulkhead_Convertible", V3)
-STATIC["Ref_Receiver"] = box(0.0, 22.0, -7.0, 7.0, 24.2, 31.2); STATIC["Ref_Battery_2S"] = box(-74.9, -29.6, -10.5, 10.5, 18.1, 29.3)      # keep-out volumes only (= 18_tub.py RX_BOX / BATT_BOX), not exported
+STATIC["Ref_Receiver"] = box(0.0, 20.0, -7.5, 7.5, 24.2, 31.2); STATIC["Ref_Battery_2S"] = box(-74.9, -29.6, -10.5, 10.5, 18.1, 29.3)      # keep-out volumes only (= 18_tub.py RX_BOX / BATT_BOX), not exported
 for n in ("Ref_Shock_RL", "Ref_Shock_RR", "Ref_Shock_Eye_L", "Ref_Shock_Eye_R"): STATIC[n] = ld(n)
 
 # ---- rear sweep poses (same maths as 18_tub.py) ----
@@ -139,6 +138,28 @@ for nm in ("L", "R"):      # one hull per front wheel over every pose that touch
 _FE = trimesh.load("stl/v3/Front_Wheel_Envelope.stl")
 for _p in _FE.split(only_watertight=False):      # front-v3 envelope (lock x travel), non-watertight halves -> convex hull each, relieved with the same clearance CLR (>= 0.5)
     if len(_p.vertices) > 8: RELIEF_FW.append(trimesh.convex.convex_hull(_p.vertices))
+# ---- Rev 35: fender side panels closing the open gap between the cowl/A-pillar edge, the hood underside and the front wheel (planar facets, wall plane = the cab side wall) ----
+FENDER = os.environ.get("FENDER", "1") != "0"; FEN_CLR = float(os.environ.get("FEN_CLR", 1.5)) + float(os.environ.get("ARCH_X", 0.25)); FEN_XE = float(os.environ.get("FEN_XE", 50.0)); FEN_X0 = 14.5; FEN_Z0 = SILL_Z
+def _wall_y(z): return 25.18 + 0.0757*(z - 10.0)      # inner face of the cab side wall at X ~10..16 (slanted ~4.3 deg); wall is 1.25 thick
+if FENDER:
+    _pan = []
+    for sg in (1, -1):
+        xs = [24.0, 28.0, 32.0, 38.0, 44.0, FEN_XE]; top = []
+        for x in xs:
+            L_, _, _ = BASE.ray.intersects_location([[x, sg*26.0, 0.0]], [[0, 0, 1.0]], multiple_hits=True); zz = sorted(z for z in L_[:, 2] if z > 20.0); top.append(zz[0] + 0.5)
+        prof = [(FEN_X0, 24.0), (22.0, 24.0)] + list(zip(xs, top))
+        pieces = []
+        for (xa, za), (xb, zb) in zip(prof[:-1], prof[1:]):
+            pts = []
+            for x_, zt_ in ((xa, za), (xb, zb)):
+                for z_ in (FEN_Z0, zt_): pts += [[x_, sg*(_wall_y(z_) + 0.05), z_], [x_, sg*(_wall_y(z_) + 1.20), z_]]
+            pieces.append(trimesh.convex.convex_hull(np.array(pts)))
+        pan = U(pieces)
+        wv = np.vstack([m.vertices for m in FW if (m.centroid[1] > 0) == (sg > 0)] + [_FE_v for _FE_v in [np.vstack([q.vertices for q in _FE.split(only_watertight=False) if (q.centroid[1] > 0) == (sg > 0)])]])
+        cutter = dil(trimesh.convex.convex_hull(wv), FEN_CLR)
+        pan = D(pan, [cutter]); pan = sorted(pan.split(only_watertight=False), key=lambda q: -abs(q.volume))[0]
+        print("  fender %s: vol %.0f mm3, X %.1f..%.1f Z %.1f..%.1f" % ("L" if sg > 0 else "R", pan.volume, pan.bounds[0][0], pan.bounds[1][0], pan.bounds[0][2], pan.bounds[1][2])); _pan.append(pan)
+    _b0 = BASE.volume; BASE = U([BASE] + _pan); print("  base shell + fenders: vol %.0f -> %.0f, watertight %s shells %d" % (_b0, BASE.volume, BASE.is_watertight, len(BASE.split(only_watertight=False))))
 # ---- which static keepouts touch the base shell ----
 use = []
 for n, m in STATIC.items():
@@ -170,6 +191,8 @@ def build(c):
 OUTF = V4 + "Tacoma_Trophy_Body_Shell.stl"; final = None
 for c in (CLR, CLR + 0.033, CLR + 0.071, CLR + 0.12):
     o = build(c); o.export(OUTF); q = trimesh.load(OUTF)
+    _sh = sorted(q.split(only_watertight=False), key=lambda t: -abs(t.volume))
+    if len(_sh) > 1 and all(abs(t.volume) < 0.5 for t in _sh[1:]): _sh[0].export(OUTF); q = trimesh.load(OUTF); print("    dropped %d zero-volume sliver shells after the STL roundtrip" % (len(_sh) - 1))
     print("    roundtrip: watertight %s open %d shells %d" % (q.is_watertight, open_edges(q), len(q.split(only_watertight=False))))
     if q.is_watertight and open_edges(q) == 0 and len(q.split(only_watertight=False)) == 1: final = q; break
 print("SHELL: watertight %s open edges %d shells %d vol %.0f bounds %s" % (q.is_watertight, open_edges(q), len(q.split(only_watertight=False)), q.volume, q.bounds.round(1).tolist()))
@@ -198,7 +221,7 @@ print("front wheel/shell contacts over lock -8..+8 x rack +/-2.75:", bad or "non
 print("--- minimum clearance to the shell (mm; < 1.0 flagged) ---")
 def mind(m):
     o = CollisionManager(); o.add_object("b", m); return cmx.min_distance_other(o)
-names = [n for n in STATIC] + ["Ref_Gearbox", "Ref_Motor_GM1614", "Motor_Clamp", "Ref_Rear_Driveshaft", "Ref_Servo_Envelope"]
+names = [n for n in STATIC] + ["Ref_Gearbox", "Ref_Motor_GM1614", "Ref_Rear_Driveshaft", "Ref_Servo_Envelope"]
 rows = []
 for n in dict.fromkeys(names): rows.append((n, mind(STATIC[n] if n in STATIC else ld(n))))
 for n in ("Rear_Trailing_Arm_L", "Rear_Upper_Link_L", "Rear_Axle_Top_Bracket", "Ref_Rear_Axle", "Ref_Wheel_RL", "Bar_lever_L", "Bar_cross"):

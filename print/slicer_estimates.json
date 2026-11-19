@@ -1,0 +1,38 @@
+{
+ "1": {
+  "time": "3h 21m 26s",
+  "seconds": 12086,
+  "filament_mm3": 11768.89,
+  "layers": 348
+ },
+ "2": {
+  "time": "26m 11s",
+  "seconds": 1571,
+  "filament_mm3": 1953.21,
+  "layers": 40
+ },
+ "3": {
+  "time": "1m 12s",
+  "seconds": 72,
+  "filament_mm3": 53.53,
+  "layers": 12
+ },
+ "4": {
+  "time": "2h 29m 16s",
+  "seconds": 8956,
+  "filament_mm3": 13323.1,
+  "layers": 214
+ },
+ "5": {
+  "time": "1h 43m 9s",
+  "seconds": 6189,
+  "filament_mm3": 6811.05,
+  "layers": 157
+ },
+ "6": {
+  "time": "5h 37m 53s",
+  "seconds": 20273,
+  "filament_mm3": 29087.87,
+  "layers": 197
+ }
+}

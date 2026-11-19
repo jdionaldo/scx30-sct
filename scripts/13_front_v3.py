@@ -160,9 +160,9 @@ bk = load("IFS_Bulkhead_Convertible")
 V_ORIG = bk.volume
 bk = D(bk, box(24, 36.1, 13.45, 15, -3, 13), box(24, 36.1, -15, -13.45, -3, 13))     # side walls flush with rail inner faces
 front_wall = box(XC1 + 0.15, XC1 + 2.6, Y_E + 0.15, Y_E + EAR_OUT + 0.25, ZC0 + 0.2, ZC1 - 0.9)   # carries the two ear-screw pilots (screws go forward through the ears)
-cage_ = trimesh.load(os.path.join(os.path.dirname(__file__), "..", "stl", "v3", "Roll_Cage.stl"))   # read-only: keep the pilot wall off the cage tubes (+0.3)
+cage_ = trimesh.load(next(f_ for f_ in (os.path.join(os.path.dirname(__file__), "..", "stl", d_, n_ + ".stl") for n_ in ("Cage", "Roll_Cage") for d_ in ("v4", "v3")) if os.path.exists(f_)))   # read-only: keep the pilot wall off the cage tubes (+0.3)
 cc_ = trimesh.boolean.intersection([cage_, box(30, 40, 6, 17, -6, 14)], engine=ENG)
-front_wall = D(front_wall, U(*[cc_.copy().apply_translation(d_) for d_ in ([0, 0, 0], [.3, 0, 0], [-.3, 0, 0], [0, .3, 0], [0, -.3, 0], [0, 0, .3], [0, 0, -.3])]))
+if len(cc_.faces): front_wall = D(front_wall, U(*[cc_.copy().apply_translation(d_) for d_ in ([0, 0, 0], [.3, 0, 0], [-.3, 0, 0], [0, .3, 0], [0, -.3, 0], [0, 0, .3], [0, 0, -.3])]))
 bk = U(bk,  front_wall, box(33.5, 38.5, -4.2, 4.2, -1.6, 1.8))                          # + rack deck (guide-screw boss)
 bk = D(bk, box(XC0 - 0.15, XC1 + 0.15, Y_N - 0.15, Y_E + 0.15, ZC0 - 0.15, 40),                      # case pocket (open top: servo drops in)
        box(XC1 - EAR_T - 0.15, XC1 + 0.15, Y_E, Y_E + EAR_OUT + 0.3, ZC0 - 0.15, 40),                 # ear-tab recess
@@ -178,9 +178,19 @@ def seg_cyl(p0, p1, r, n=24):
     m.apply_transform(trimesh.geometry.align_vectors([0, 0, 1], (p1 - p0) / L)); m.apply_translation((p0 + p1) / 2); return m
 bk = D(bk, seg_cyl(SH0, SH1 + np.array([4.0, 0, 0.55]), TUN_R))
 bk = D(bk, seg_cyl(SH0 + (SH1 - SH0) * ((35.6 - SH0[0]) / (SH1[0] - SH0[0])), SH1 + np.array([0.5, 0, 0.05]), 2.0))      # Ø4.0 seat for the worm-end dogbone/U-joint coupler
-shk0 = load("Ref_Shock_FL"); sw = []
-for a_ in np.radians(np.linspace(-20, 20, 17)):
-    m_ = shk0.copy(); m_.apply_transform(rotx(a_, 9.2, 10.4)); sw.append(m_)
+# ---- front shock: Injora SCX30-08 (26 mm extended / 18.3 compressed, 7.7 travel, 1.0 g; body Ø8-9 with spring, eye centre to end ~2 mm). Shock plane X58.6, upper eye raised from (Y9.2,Z10.4) to (Y9.0,Z17.0) on a bulkhead fork tower so ride sits near mid-stroke and the Ø8 body clears the hinge pins/retainer.
+SHOCK_UP = np.array([58.6, 9.0, 17.0]); SHOCK_LO0 = np.array([58.6, 24.0, 2.5])   # eye centres (upper on the bulkhead, lower on the lower arm at arm angle 0)
+SHOCK_LMIN, SHOCK_LMAX = 18.3, 26.0       # eye-to-eye compressed / extended (listing, 7.7 mm travel)
+SHOCK_BODY_R, SHOCK_BODY_LEN, SHOCK_ROD_R, SHOCK_EYE_R, SHOCK_EYE_W, SHOCK_BODY_OFF = 4.0, 13.0, 0.7, 1.5, 1.4, 3.0   # eye 1.4 wide: fits between the arm lug (X<=57.8) and the lower screw head (X>=59.3)   # body Ø8 spans OFF..LEN from the upper eye (eye tab/neck before it)   # body Ø8 (listing: Ø8-9 with spring: ESTIMATE), body length from the upper eye, rod Ø3, eye boss
+def make_shock(U3, P3, grow=0.0):
+    U3 = np.array(U3, float); P3 = np.array(P3, float); d = (P3 - U3) / np.linalg.norm(P3 - U3)
+    eye = lambda c: D(cyl("x", list(c), SHOCK_EYE_R + grow, SHOCK_EYE_W + 2 * grow, 24), cyl("x", list(c), 0.85, 4.0, 16)) if grow == 0 else cyl("x", list(c), SHOCK_EYE_R + grow, SHOCK_EYE_W + 2 * grow, 24)
+    m_ = U(eye(U3), seg_cyl(U3, U3 + d * (SHOCK_BODY_OFF + 0.5), SHOCK_EYE_W / 2 + grow), seg_cyl(U3 + d * SHOCK_BODY_OFF, U3 + d * SHOCK_BODY_LEN, SHOCK_BODY_R + grow), seg_cyl(U3 + d * (SHOCK_BODY_LEN - 0.5), P3, SHOCK_ROD_R + grow), eye(P3))
+    return m_ if grow else D(m_, cyl("x", list(U3), 0.85, 4.0, 20), cyl("x", list(P3), 0.85, 4.0, 20))      # pin bores re-opened after the union
+def shock_lo(th_deg):     # lower eye centre when the lower arm is at angle th_deg (rotation about the inner pivot AL, X axis)
+    a_ = math.radians(th_deg); d_ = SHOCK_LO0[1:] - np.array(AL)
+    return np.array([58.6, AL[0] + d_[0] * math.cos(a_) - d_[1] * math.sin(a_), AL[1] + d_[0] * math.sin(a_) + d_[1] * math.cos(a_)])
+sw = [make_shock(SHOCK_UP, shock_lo(th_), grow=0.15) for th_ in np.arange(-14, 12.1, 2)]
 relief = U(*sw)
 bk = D(bk, relief, mirror(relief))
 print("bulkhead (before steering relief): shells %d, vol %.0f -> %.0f mm3" % (len(bk.split(only_watertight=False)), V_ORIG, bk.volume))
@@ -270,7 +280,7 @@ replaced = ("IFS_Lower_Arm_", "IFS_Upper_Arm_", "IFS_Knuckle_", "IFS_Bulkhead", 
             "Steering_", "Tie_Rod_", "HW_Front_Upper_Kingpin", "HW_Front_Lower_Kingpin", "HW_Front_TieRod", "HW_Steering_",
             "HW_Drag_Link", "HW_Servo_Mount", "Ref_Front_CVD", "Ref_Front_Center_Driveshaft", "Ref_Wheel_F", "HW_Front_Wheel_Nut",
             "HW_Front_Lower_Hinge_Pin", "HW_Front_Upper_Hinge_Pin",
-            "Chassis_Rail", "Roll_Cage", "Tacoma", "Slider", "Spare", "Rear_", "Ref_Rear", "Ref_Shock_R", "Ref_Wheel_R", "HW_Rear", "Ref_Gearbox", "Front_Pin_Retainer")
+            "Chassis_Rail", "Roll_Cage", "Cage", "Tacoma", "Slider", "Spare", "Rear_", "Ref_Rear", "Ref_Shock_R", "Ref_Wheel_R", "HW_Rear", "Ref_Gearbox", "Front_Pin_Retainer", "HW_Front_Shock_Upper_Screw", "HW_Front_Shock_Lower_Screw", "Ref_Shock_F")
 allb = {os.path.basename(f)[:-4]: trimesh.load(f) for f in glob.glob(os.path.join(BODY_DIR, "*.stl"))}
 static = {k: v for k, v in allb.items() if not k.startswith(replaced)}
 # keep inner hinge pins (inboard end unchanged) but trim: reuse originals clipped to Y<=14 -> simply reuse
@@ -284,6 +294,10 @@ for s in ("L", "R"):
 static["HW_Servo_Mount_Screw_L"] = refs["HW_Servo_Mount_Screw_L"]; static["HW_Servo_Mount_Screw_R"] = refs["HW_Servo_Mount_Screw_R"]
 static["HW_Rack_Guide_Screw"] = refs["HW_Rack_Guide_Screw"]
 static["Ref_Front_Driveshaft"] = refs["Ref_Front_Driveshaft"]
+SHOCK_UP_SHIFT = SHOCK_UP - np.array([58.6, 9.2, 10.4])      # upper eye moved from the old mount
+_xl, _xr = SHOCK_UP[0] - SHOCK_EYE_W / 2 - 0.1 - 0.8 - 0.4, SHOCK_UP[0] + SHOCK_EYE_W / 2 + 0.1 + 0.8        # screw through tower wall - eye - wall: shank Ø1.36, head Ø2.4 x 0.6 outside the +X wall
+static["HW_Front_Shock_Upper_Screw_L"] = U(cyl("x", [(_xl + _xr) / 2, SHOCK_UP[1], SHOCK_UP[2]], 0.68, _xr - _xl, 20), cyl("x", [_xr + 0.3, SHOCK_UP[1], SHOCK_UP[2]], 1.2, 0.6, 24))
+static["HW_Front_Shock_Upper_Screw_R"] = mirror(static["HW_Front_Shock_Upper_Screw_L"])
 for k_ in ("Ref_Gearbox_Spec_Box", "Rail_Box_L", "Rail_Box_R", "HW_Horn_Screw"): static[k_] = refs[k_]
 
 def sided(name, m):   # returns {name_L: m, name_R: mirror}
@@ -300,12 +314,12 @@ moving = {"IFS_Lower_Arm_L": ("arm_l", parts["IFS_Lower_Arm_L"]), "IFS_Upper_Arm
           "HW_TieRod_Outer_Screw_L": ("spin", hw_tr["HW_TieRod_Outer_Screw_L"]),
           "CVD_Inner_L": ("cvd", cvd_in), "Tie_Rod_L": ("rod", parts["Tie_Rod_L"]),
           "HW_TieRod_Inner_Screw_L": ("rack", hw_tr["HW_TieRod_Inner_Screw_L"]),
-          "Ref_Shock_FL": ("shock", allb["Ref_Shock_FL"])}
+          "Ref_Shock_FL": ("shock", make_shock(SHOCK_UP, SHOCK_LO0)), "HW_Front_Shock_Lower_Screw_L": ("arm_l", allb["HW_Front_Shock_Lower_Screw_L"])}
 for k in ("Ref_Wheel_FL", "HW_Front_Wheel_Nut_L", "Ref_Shock_FL"): pass
 # right side moving (rest only; mirrored)
 rest_all = dict(static)
 for n, (g, m) in moving.items():
-    rest_all[n] = m; rest_all[rn(n)] = mirror(m) if n != "Ref_Shock_FL" else allb["Ref_Shock_FR"]
+    rest_all[n] = m; rest_all[rn(n)] = mirror(m)
 rest_all["Steering_Rack"] = parts["Steering_Rack"]; rest_all["Servo_Horn"] = parts["Servo_Horn"]; rest_all["Steering_Drag_Link"] = parts["Steering_Drag_Link"]; rest_all["Steering_BellCrank"] = parts["Steering_BellCrank"]
 
 from trimesh.collision import CollisionManager
@@ -428,9 +442,7 @@ def pose_scene(theta_deg, s):
         Trod = tr(I_) @ trimesh.geometry.align_vectors(ROD_OUT - ROD_IN, rod_dir) @ tr(-ROD_IN)
         put("Tie_Rod_L", parts["Tie_Rod_L"], Trod)
         # shock: rotate about upper mount to point at lower-arm mount
-        shk = allb["Ref_Shock_FL"]; up = np.array([58.6, 9.2, 10.4]); lo0 = np.array([58.6, 24.0, 2.5]); lo = (rotx(sol["th"], *AL) @ np.append(lo0, 1))[:3]
-        Ts = tr(up) @ trimesh.geometry.align_vectors(lo0 - up, lo - up) @ tr(-up)
-        put("Ref_Shock_FL", shk, Ts)
+        put("Ref_Shock_FL", make_shock(SHOCK_UP, (rotx(sol["th"], *AL) @ np.append(SHOCK_LO0, 1))[:3]), np.eye(4))      # exact per pose (rod slides in the body)
     return sc, sol
 
 # ---------- swept steering relief in the bulkhead (rack, horn+pin, tie rods over steering x travel), then final rest check
@@ -457,6 +469,13 @@ bk = D(bk, cyl("z", [RACK_X, 0.0, 0.3], 0.55, 4.8, 16))   # rack guide-screw pil
 # bell-crank pivot boss (re-added after the relief; the crank sweep would otherwise shave it) with Ø1.1 pin pilot; wire-clip pad with two pilots and a cable groove
 bk = D(bk, box(35.0, 37.0, 3.5, 4.8, -0.5, 0.4))   # removes a tangent sliver left between the horn-boss and link sweeps (non-manifold edge after STL roundtrip)
 bk = D(bk, cyl("z", [XP, YPC, 1.05], 3.0, 2.0, 40))   # clears the crank hub disc (tangent slivers between the rotated sweep copies)
+# upper shock fork tower: two 0.8 mm walls either side of the eye (eye 2.4 wide), hull of the eye boss and a base block on the bulkhead top; Ø1.7 pin bore along X
+TW_W, TW_R, TW_Y0, TW_Y1, TW_Z0 = 0.8, 2.2, 5.0, 7.6, 11.5
+for _xs in (SHOCK_UP[0] - SHOCK_EYE_W / 2 - 0.1 - TW_W, SHOCK_UP[0] + SHOCK_EYE_W / 2 + 0.1):
+    _w = trimesh.convex.convex_hull(np.vstack([cyl("x", [_xs + TW_W / 2, SHOCK_UP[1], SHOCK_UP[2]], TW_R, TW_W, 28).vertices, box(_xs, _xs + TW_W, TW_Y0, TW_Y1, TW_Z0, SHOCK_UP[2] + 1.0).vertices]))
+    bk = U(bk, _w, mirror(_w))
+bk = D(bk, cyl("x", [SHOCK_UP[0], SHOCK_UP[1], SHOCK_UP[2]], 0.85, 8.0, 20), cyl("x", [SHOCK_UP[0], -SHOCK_UP[1], SHOCK_UP[2]], 0.85, 8.0, 20))
+print(" shock fork tower: walls X%.1f..%.1f / %.1f..%.1f, base solid under it? %s" % (SHOCK_UP[0] - SHOCK_EYE_W / 2 - 0.1 - TW_W, SHOCK_UP[0] - SHOCK_EYE_W / 2 - 0.1, SHOCK_UP[0] + SHOCK_EYE_W / 2 + 0.1, SHOCK_UP[0] + SHOCK_EYE_W / 2 + 0.1 + TW_W, bool(bk.contains([[SHOCK_UP[0] - SHOCK_EYE_W / 2 - 0.5 - TW_W / 2, (TW_Y0 + TW_Y1) / 2, TW_Z0 - 0.5], [SHOCK_UP[0] + SHOCK_EYE_W / 2 + 0.5 + TW_W / 2, (TW_Y0 + TW_Y1) / 2, TW_Z0 - 0.5]]).all())))
 bk = U(bk, cyl("z", [XP, YPC, -0.95], 2.4, 1.9, 32), box(CLIP_X0, CLIP_X1, Y_E + 0.15, 13.4, 8.0, 10.5))
 bk = D(bk, cyl("z", [XP, YPC, -0.65], 0.55, 1.3, 16), cyl("z", [CLIP_SX[0], 12.65, 9.3], 0.45, 2.4, 14), cyl("z", [CLIP_SX[1], 12.65, 9.3], 0.45, 2.4, 14), cyl("y", [CLIP_GX, 12.65, 10.5], CLIP_GR, 3.0, 16))
 BH_HOLES = [(44.5, 3.5), (44.5, -3.5), (52.0, 3.5), (52.0, -3.5)]
@@ -574,7 +593,8 @@ for n in sorted(printable):
 # ---------------------------------------------------------------- envelope check vs the CURRENT cage / shell / rails (stl/v3, read-only) + moving-part sweeps
 print("\n--- ENVELOPE CHECK vs stl/v3 cage, shell, rails, gearbox ---")
 envd = os.path.join(os.path.dirname(__file__), "..", "stl", "v3")
-env = {n: trimesh.load(os.path.join(envd, n + ".stl")) for n in ("Roll_Cage", "Tacoma_Trophy_Body_Shell", "Chassis_Rail_L", "Chassis_Rail_R", "Ref_Gearbox")}
+def _envf(n): return next((f_ for f_ in (os.path.join(envd, "..", d_, n + ".stl") for d_ in ("v4", "v3")) if os.path.exists(f_)), None)
+env = {n: trimesh.load(_envf(n)) for n in ("Cage", "Tacoma_Trophy_Body_Shell", "Chassis_Rail_L", "Chassis_Rail_R", "Ref_Gearbox") if _envf(n)}
 sw_ = {"horn": [], "link": [], "crank": [], "rack": []}
 for s_ in np.linspace(-3.0, 3.0, 13):
     for k_, m_, T_ in (("horn", parts["Servo_Horn"], rotx(horn_angle(s_), YSP, ZSP)), ("link", parts["Steering_Drag_Link"], link_T(s_)), ("crank", parts["Steering_BellCrank"], crank_T(s_)), ("rack", parts["Steering_Rack"], tr([0, s_, 0]))):
@@ -604,22 +624,22 @@ print(" bulkhead final: shells %d, watertight %s, volume %.0f" % (len(bkc.split(
 
 # ================================================================ FULL-TRAVEL CHECK (shock stroke, hard stops, env contacts, wheel envelope)
 print("\n=== FULL TRAVEL: shock stroke, stops, env contacts ===")
-UP_ = np.array([58.6, 9.2, 10.4]); LO0_ = np.array([58.6, 24.0, 2.5])
+UP_ = SHOCK_UP.copy(); LO0_ = SHOCK_LO0.copy()
 def shock_L(th_deg): return float(np.linalg.norm((rotx(math.radians(th_deg), *AL) @ np.append(LO0_, 1))[:3] - UP_))
-SHOCK_STROKE = 7.0      # ASSUMED (no front shock stroke in the model: mesh shows 5.0 mm exposed rod + 2.0 mm) ; mid-stroke at the neutral pose
-SHOCK_BODY_FACE = 10.0   # axis distance from the upper eye to the end face of the shock body (Ref_Shock mesh profile)
+SHOCK_STROKE = SHOCK_LMAX - SHOCK_LMIN      # 7.7 (Injora SCX30-08 listing)
+SHOCK_BODY_FACE = SHOCK_BODY_LEN   # axis distance from the upper eye to the end face of the shock body
 TH_STOP = 4.0           # end of clear travel (bump stop contact), arm angle
 TH_N = -4.0             # neutral (mid-stroke, spring neutral) arm angle: lower arm 4 deg down, hub Z 1.47 = rear 1.5
 Lmid = shock_L(TH_N)
-print(" shock eye-eye at neutral (mid-stroke) %.2f mm, stroke %.1f assumed -> bottom-out at L=%.2f, full extension L=%.2f" % (Lmid, SHOCK_STROKE, Lmid - SHOCK_STROKE / 2, Lmid + SHOCK_STROKE / 2))
+print(" shock eye-eye at ride %.2f mm (mid-stroke %.2f); stroke %.1f -> bottom-out L=%.2f, full extension L=%.2f ; bump stop (arm %+.0f) L=%.2f (%.2f left), droop (-12) L=%.2f (%.2f left)" % (Lmid, (SHOCK_LMIN + SHOCK_LMAX) / 2, SHOCK_STROKE, SHOCK_LMIN, SHOCK_LMAX, TH_STOP, shock_L(TH_STOP), shock_L(TH_STOP) - SHOCK_LMIN, shock_L(-12), SHOCK_LMAX - shock_L(-12)))
 for th in (-14, -12, -10, -8, -4, 0, 4, 6, 8, 12):
     hz = 3.0 + (AL[0] * 0 + math.sin(math.radians(th)) * (PL[0] - AL[0]))
     print("   arm %+3d deg: hub Z %+5.2f  shock L %.2f (%+.2f from mid)" % (th, hz, shock_L(th), shock_L(th) - Lmid))
-th_b = brentq(lambda t: shock_L(t) - (Lmid - SHOCK_STROKE / 2), TH_N, 40); th_d = brentq(lambda t: shock_L(t) - (Lmid + SHOCK_STROKE / 2), -60, TH_N)
+th_b = brentq(lambda t: shock_L(t) - SHOCK_LMIN, TH_N, 40); th_d = brentq(lambda t: shock_L(t) - SHOCK_LMAX, -80, TH_N)
 print(" shock bottoms at arm %+.1f deg (hub Z %.2f), fully extends at arm %+.1f deg (hub Z %.2f)" % (th_b, 3 + math.sin(math.radians(th_b)) * (PL[0] - AL[0]), th_d, 3 + math.sin(math.radians(th_d)) * (PL[0] - AL[0])))
 
 envf = {}
-for n_ in ("Chassis_Tub", "Roll_Cage", "Tacoma_Trophy_Body_Shell"):
+for n_ in ("Chassis_Tub", "Cage", "Tacoma_Trophy_Body_Shell"):
     for d_ in ("v4", "v3"):
         f_ = os.path.join(os.path.dirname(__file__), "..", "stl", d_, n_ + ".stl")
         if os.path.exists(f_): envf[n_] = trimesh.load(f_); print("  env %s from stl/%s" % (n_, d_)); break
@@ -653,7 +673,7 @@ for th, s in ((-4.0, 0.0), (-12, 0.0), (4, 0.0), (-8, 3.0), (4, 3.0)):
     if sc is None: continue
     out = []
     for a in ("Ref_Wheel_FL", "Ref_Wheel_FR", "IFS_Lower_Arm_L", "IFS_Upper_Arm_L", "Tie_Rod_L"):
-        for b in ("Env_Chassis_Tub", "Env_Tacoma_Trophy_Body_Shell", "Env_Roll_Cage", "IFS_Bulkhead_Convertible"):
+        for b in ("Env_Chassis_Tub", "Env_Tacoma_Trophy_Body_Shell", "Env_Cage", "IFS_Bulkhead_Convertible"):
             if a in sc and b in sc: out.append("%s/%s %.2f" % (a.replace("Ref_Wheel_", "W").replace("IFS_", "").replace("Tie_Rod_L", "Rod"), b.replace("Env_Tacoma_Trophy_Body_Shell", "Shell").replace("Env_", "").replace("IFS_Bulkhead_Convertible", "Bulk"), mind(sc, a, b)))
     print("  arm %+.0f s=%.1f: %s" % (th, s, "; ".join(out)))
 
@@ -676,8 +696,8 @@ for n_, m_ in envf.items():
 print("\n=== BUMP STOPS / CLIP / HARDWARE ===")
 ax_ = (LO0_ - UP_) / np.linalg.norm(LO0_ - UP_)
 RING_OFF = SHOCK_BODY_FACE + (shock_L(0.0) - shock_L(TH_STOP))      # ring face on the rod touches the body face when the shock has shortened from L(0) to L(TH_STOP)
-print(" bump stop: ring face %.2f mm from the upper eye; touches the shock body (face at %.1f) at arm %+.1f deg = shock L %.2f (%.2f above bottom-out at L %.2f)" % (RING_OFF, SHOCK_BODY_FACE, TH_STOP, shock_L(TH_STOP), shock_L(TH_STOP) - (Lmid - SHOCK_STROKE / 2), Lmid - SHOCK_STROKE / 2))
-ring = D(seg_cyl(UP_ + ax_ * RING_OFF, UP_ + ax_ * (RING_OFF + 2.3), 2.0), seg_cyl(UP_ + ax_ * 10.0, UP_ + ax_ * 13.5, 0.75))     # on the exposed shock rod: stops compression at arm +4 deg
+print(" bump stop: ring face %.2f mm from the upper eye; touches the shock body (face at %.1f) at arm %+.1f deg = shock L %.2f (%.2f above bottom-out at L %.2f)" % (RING_OFF, SHOCK_BODY_FACE, TH_STOP, shock_L(TH_STOP), shock_L(TH_STOP) - SHOCK_LMIN, SHOCK_LMIN))
+ring = D(seg_cyl(UP_ + ax_ * RING_OFF, UP_ + ax_ * (RING_OFF + 2.0), SHOCK_ROD_R + 1.5), seg_cyl(UP_ + ax_ * (RING_OFF - 1.0), UP_ + ax_ * (RING_OFF + 3.0), SHOCK_ROD_R + 0.05))     # on the exposed shock rod: stops compression at arm +4 deg
 lid = D(box(CLIP_X0, CLIP_X1, Y_E + 0.15, 13.4, 10.5, CLIP_ZT), cyl("y", [CLIP_GX, 12.65, 10.5], CLIP_GR, 3.0, 16), cyl("z", [CLIP_SX[0], 12.65, 11.0], 0.55, 3.0, 14), cyl("z", [CLIP_SX[1], 12.65, 11.0], 0.55, 3.0, 14))
 extra = {"Front_Bump_Stop_L": ring, "Front_Bump_Stop_R": mirror(ring), "Servo_Wire_Clip": lid}
 for n_, m_ in extra.items(): m_.export(os.path.join(OUT, n_ + ".stl"))
@@ -731,7 +751,7 @@ _skip = ("Rail_Box", "Ref_Gearbox_Spec_Box", "Env_")
 cand = dict(rest_all); cand["Ref_Front_Center_Driveshaft"] = refs["Ref_Front_Driveshaft"]      # same name as the stale body: now the fixed shaft (the only front shaft body; Ref_Front_Driveshaft is NOT exported = would duplicate it)
 cand.pop("Ref_Front_Driveshaft", None)
 KEEP_FROM_FOLDER = ("Ref_Front_Diff_Ring_Gear", "Ref_Front_Input_Worm_Gear", "HW_Front_Lower_Hinge_Pin_L", "HW_Front_Lower_Hinge_Pin_R", "HW_Front_Upper_Hinge_Pin_L", "HW_Front_Upper_Hinge_Pin_R",
-                    "HW_Front_Shock_Upper_Screw_L", "HW_Front_Shock_Upper_Screw_R", "HW_Front_Shock_Lower_Screw_L", "HW_Front_Shock_Lower_Screw_R", "Ref_Shock_FL", "Ref_Shock_FR", "Front_Pin_Retainer_Plate_L", "Front_Pin_Retainer_Plate_R", "HW_Front_Retainer_Screw_L", "HW_Front_Retainer_Screw_R")   # retainer plate+screw keep the inboard hinge pins (X57, touching bulkhead/pin, no overlap): still valid, printed plate
+                    "HW_Front_Shock_Lower_Screw_L", "HW_Front_Shock_Lower_Screw_R", "Front_Pin_Retainer_Plate_L", "Front_Pin_Retainer_Plate_R", "HW_Front_Retainer_Screw_L", "HW_Front_Retainer_Screw_R")   # retainer plate+screw keep the inboard hinge pins (X57, touching bulkhead/pin, no overlap): still valid, printed plate   # retainer plate+screw keep the inboard hinge pins (X57, touching bulkhead/pin, no overlap): still valid, printed plate
 for k_ in KEEP_FROM_FOLDER:
     if k_ in allb: static.get(k_, allb[k_]).export(os.path.join(OUT, k_ + ".stl")); exported.append(k_ + " (unchanged copy from per-body folder)")
 for k_, m_ in refs.items():
