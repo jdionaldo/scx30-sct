@@ -18,12 +18,16 @@ for p in sorted(glob.glob(os.path.join(HERE, 'plate_*.3mf'))):
     names = z.namelist(); print(os.path.basename(p), len(objs), 'objects', 'config' if 'Metadata/model_settings.config' in names else 'NO CONFIG')
     boxes = []
     for n, m in objs:
-        ok = m.is_watertight and m.volume > 0
+        _, ec = np.unique(m.edges_sorted, axis=0, return_counts=True)
+        oe = int((ec == 1).sum()); nme = int((ec != 2).sum())
+        sh = len(m.split(only_watertight=False))
+        deg = int((m.area_faces < 1e-6).sum())
+        ok = m.is_watertight and m.volume > 0 and oe == 0 and nme == 0 and sh == 1
         lo, hi = m.bounds; inbed = lo[0] >= 0 and lo[1] >= 0 and hi[0] <= BX and hi[1] <= BY and abs(lo[2]) < 1e-3
         mi = rep['parts'][n]
-        flag = 'OK ' if ok and inbed and mi['contact'] >= 5 or (ok and inbed and mi['brim'] != '0') else 'BAD'
+        flag = 'OK ' if ok and inbed and (mi['contact'] >= 5 or mi['brim'] != '0') else 'BAD'
         if flag == 'BAD': bad += 1
-        print(f"  {flag} {n:28s} wt={ok} inbed={inbed} vol={m.volume:8.1f} h={hi[2]:5.1f} contact={mi['contact']:6.1f}mm2 sup={mi['support']:16s} overhang={mi['overhang']:6.1f} (on part {mi['overhang_on_part']:5.1f})")
+        print(f"  {flag} {n:28s} wt={ok} sh={sh} oe={oe} nme={nme} deg={deg:4d} inbed={inbed} vol={m.volume:8.1f} h={hi[2]:5.1f} contact={mi['contact']:6.1f}mm2 sup={mi['support']:16s} overhang={mi['overhang']:6.1f} (on part {mi['overhang_on_part']:5.1f})")
         boxes.append((n, lo, hi))
     for (a, la, ha), (b, lb, hb) in itertools.combinations(boxes, 2):
         gx = max(la[0] - hb[0], lb[0] - ha[0]); gy = max(la[1] - hb[1], lb[1] - ha[1])

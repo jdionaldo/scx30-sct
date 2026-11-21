@@ -2,7 +2,7 @@
 import os,sys,numpy as np,trimesh,manifold3d as m3
 from trimesh.collision import CollisionManager
 B=os.environ.get("BODY_DIR")  # optional: extra low-precedence folder of per-body STLs; leave unset
-DROP={"Chassis_Rail_L","Chassis_Rail_R","Slider_L","Slider_R","Rear_Sway_Bridge_old","Rear_Sway_Bridge","Spare_Tire_Carrier","Drag_Link","Steering_Ackermann_Bar","Steering_Bell_Crank_L","Steering_Bell_Crank_R","Steering_Pivot_Pin_L","Steering_Pivot_Pin_R","IFS_Knuckle_L","IFS_Knuckle_R","Ref_Front_Diff_Ring_Gear","Ref_Front_Input_Worm_Gear","Tacoma_Trophy_Body_Shell_old","Front_Wheel_Envelope"}
+DROP={"Chassis_Rail_L","Chassis_Rail_R","Slider_L","Slider_R","Rear_Sway_Bridge_old","Rear_Sway_Bridge","Spare_Tire_Carrier","Drag_Link","Steering_Ackermann_Bar","Steering_Bell_Crank_L","Steering_Bell_Crank_R","Steering_Pivot_Pin_L","Steering_Pivot_Pin_R","IFS_Knuckle_L","IFS_Knuckle_R","Ref_Front_Diff_Ring_Gear","Ref_Front_Input_Worm_Gear","Tacoma_Trophy_Body_Shell_old","Front_Wheel_Envelope","IFS_Bulkhead_Convertible"}
 src={}
 for d in [x for x in (B,"stl/v3","stl/v4") if x]:
     for f in os.listdir(d):

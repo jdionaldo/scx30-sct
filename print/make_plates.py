@@ -27,7 +27,6 @@ Z = (0, 0, -1)
 # profile keys are defined in PROFILES below
 PARTS = {
  # --- front end, precision (0.12 mm)
- 'IFS_Bulkhead_Convertible':((-1,0,0),'front',5,100,'build-plate','5','Rear face (X-) on the bed, nose up: both hinge-pin bores and the Z floor-screw pilots print as vertical holes, ear loads are radial (in-layer). Supports only where the part overhangs the bed.'),
  'IFS_Lower_Arm_L':(Z,'front',6,100,'build-plate','0','Flat (Z down): arm length runs along the layers, shock/bump bending is in-plane. Hinge and outer-pin bores horizontal: ream 1.5 mm.'),
  'IFS_Lower_Arm_R':(Z,'front',6,100,'build-plate','0','Mirror of the L arm, same orientation.'),
  'IFS_Upper_Arm_L':(Z,'front',6,100,'build-plate','0','Flat (Z down): bending in-plane. Pin bores horizontal: ream 1.5 mm.'),
@@ -44,26 +43,22 @@ PARTS = {
  'Steering_Drag_Link':(Z,'front',5,100,'build-plate','4','Flat; the pin bosses stand proud so a few small support dots are needed under the stem.'),
  'Tie_Rod_L':(Z,'front',5,100,'none','0','Flat 1.1 mm, tension/compression is in the layer plane, vertical bores.'),
  'Tie_Rod_R':(Z,'front',5,100,'none','0','Flat 1.1 mm.'),
- 'Front_Bumper':(Z,'rear',6,100,'build-plate','3','Oval skid loop and centre plate flat on the bed (Z down), hoop arches up: the tubes are chamfered square 2.6 mm so layers run along them; small supports only under the hoop arch; keep supports out of the Ø2.8 bolt counterbores.'),
+ 'Front_Bumper':(Z,'rear',6,100,'build-plate','3','Oval skid loop and centre plate flat on the bed (Z down), hoop arches up: the tubes are chamfered square 2.6 mm so layers run along them; small supports only under the hoop arch; keep supports out of the bolt counterbores. (New guard profile: re-check the orientation note after the next verify_plates.)'),
  'Front_Y_Brace':((0,0,1),'front',4,100,'none','0','Upside down (feet up) so the 1.6 mm plate lies flat on the bed; vertical bores.'),
  'Servo_Horn':((1,0,0),'front',5,100,'none','0','Flat (1.5 mm), vertical spline bore (print 0.1 mm undersize and drill/ream to 3.9 mm).'),
- 'Servo_Wire_Clip':((0,0,1),'rear',4,100,'none','0','Flat, no support.'),
  # --- rear (0.16 mm)
- 'Rear_Trailing_Arm_L':((0,-1,0),'rear',6,100,'build-plate','0','Side face (Y) down: long axis and the vertical bending load are both in the layer plane; the pivot / axle / shock bores run vertically.'),
+ 'Rear_Trailing_Arm_L':((0,-1,0),'rear',6,100,'build-plate','0','Side face (Y) down: long axis and the vertical bending load are both in the layer plane; the pivot / axle / shock bores run vertically. Plate-beam arm with a sway-bar clevis tab and a Ø1.2 steel pin: keep the clevis bore vertical and unsupported. D3 deeper flat beam: 240 mm2 bed contact, 8.9 mm tall, about 60 mm2 of overhang (bores and tab), tree supports only where the slicer asks.'),
  'Rear_Trailing_Arm_R':((0,1,0),'rear',6,100,'build-plate','0','Mirror of the L arm.'),
- 'Rear_Upper_Link_L':((0,0,1),'rear',6,100,'build-plate','0','Flat: link is a plate loaded axially, three vertical D1.5 pilots (anti-squat holes) on the tub-end stadium boss.'),
- 'Rear_Upper_Link_R':((0,0,1),'rear',6,100,'build-plate','0','Flat, same as L.'),
+ 'Rear_Upper_Link_L':((0,0,1),'rear',5,100,'build-plate','0','Flat: link is a plate loaded axially, three vertical D1.5 pilots (anti-squat holes) on the tub-end stadium boss.'),
+ 'Rear_Upper_Link_R':((0,0,1),'rear',5,100,'build-plate','0','Flat, same as L.'),
  'Rear_Axle_Top_Bracket':((0,0,1),'rear',5,100,'none','0','Upside down so the broad foot is on the bed; the vertical pin bore stays vertical.'),
  # --- bump stops (TPU)
- 'Front_Bump_Stop_L':((0,-0.72,0.70),'tpu',3,100,'none','0','Ring flat on the bed (axis vertical).'),
- 'Front_Bump_Stop_R':((0,0.72,0.70),'tpu',3,100,'none','0','Ring flat on the bed (axis vertical).'),
- # --- tub and shelves (0.20 mm)
- 'Chassis_Tub':(Z,'tub',4,100,'build-plate','8','Floor on the bed. Rear deck / tail overhang and the arch tops need support from the plate; supports off every bore and pocket.'),
- 'ESC_RX_Shelf_L':(Z,'tub',4,100,'none','0','Flat 1.0 mm lid plate, countersunk screw holes up.'),
- 'ESC_RX_Shelf_R':(Z,'tub',4,100,'none','0','Flat 1.0 mm lid plate, countersunk screw holes up.'),
- # --- cage (0.16 mm)
- 'Cage':((0,0,1),'cage',4,100,'build-plate','6','Upside down: roof rails and cross tube lie on the bed (tube axes in the layer plane, so tubes are not cleaved by layer lines), legs grow up from them, foot plates print last. In the assembly orientation only ~2 mm2 would touch the bed. Brim 6 mm; supports from the plate under the tail frame and rungs.'),
- 'Cabin_Cage':(Z,'cage',4,100,'build-plate','6','Feet down (best bed contact 125 mm2): the roof/A-pillar frame is an arch with almost no flat top, so roof-down would stand on 4 mm2. Posts are vertical (layer-wise): print slow and hot, 100 % walls. Tree supports from the plate under the hood rails and the A-pillar slope; the arch top needs none. Alternative: lie on its side (46 mm tall, supports land on the part).'),
+ 'Front_Bump_Stop_L':((0,-0.49,0.87),'tpu',3,100,'none','0','Ring flat on the bed (axis vertical).'),
+ 'Front_Bump_Stop_R':((0,0.49,0.87),'tpu',3,100,'none','0','Ring flat on the bed (axis vertical).'),
+ # --- tub (0.20 mm); the ESC/RX shelves are gone (no shelf parts any more)
+ 'Chassis_Tub':(Z,'tub',4,100,'build-plate','8','Unified tub + fused front bulkhead + chamfered diff drop (diff drop on bed, Z down). Boat-side chamfers (36 deg), bulkhead nose/diff overhang, and rear deck/tail overhangs get plate supports; keep supports off every bore and pocket.'),
+ # --- cage (0.16 mm): one one-piece Cage (the Cabin_Cage is merged into it; light bar and radiator are part of it)
+ 'Cage':((0,0,1),'cage',4,100,'build-plate','4','One-piece Cage printed inverted (roof down): tube axes stay in the layer plane, legs grow up. With the foot bosses the bed contact is about 200 mm2 (it was 3 mm2 before them). Plan: 4 mm brim (6 mm if it lifts), tree supports under the arch and rails, first layers slow (20 mm/s) and hot, no raft needed. 35.6 mm tall, 103 x 47 mm footprint.'),
  # --- shell (0.20 mm)
  'Tacoma_Trophy_Body_Shell':(Z,'shell',3,10,'tree-build-plate','8','Sill rim on the bed, roof up (39 mm tall, stable). Tree supports from the plate fill the cabin and hood underside. Alternative: nose down (X+), no support in the cabin but 142 mm tall and wobbly.'),
 }
@@ -72,9 +67,9 @@ PROFILES = {
  'front':{'material':'PETG-CF (PA12-CF / PAHT-CF if you have a dry box)','layer':0.12,'nozzle':0.4,'label':'Front end and steering (precision)'},
  'rear': {'material':'PETG-CF (PA-CF if available)','layer':0.16,'nozzle':0.4,'label':'Rear suspension'},
  'tpu':  {'material':'TPU 95A','layer':0.16,'nozzle':0.4,'label':'Bump stops'},
- 'tub':  {'material':'PETG-CF','layer':0.20,'nozzle':0.4,'label':'Tub and shelves'},
- 'cage': {'material':'PETG (tough) or PETG-CF','layer':0.16,'nozzle':0.4,'label':'Cage'},
- 'shell':{'material':'PETG (PLA also fine)','layer':0.20,'nozzle':0.4,'label':'Body shell'},
+ 'tub':  {'material':'PETG-CF','layer':0.20,'nozzle':0.4,'label':'Tub'},
+ 'cage': {'material':'PETG (neat tough PETG recommended for vertical Z-layer posts)','layer':0.16,'nozzle':0.4,'label':'Cage'},
+ 'shell':{'material':'PETG','layer':0.20,'nozzle':0.4,'label':'Body shell'},
 }
 DENS = {'PETG-CF':1.30,'TPU':1.21,'PETG':1.27}
 def density(prof):
@@ -94,19 +89,20 @@ def find_src(name):
 def load(name):
     m = trimesh.load(find_src(name), process=True)
     m.merge_vertices()
-    # collapse sliver triangles (< 0.1 um) so float32 re-quantisation cannot merge distinct vertices
+    # collapse sliver triangles (volume-guarded 0.005 -> 1e-4) so float32 re-quantisation cannot merge distinct vertices
     try:
         import manifold3d as mf
         mm = mf.Manifold(mf.Mesh(vert_properties=m.vertices.astype(np.float32), tri_verts=m.faces.astype(np.uint32)))
         if mm.status() == mf.Error.NoError and mm.num_tri() > 0:
-            o = mm.simplify(1e-4).to_mesh()
-            q = trimesh.Trimesh(np.array(o.vert_properties)[:, :3].astype(np.float64), np.array(o.tri_verts), process=False)
-            parts = q.split(only_watertight=False)
-            if len(parts) > 1:                      # drop zero-volume sliver shells the collapse can leave behind
-                keep = [c for c in parts if abs(c.volume) > 1e-2]
-                if len(keep) < len(parts): q = trimesh.util.concatenate(keep)
-            if q.is_watertight and abs(q.volume - m.volume) < 1e-3 * m.volume:
-                return q
+            for tol in (0.005, 1e-3, 1e-4):
+                o = mm.simplify(tol).to_mesh()
+                q = trimesh.Trimesh(np.array(o.vert_properties)[:, :3].astype(np.float64), np.array(o.tri_verts), process=False)
+                parts = q.split(only_watertight=False)
+                if len(parts) > 1:                      # drop zero-volume sliver shells the collapse can leave behind
+                    keep = [c for c in parts if abs(c.volume) > 1e-2]
+                    if len(keep) < len(parts): q = trimesh.util.concatenate(keep)
+                if q.is_watertight and len(q.split(only_watertight=False)) == 1 and abs(q.volume - m.volume) < 2e-3 * m.volume:
+                    return q
     except Exception as e:
         print('manifold clean skipped for', name, e)
     return m
@@ -276,7 +272,14 @@ def settings_for(name, prof, mi):
     d, p, walls, infill, sup, brim, note = PARTS[name]
     sup = support_policy(name, mi)
     s = {'layer_height': PROFILES[prof]['layer'], 'wall_loops': walls, 'sparse_infill_density': f'{infill}%',
-         'top_shell_layers': 7 if PROFILES[prof]['layer'] < 0.15 else 5, 'bottom_shell_layers': 7 if PROFILES[prof]['layer'] < 0.15 else 5}
+         'sparse_infill_pattern': 'gyroid' if prof == 'shell' else 'rectilinear',
+         'top_shell_layers': 7 if PROFILES[prof]['layer'] < 0.15 else 5, 'bottom_shell_layers': 7 if PROFILES[prof]['layer'] < 0.15 else 5,
+         'wall_generator': 'arachne', 'min_feature_size': '15%', 'min_bead_width': '50%',
+         'wall_sequence': 'inner wall/outer wall', 'elefant_foot_compensation': '0.15',
+         'xy_hole_compensation': '0.08' if prof in ('front', 'rear', 'tub', 'cage') else '0.04',
+         'seam_position': 'aligned'}
+    if prof == 'tpu':   # playbook: TPU 95A bump stops 20 mm/s max
+        s.update({k: 20 for k in ('outer_wall_speed', 'inner_wall_speed', 'sparse_infill_speed', 'internal_solid_infill_speed', 'top_surface_speed', 'initial_layer_speed', 'gap_infill_speed')})
     if sup == 'none':
         s['enable_support'] = 0
     else:
@@ -300,6 +303,9 @@ def main():
     pp = os.path.join(REPO, 'print/parts'); os.makedirs(pp, exist_ok=True)
     for f in os.listdir(pp):
         if f.endswith('.stl') and f[:-4] not in PARTS: os.remove(os.path.join(pp, f))
+    od_dir = os.path.join(a.out, 'oriented')
+    for f in os.listdir(od_dir):
+        if f.endswith('.stl') and f[:-4] not in PARTS: os.remove(os.path.join(od_dir, f))
     for n in PARTS:
         src = find_src(n)
         if os.path.abspath(src) != os.path.abspath(os.path.join(pp, n + '.stl')): shutil.copyfile(src, os.path.join(pp, n + '.stl'))
