@@ -448,3 +448,22 @@ The cross wire (D0.8, Y +-19.1 at X -78, Z 20.5, `Ref_Rear_Sway_Bar` = cross + 2
 **3. Cabin_Cage.** The 1.47 was the hood rail's straight run next to the fender panel (X 22, Y -22.1, Z 26.1); the rail is now one diagonal from the cowl post (17, 20.4) to the front hoop (26, 17.0): shell minimum 1.68 (script 19), rear cage 1.9.
 
 Chain 19 -> 18 -> 18 -> 16: shell 1 watertight shell (vol 14007); clearances Cabin_Cage 1.68, Cage 1.53, front wheels 1.53, shocks 1.55, tub 1.58. Changed in stl/v4: Chassis_Tub, Cabin_Cage, HW_Bulkhead_Floor_Screw_1..4, Rear_Upper_Link_L/R (re-export), Tacoma_Trophy_Body_Shell, Cage and reference parts re-exported unchanged in geometry.
+
+## Rev 44: rear travel restored (21 deg double-joint rear shaft)
+
+`DRV_MAX` in `scripts/18_tub.py` is now 21.0 deg (env `DRV_MAX` overrides; 13.0 reproduces Rev 43). It assumes an Injora-type double-joint rear driveshaft, whose rating is NOT verified; with a single stock U-joint set `DRV_MAX=13` and rebuild. The droop stop now sits at ta -14.00 (shaft 20.45 deg, axle dZ -7.90 mm), post tops Z 8.42 (L) / 8.19 (R), 1.6 mm under the link at rest. Rear axle travel: droop 7.90, bump 4.04, total 11.94 mm (was 6.84). Shock eye-to-eye 34.67 at droop / 31.06 ride / 29.11 bump (limit 35, stroke used 5.56 of the assumed 7-9). Rear shaft 20.45 / 9.0 / 3.3 deg. Sweep, bump stops and cage clearances unchanged (axle to bump post 0.31 at +7, wheel to shell 4.06). Chain 19 -> 18 -> 18 -> 16 rebuilt with BODY_DIR.
+
+## Doc note (exporter session, 2026-11-20): part set after the one-piece cage round (text only, no geometry)
+Entries above that name `Cabin_Cage`, `ESC_RX_Shelf_L/R`, `HW_Shelf_Screw_*`, the separate light bar / radiator, the sway-bar saddles and drop links, or the old two-piece cage clearances (Rev 27, 42, 43 and the Cage section) describe parts that are removed or merged: there is now one `Cage` (cabin cage, light bar and radiator inside it), no shelf lids, a U-bar rear sway bar held by a clevis tab and a Ø1.2 steel pin on each `Rear_Trailing_Arm` (plate-beam C5), a new `Front_Bumper` guard profile and a shorter shell bed. `Servo_Wire_Clip` is also gone. The authoritative part list is `parts_list.md`; the exact new hardware names and clearances are TO BE CONFIRMED from the final STLs and the next chain report.
+
+## UPDATE 2026-11-21 (doc refresh for the 124-body kit, round 6)
+Current kit: 124 bodies in the viewer 3MF and the kit STEP (stl/v3 + stl/v4, v4 wins, 3 envelope/servo bodies dropped), 28 printed parts on 6 plates. The one-piece `Cage` (6667.9 mm3, screw-3 pad) replaces `Cabin_Cage` and the old rear cage; `ESC_RX_Shelf_L/R`, `HW_Shelf_Screw_*`, `HW_Cage_Screw_L2/L4/R2/R4` and `Servo_Wire_Clip` no longer exist. `Chassis_Tub` is 15138.8 mm3. The shell has tail fins and the rear tilt hinge sits at X -64.0, Z 29.0. Older Revs above (shelves, Cabin_Cage, two-piece cage) are history, not the current design.
+
+## UPDATE 2026-11-21 (round 7 doc refresh)
+Kit: 124 bodies (3MF = STEP), 28 printed parts on 6 plates. `Chassis_Tub` 15060.6 mm3 with one rib lattice, mirrored tab, skirt taper and ledge chamfer. One-piece `Cage` 6588.3 mm3 with clean joints and foot bosses: printed inverted, about 200 mm2 bed contact, 35.6 mm tall, 4 mm brim. Shell has a rear arch (circle R 21.1) and tail fins. `Rear_Trailing_Arm_L/R` are the D3 plate-beam arms (1112.6 mm3, 8.9 mm tall, 240 mm2 flat on the bed). Earlier Revs above describe superseded geometry.
+
+## UPDATE 2026-11-21 (round 9 doc refresh)
+`Chassis_Tub` is now 14802.3 mm3 after the rib-tip trim (floor ribs changed); first-layer contact is unchanged at 522.1 mm2, 29.9 mm tall, 8 mm brim, plate supports for the deck, tail and arches. `Cage` 6591.0 mm3 (keep-out smooth), about 198 mm2 on its foot bosses, 4 mm brim. Kit is 124 bodies, 28 printed parts.
+
+## UPDATE 2026-11-21 (final round doc refresh)
+Tub 14838.6 mm3 (final 10), Cage 6595.8 mm3, shell 13668.6 mm3 (final 6), front spindles 269.6 mm3 each (front final 5). Rear track +2.1 mm (axle Y +-32.55); trailing arm = arm_d4 (1158.8 mm3). Tub bed contact 522.1 mm2, 29.9 mm tall, 8 mm brim; Cage 197.6 mm2, 35.6 mm, 4 mm brim. 124 bodies, 28 printed parts.

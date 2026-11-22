@@ -36,7 +36,7 @@ Servo envelope (+0.3 mm clearance, add your wall):
 ## Verified (script output)
 * Printed parts: Front_Carrier/Spindle L/R, IFS_Lower/Upper_Arm L/R, IFS_Bulkhead_Convertible (1 shell, 5337 → 5732 mm³), Steering_Rack, Servo_Horn, Tie_Rod L/R: **watertight after roundtrip**.
 * Rest pose vs gearbox spec box, rail boxes and all front bodies: **no real interference**; remaining pairs are intentional or not mine (horn spline in bore 0.2 mm³, face contacts 0.00 mm³, shaft stub 0.5 mm into the gearbox box, CVD halves/ring gear, hardware in pilots, spare wheel vs rail box).
-* **Steering** (ride pose): rack ±2.8 mm → outer **24.9°** / inner 35.5°; ±3.0 mm → **27.1° / 42.2°**, contact-free to ±3.0 (horn ±38.7°). Recommended servo end-points ±2.9 mm (outer ≈ 26°, inner ≈ 38°). Ackermann near ideal (s 2.5: 30.6/22.8). No dead-centre (rod ⟂ arm at centre; yoke far from 90°).
+* **Steering** (ride pose, `ACK_AIM` 90, 2026-11-20; the older figures 24.9°/35.5° and "Ackermann near ideal" below in this file are superseded): rack ±2.8 mm → outer **25.2°** / inner 32.1°; ±2.9 mm → 26.0° / 33.7°; ±3.0 mm → **26.9° / 35.5°**. Ackermann (cot o − cot i)/(B/L), B 72.13, L 116.5: **58 % at 1.5 mm, 79 % at 2.5, 86 % at 2.8, 92 % at 3.0** (was 78 / 104 / 116 / 129 % with the arm aimed at X −59, the rear axle of the old 107 mm wheelbase). Over-centre limit 3.65 mm (was 3.22). Recommended servo end-points ±2.8…2.9 mm. Turning circle to the outside front tyre centre 571 mm at 2.8, 534 mm at 3.0 (rigid tyres, no slip). No dead-centre (rod ⟂ arm at centre; yoke far from 90°).
 * **Bump steer** (rack centred): −0.16° at ride, −0.6° at +8° arm; within ±4 mm hub travel < 0.3°.
 * **Travel**: centred steering free from arm −12° (droop, lower arm on bulkhead) to +12° (bump, CVD limit); at full lock bump is limited to +4° (tie rod on upper arm) and droop to −8°: don't combine full lock with big bump.
 * Shaft/worm/tunnel clear of servo, horn and pin over all steering angles; horn (Y ≤ 9.5) clears the upper arm (Y ≥ 9.8).
@@ -164,3 +164,55 @@ Wheels/hubs/arm pivots/bulkhead pivots/diff/CVD chain/shock upper mounts are NOT
 ## UPDATE 14 — bulkhead floor web raised to meet the raised tub (constants `WEB_Z0, WEB_TOP, SEAT_TOP`)
 * Underside trimmed from Z−1.9/−2.0 to **Z−0.9** (X24…40.5 for |Y|<14, X40.5…64 for |Y|<8.5; the hinge-pin bosses at |Y|>8.5 are untouched, arm pivots exactly where they were). Web top stays **Z+0.5** (1.4 thick): the diff ring gear bottom is Z0.85, so a web top at +0.9 would rub the ring. The four screw seats at (44.5/52.0, ±3.5) are pads up to **Z+0.8**, Ø1.8 through, Ø3.2 counterbore 0.45 deep → **web under the screw head 1.25 mm** (min elsewhere 1.4). Screw engagement below −0.9 is in the tub (chassis-gbx). Bulkhead volume **4308 mm³** (was 5010).
 * Re-verified: STL roundtrip watertight (17 parts), floor-screw driver columns 0 hits, full-lock matrix arm −12…+8 clear (same as before; only the existing upper-arm/tie-rod flag at s=3.0), droop stop still lower arm on the bulkhead at −12° (hub Z−1.5, arm is at |Y|>9 so the web trim does not touch it), bumper/Y-brace and wheel clearances unchanged, integration check lists no new bulkhead pairs.
+
+## UPDATE 15 — front shock clearance ≥ 1.0 mm (Item 1)
+* **Changes (`scripts/13_front_v3.py`):** moved `SHOCK_LO0` inboard `[58.6, 24.0, 2.5]` → **`[58.6, 22.5, 2.5]`** (relocated lower-arm shock lug + Ø1.56 bore + `HW_Front_Shock_Lower_Screw_L/R`), moved `SHOCK_UP` `[58.6, 9.0, 17.0]` → **`[58.6, 12.0, 20.5]`**, reshaped upper fork tower into twin 0.8 mm gooseneck walls (`TW_R = 1.9`, `TW_Y0..Y1 = 5.0..7.2`, `TW_Z0 = 11.0`, `TW_ZG = 17.0`, top Z 22.4). Updated `Front_Bump_Stop_L/R` bed-down vector in `print/make_plates.py` to `(0, ∓0.49, 0.87)`.
+* **Verified clearances (`stl/v3`, full travel −12°..+4°):**
+  * `Ref_Shock_FL` lower eye → `Front_Wheel_Envelope`: **1.45 mm** min at −12°, **1.53 mm** at ride −4°, **1.82 mm** at +4° (was 0.16 / 0.22 mm); `HW_Front_Shock_Lower_Screw_L` → wheel envelope **1.36 mm** at ride (was 0.03 mm).
+  * `Ref_Shock_FL` Ø8 body → `IFS_Bulkhead_Convertible`: **1.03 mm** at −12°, **1.10 mm** at ride −4°, **1.11 mm** at +4° (was −0.05 mm overlap at −12° / 0.19 mm at ride), with **0.0 mm³** carved from the upper hinge-pin boss.
+  * Ride shock eye-to-eye **21.64 mm** (was 21.63 mm; bump stop +4° L = 20.02 mm, droop −12° L = 23.20 mm); `Ref_Shock_FL` → upper arm **2.17 mm**, bumper **5.83 mm**, Y-brace **5.85 mm**, retainer **3.17 mm**, shell **4.30 mm**; bulkhead tower → shell **3.43 mm**.
+  * Bulkhead vol **4367 mm³**, lower arm vol **583.9 mm³**; `verify_plates.py` 0 failures (33/33 watertight), `battery.py` 0 non-HW collisions, `hw.py` all front shock screws seated.
+
+## UPDATE 2026-11-20: Ackermann variant B, servo ear wall behind the tabs, no wire clip, pocket and keeper clean-up
+* **Ackermann:** `ACK_AIM = 90.0` (steering arm aims at X −90 on the centre line; was the literal 59.0). Tie-rod outer pickup (41.71, ±34.46), rod 28.70 mm. Table at ride, rack s → outer / inner / Ackermann %: 1.0 → 9.3 / 9.7 / 37; 1.5 → 13.8 / 15.0 / 58; 2.0 → 18.2 / 20.9 / 69; 2.5 → 22.5 / 27.5 / 79; 2.8 → 25.2 / 32.1 / 86; 3.0 → 26.9 / 35.5 / 92. Left/right mirror exactly. Bump steer unchanged (0.16° toe-in per wheel at ride, 0.64° at −8°, 0.61° at +8°).
+* **Tie-rod outer screw seat:** outer rod eye spot-faced 0.10 from the top (`ROD_SEAT_DROP`, eye 1.0 thick), screw 0.10 lower. Outer screw to upper arm **0.230 mm** (0.155 right after the aim change, 0.189 before it). Trade: outer screw to lower arm 0.266 mm at lock 2.8 / 0.224 at 3.0 (was 0.348 / 0.323); the screw tip is 0.05 proud of the pad. `ARM_RELIEF_CLR` 0.28 → 0.38: spindle to lower arm 0.274 at 2.8 / 0.170 at 3.0 (was 0.230 / 0.133).
+* **Known shortfalls:** tie rod to upper arm at arm +8° (beyond the +4° bump stop) 0.177 mm at lock 2.8 and 0.033 at 3.0; spindle to tie rod 0.120.
+* **Servo ear wall:** the plate with the two M1.0 ear-screw pilots is now BEHIND the tabs: X 29.75…32.15, Y 12.0…14.9, Z 1.0…15.7 (`EARW_*`). Screws `HW_Servo_Mount_Screw_L/R` enter from the front: axis along X at (Y 13.25, Z 13.7) and (Y 13.25, Z 3.7), head Ø2.0 at X 33.5…34.1, shank back to X 30.0 (2.15 mm in the wall, pilot Ø0.9 blind to X 29.93). Driver access: Ø2.6 channels along X from the ear face to X 41 (`EARS_ACC_*`); a doubler (X 33.65…36.4, Y 10.8…11.7, Z 2.3…5.1) backs the cheek post that the lower channel notches (0.52 mm at its front end, 1.2 elsewhere). Fit the servo screws before the cage, tie rods and shock.
+* **Servo_Wire_Clip removed** with its pad (X 22.9…29.9, Y 12.0…14.35, Z 8.0…16.3) and both M1.0 pilots; the bulkhead now starts at X 24.0. The servo lead is no longer clamped.
+* **Bell-crank pocket:** one floor (Z −0.15), one shelf (Z 1.20), vertical walls, pivot boss a plain Ø4.4 cylinder to Z 0.10 (`_zslab`, `CRK_WIN`). Bell crank to bulkhead 0.398 mm (was 0.283); thrust face on the boss still 0.15 by design.
+* **Keeper:** `RET_POCKET` cut in the nose: `Front_Pin_Retainer_Plate_L/R` × bulkhead 0.000 mm³ (was 0.023), screw × bulkhead 0.0001 (was 0.025; the pilot is a Ø1.4 line fit). Plate: bumper 0.92 mm, shock 3.1, arms ≥ 2.05 over travel, Cage 58 mm, Cabin_Cage 24.5 mm.
+
+
+## Doc note (exporter session, 2026-11-20): what is current (text only, no geometry)
+* **Steering:** the current linkage is the bell-crank steering of UPDATE 7 (servo horn -> `Steering_Drag_Link` -> `Steering_BellCrank` -> `Steering_Rack`) with the figures in the "Steering (ride pose ...)" bullet near the top. The "rack + link" steering text of UPDATE 4 (`Steering_Link.stl`, +-3.0 mm / 27.1 / 42.2 deg, "bell crank not built") is history. Re-check the lock angles and the CVD joint angle against the final STLs before quoting them.
+* **Parts removed or fused:** `Servo_Wire_Clip` no longer exists (route the servo lead with a zip tie); the front bulkhead (`IFS_Bulkhead_Convertible`) is fused into `Chassis_Tub`; `Front_Wheel_Envelope` is a keep-out body, not printed. Bumper through-bolts are M2 x 14 with M2 nuts. The `Front_Bumper` has a new guard profile.
+
+## UPDATE 2026-11-20 (evening): front guard redrawn to the owner's side profile
+- Front_Bumper is now a leaning hoop (outer face X 67.9 at Z 3.65 up to X 69.2 at Z 20.3, 2.4 mm square-chamfered tube, legs Y +-9.2) with a mid rung at Z 11.4 that carries the dia 1.2 Y-brace screw pilot, and a 45 deg ramp (2.4 mm) sweeping rearward and down from the kink into a flat skid block (X 60.2.., Z -1.1..2.9, half width 8.6) under the bulkhead nose.
+- The ramp is the sketch line lowered 2.3 mm: as drawn it ran through the bulkhead nose pad (Z 2.9..4.3) and the M2 bolt posts. Vertical bar and kink are as drawn.
+- M2 bolt seats unchanged (head seat Z 2.2, rear-open slots, counterbore dia 4.0 from below). Y-brace, magnets untouched.
+- Numbers: vol 637 mm3 (was 790), extents X 60.2..69.2 Y +-9.25 Z -1.1..20.3 (lowest point unchanged). Min distance to wheel envelope (lock x arm -12..+4) 22.9 mm, shell v4 4.04, Ref_Shock 6.39, lower arm (rest) 5.23, retainer plate 2.37. Overlaps with Y-brace and bulkhead 0.00 mm3.
+- Open: print/ plates and the battery mesh-quality line still show the old bumper (790 mm3) until make_plates.py is rerun.
+- Fix (2): wall sliver at the bolt counterbore front (X 63.8, Y +-3, Z -0.4, 0.05 mm between the dia 4.0 counterbore and the 45 deg ramp face) removed with a 4.0 wide access notch under each bolt head (to X 65.1, ceiling Z 0.8, `GD_NOTCH_Z`); wall there now >= 1.27 mm, Front_Bumper vol 621 mm3.
+
+## UPDATE 2026-11-21: front final (3)
+- Cause of the wheel drop: BODY_DIR (regenerated from the .sc) held Ref_Wheel_FL / nut / lower shock screw already at the ride pose and shifted track, so the script applied the ride drop and WHEEL_SHIFT a second time (wheel Z -18.04, Y 40.79). Fixed by a drift guard in the script (`WHEEL_REST_YMIN` 28.99, ZH, `SHOCK_SCREW_REST_Y` 24.0): wheel again Z -16.52..19.47, Y 32.88..46.58 (HEAD values), all four contact patches on Z -16.5.
+- Lower shock screw no longer runs through the lower arm (overlap 2.49 -> 0 mm3). Wheel x spindle overlap 0.
+- Bumper: counterbore opened to the rear up to the head seat, removes the 0.1 mm paper fins at X 60.3; retainer plates cleaned (7 -> 0 degenerate faces).
+- Open: bulkhead dish (X 33..36, Y 4.7..7.8, Z 0.3) paper walls. Fill raises the floor into the drag link/horn (audit fail), cutting the spike/ridge leaves new 0.05 mm walls. Needs a change in the bulkhead source.
+
+## UPDATE 2026-11-21: front final (4) - bulkhead dish
+The swept steering relief left a terraced dish at X 33.7..36.6, Y 3.9..9.1 (floor Z 0.18 / 0.30 / 0.40 / 0.28, a 0.05 mm wide, 0.12 mm high rib at X 35.0..35.05). Fixed in `13_front_v3.py` (`DISH_CUT`): one flat floor at Z 0.10 for X 34.30..36.55 (both sides), material removed only, so link / horn / crank clearance can only grow. Floor stays 1.0 mm over the tub interface (Z -0.9). Removed 3.93 mm3 (both sides). Audit 123 pairs, 0 failures. Spindle / lower-arm thin areas left alone (kingpin and bearing fits; the existing `_dedegen` pass does not remove the 5 spindle degenerate faces).
+
+## UPDATE 2026-11-21 (doc refresh, round 6)
+Kit is 124 bodies (3MF = STEP). Front end changes since the entries above: bulkhead dish floor, front wheels Z -16.52..19.47 (contact patch on the common ground plane), `Front_Bumper` guard profile, retainer and shock-screw fixes, `Servo_Wire_Clip` gone (zip tie). `IFS_Bulkhead_Convertible` is fused into `Chassis_Tub` and not exported.
+
+## UPDATE 2026-11-21 (round 7)
+No front-end geometry change in this round; kit is 124 bodies. Front parts: see the 2026-11-21 round 6 note above.
+
+## UPDATE 2026-11-21: front final (5) - thin spots
+- **Front_Spindle L/R:** the dilated tie-rod sweep left a ragged crescent rim (0.1-0.3 mm walls, 503 thin samples) on the steering-arm boss and bar corner. Now one flat pocket floor at SP_LEVEL_Z = 2.60 (spindle frame; lowest point of the dilated sweep, so rod clearance is unchanged) over the sweep footprint plus the boss and bar corner (X 39.5..43.8, Y 32.4..36.6). Thin samples 503 -> 0, degenerate faces 5 -> 0, 5.99 mm3 removed, arm boss 0.6 mm thick over its Z 2.0 underside. Kingpin bores, bearing seat and pilot untouched.
+- **Not changed (measured walls already >= 0.45, or no real wall found):** lower arms (probe min 0.57, earlier dense resample found no thin samples), carriers (0.55), bulkhead hinge-boss clusters at (55.4,11.5,6.0) / (49.2,12.3,7.1) / (40.6,12.0,7.5): the section at Z 7.1 shows the pin-bore chord against the boss wall, the probe hits are bore-facet near-coincidence, no sheet under 0.45 found by line probes. Steering_Rack keeps 35 degenerate faces (`_dedegen` cannot remove them).
+
+## UPDATE 2026-11-21 (final round)
+Front final (5): `Front_Spindle_L/R` 274.7 -> 269.6 mm3 each; nothing else in the front end changed volume. 124 bodies in total.
