@@ -467,7 +467,7 @@ def link(side):      # diagonal upper link: corner pivot (Y axis) -> shared axle
     return m
 CLV_CUT_Y0, CLV_CUT_Y1, CLV_ROOF_Z = 17.9, 19.1, 3.25      # shock-neck relief takes the whole inner ridge (was 18.45..18.9: left a 0.35 ridge and a 0.1 fin); flat roof over the eye pocket instead of the arc (no feather edges)
 SLOT_LIP = (-62.4, -61.15, 19.5, 21.3, 0.9, 2.2)            # removes the 0.26 mm lip the ear sweep left over the slot mouth
-ARM_C3 = os.environ.get("ARM_C3", "1") == "1"; ARM_DIR = os.environ.get("ARM_DIR", "arm_d4")
+ARM_C3 = os.environ.get("ARM_C3", "1") == "1"; ARM_DIR = os.environ.get("ARM_DIR", "arm_d5")      # arm_d5 = arm_d4 + shock-neck relief and taller inner cheek (scripts/arm_d5_ear_relief.py)
 for sg, n in ((1, "L"), (-1, "R")):
     _arm_m = D(arm(sg), [box(-53.2, -47.8, *ysp(sg, 18.8, 19.1), -2.0, 8.0), box(-53.2, -47.8, *ysp(sg, 21.4, 22.1), -2.0, 8.0), box(-49.2, -46.85, *ysp(sg, 21.06, 21.85), 1.05, 2.2), box(-55.8, -53.1, *ysp(sg, 21.42, 22.6), 2.12, 5.0), box(-57.55, -54.5, *ysp(sg, 21.22, 21.9), -4.3, -3.1), cylY(SHK_LO[0], SHK_LO[1], SHK_EYE_R + 0.5, *ysp(sg, 18.8, 22.1), 24), box(-51.6, -46.5, *ysp(sg, CLV_CUT_Y0, CLV_CUT_Y1), 1.5, 8.0), box(SHK_LO[0] - SHK_EYE_R - 0.5, SHK_LO[0] + SHK_EYE_R + 0.5, *ysp(sg, 18.8, 22.1), SHK_LO[1], CLV_ROOF_Z), box(SLOT_LIP[0], SLOT_LIP[1], *ysp(sg, SLOT_LIP[2], SLOT_LIP[3]), SLOT_LIP[4], SLOT_LIP[5])])   # shock clevis: eye side clearance 0.45 -> 0.75 / 1.0 (cheeks stay >= 0.8 thick)
     P[f"Rear_Trailing_Arm_{n}"] = simp(single(f"Rear_Trailing_Arm_{n}", _arm_m), 0.002)
