@@ -65,9 +65,9 @@ def pt(ax, view, p, text, dx=0, dy=0, color='k', fs=7, arrow=True, ha='left'):
 
 FRONT = ['IFS_Bulkhead_Convertible', 'IFS_Lower_Arm_L', 'IFS_Lower_Arm_R', 'IFS_Upper_Arm_L', 'IFS_Upper_Arm_R', 'Front_Carrier_L', 'Front_Carrier_R',
          'Front_Spindle_L', 'Front_Spindle_R', 'Front_Pin_Retainer_Plate_L', 'Front_Pin_Retainer_Plate_R', 'Front_Bump_Stop_L', 'Front_Bump_Stop_R', 'Front_Bumper', 'Front_Y_Brace']
-STEER = ['Steering_Rack', 'Steering_BellCrank', 'Steering_Drag_Link', 'Tie_Rod_L', 'Tie_Rod_R', 'Servo_Horn', 'Servo_Wire_Clip']
+STEER = ['Steering_Rack', 'Steering_BellCrank', 'Steering_Drag_Link', 'Tie_Rod_L', 'Tie_Rod_R', 'Servo_Horn']
 REAR = ['Rear_Trailing_Arm_L', 'Rear_Trailing_Arm_R', 'Rear_Upper_Link_L', 'Rear_Upper_Link_R', 'Rear_Axle_Top_Bracket']
-def many(names, col, alpha=1.0): return [(L(n), col, alpha) for n in names]
+def many(names, col, alpha=1.0): return [(L(n), col, alpha) for n in names if L(n) is not None]
 def hw(prefixes):
     out = []
     for d in SRC:
@@ -79,8 +79,7 @@ def hw(prefixes):
 
 def fig_overview():
     fig, axs = plt.subplots(2, 2, figsize=(16, 10))
-    items = (many(['Chassis_Tub'], C['tub']) + many(['Cage', 'Cabin_Cage'], C['cage']) + many(FRONT, C['front']) + many(STEER, C['steer']) + many(REAR, C['rear']) +
-             many(['ESC_RX_Shelf_L', 'ESC_RX_Shelf_R'], C['motor']) +
+    items = (many(['Chassis_Tub'], C['tub']) + many(['Cage'], C['cage']) + many(FRONT, C['front']) + many(STEER, C['steer']) + many(REAR, C['rear']) +
              [(L(n), C['ref'], 0.9) for n in ['Ref_Gearbox', 'Ref_Motor_GM1614', 'Ref_Rear_Axle', 'Ref_Wheel_RL', 'Ref_Wheel_RR', 'Ref_Wheel_FL', 'Ref_Wheel_FR', 'Servo_Ref', 'Ref_ESC_G40'] if L(n) is not None])
     render(axs[0][0], items, 'iso'); axs[0][0].set_title('Overview (iso, shell removed; grey = purchased / stock bodies)')
     render(axs[0][1], items, 'top'); axs[0][1].set_title('Top view (X forward = up the page, +Y left = left on the page)')
@@ -99,7 +98,7 @@ def fig_front():
     ax = axs[0]
     marks = [('1 Bulkhead', (36, 0, 12), 'top', 34, 0), ('2 Upper arm', (48, 22, 7), 'top', 2, 0), ('3 Lower arm', (48, 20, 0), 'top', 2, 0), ('4 Carrier', (48, 33, 3), 'top', 2, 0), ('5 Spindle', (46, 38, 6), 'top', 2, 0),
              ('6 Bell crank', (32.4, -8.4, 1), 'top', 2, 0), ('7 Servo', (30, 6, 6), 'top', 2, 0)]
-    for lab, p, dx, dy in [('1 IFS_Bulkhead_Convertible', (60, 0, 8), 0, 16), ('2 IFS_Upper_Arm L/R', (47, 17, 7), -22, 20), ('3 IFS_Lower_Arm L/R', (46, 24, 0), -30, -18), ('4 Front_Carrier', (48, 33, 3), -14, 26), ('5 Front_Spindle', (44, 38, 4), -12, -34),
+    for lab, p, dx, dy in [('1 Front bulkhead (fused into Chassis_Tub)', (60, 0, 8), 0, 16), ('2 IFS_Upper_Arm L/R', (47, 17, 7), -22, 20), ('3 IFS_Lower_Arm L/R', (46, 24, 0), -30, -18), ('4 Front_Carrier', (48, 33, 3), -14, 26), ('5 Front_Spindle', (44, 38, 4), -12, -34),
                            ('6 Steering_BellCrank', (32.4, -8.4, 1), 40, -8), ('7 Servo (ref) + horn', (24, 7, 6), -45, -8), ('8 Tie_Rod L/R', (38, 22, 3.5), 12, -22), ('9 Front_Pin_Retainer_Plate', (57.4, 11, 3), 28, 14), ('10 Front_Bump_Stop (on shock)', (58, 19, 3), -30, 22)]:
         pt(axs[0], 'top', np.array(p), lab, dx, dy, fs=7)
     render(axs[1], pr, 'front'); axs[1].set_title('Front end, seen from the front (truck-left +Y is on the right of the page, Z up)')
@@ -126,11 +125,10 @@ def fig_rear():
 
 def fig_fasteners():
     fig, ax = plt.subplots(figsize=(16, 7))
-    it = many(['Chassis_Tub'], C['tub'], 0.55) + many(['Cage', 'Cabin_Cage'], C['cage'], 0.6) + many(['ESC_RX_Shelf_L', 'ESC_RX_Shelf_R'], C['motor'], 0.8) + many(['IFS_Bulkhead_Convertible'], C['front'], 0.7)
+    it = many(['Chassis_Tub'], C['tub'], 0.55) + many(['Cage'], C['cage'], 0.6)
     render(ax, it, 'top')
-    groups = [('HW_Bulkhead_Floor', '#ff7f0e', 'bulkhead floor screws (x4, 1.6-1.8 mm thread in the 1.8 mm floor: TEST FIRST)'), ('HW_Bulkhead_Screw', '#1f77b4', 'bulkhead wall screws (x3)'),
-              ('HW_Shelf', '#2ca02c', 'ESC/RX shelf screws (x8)'), ('HW_Cage_Screw', '#d62728', 'cage screws (3 per side)'),
-              ('HW_Rear_Trailing_Pivot', '#8c564b', 'trailing arm pivots (x2)'), ('HW_Rear_Upper_Link_Pivot', '#e377c2', 'upper link pivots (x2)'), ('HW_Rear_Axle_Top_Pin', '#17becf', 'axle top pin')]
+    groups = [('HW_Cage_Screw', '#d62728', 'cage screws'),
+              ('HW_Rear_Trailing_Pivot', '#8c564b', 'trailing arm pivots (x2)'), ('HW_Rear_Upper_Link_Pivot', '#e377c2', 'upper link pivots (x2)'), ('HW_Rear_Axle_Top_Pin', '#17becf', 'axle top pin'), ('HW_Rear_Hinge_Screw', '#ff7f0e', 'shell hinge screws (x2)'), ('HW_Sway_Link_Pin', '#9467bd', 'sway-link pins (x2)')]
     seen = set()
     for pre, col, lab in groups:
         first = True

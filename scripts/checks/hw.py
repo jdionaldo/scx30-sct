@@ -5,7 +5,7 @@ src={}
 for d in ("stl/v3","stl/v4"):
     for f in os.listdir(d):
         if f.endswith(".stl"): src[f[:-4]]=os.path.join(d,f)
-M={n:trimesh.load(p) for n,p in src.items() if n not in("Front_Wheel_Envelope",)}
+import sys; sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")); from make_viewer_3mf import DROP; M={n:trimesh.load(p) for n,p in src.items() if n not in DROP and not n.startswith("Ref_Wheel_Spare")}
 hw=[n for n in M if n.startswith("HW_")]
 oth=[n for n in M if not n.startswith("HW_") and n not in("Tacoma_Trophy_Body_Shell",)]
 cm=CollisionManager()

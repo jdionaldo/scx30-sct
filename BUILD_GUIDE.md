@@ -4,6 +4,8 @@
 **Architecture:** Convertible Path C (2WD High-Speed Trophy Truck) / Path A (4WD Prerunner)  
 **Target Top Speed:** ~8.5–9.8 mph (~255–295 scale mph at 1:30) vs. 0.9 mph stock
 
+> **Status 2026-11-23:** this guide is the early engineering write-up and is out of date in places (part names, rails, the 7 STL sets). The current kit is 120 bodies, 28 printed parts on 6 plates; ASSEMBLY.md and parts_list.md are the current references. The cage has 4 M2 x 6 screws (not the 12 of earlier rounds), and the cage door-bay posts sit in pegged pockets.
+
 ---
 
 ## 1. Architecture Overview & CAD Coordinate System
@@ -203,6 +205,7 @@ Run a pin-vise hand drill through every printed bore *before* test-fitting pins 
 1. **Mount & Wire Electronics:** Strap the **G40 Pro Nano ESC** and standalone **micro receiver** onto one `Slider` (e.g., `Slider_L`) and strap the **3S 300 mAh LiPo** onto the opposite `Slider_R` (twin `3.6 mm` strap slots at `Y = ±30.25 mm`) for 50/50 left-right balance. Plug GM1614 PH2.0 3P into the ESC, ESC signal into RX Ch2, servo into RX Ch1, and **leave the yellow AUX drag-brake wire unplugged** (or endpoint-locked at 0%).
 2. **Bluetooth ESC Programming (Mandatory Before Wheels Touch Ground):** Power on with wheels elevated, open the **GACRacing App**, connect to **G40 Pro**, set **Drag Brake = `0%`**, verify **3S LVC**, set **BEC = `6.0V`** (or `7.4V` if HV servo), calibrate throttle endpoints on your radio, and confirm motor rotation direction.
 3. **Axial Yeti Tube Cage & Tacoma Trophy Shell:** Seat `Roll_Cage` onto the flat `Z = +8.0 mm` top chassis rail deck (`Y = ±13.0–15.5 mm`, cage feet sit cleanly at `Z >= +8.05 mm`). Fit `Tacoma_Hood_Roof_Shell` over the cage so the `AX31111` front IFS shock tower passes cleanly through the **`8.5 × 35.0 mm` hood window**, and secure `Tacoma_Fender_L/R` along the outer `Slider` edges (`Y = ±36.0 mm`) with the low-cut door sills exposing the side cage truss and `"05"` rear tail fins framing the fastback bed.
+   > **Update 2026-11-23 (current design; the paragraph above is the old Rev 1 text):** the part is now the one-piece `Cage`. Its four door-bay posts (B-post X -25.5, A-post X 17.0, both sides) end in a locating peg 2.4 x 1.4 mm, 2.5 mm deep, in a pocket in the tub rim (0.15 mm clearance), with no plate and no screw. Lower the cage straight down so the four pegs enter the pockets, then fit the 4 screws `HW_Cage_Screw_L3`, `R3` (tail foot) and `L6`, `R6` (front foot), M2 x 6 pan head. The shell is no longer a separate hood/roof/fender set: it is the single `Tacoma_Trophy_Body_Shell`, built from the shell saved in the SOMA app on 2026-11-22, with a 1.4 mm nominal wall. See ASSEMBLY.md sections 6 and 7 for the current steps.
 
 ---
 

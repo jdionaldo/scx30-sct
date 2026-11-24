@@ -4,3 +4,5 @@
 *.lock
 .~*
 __pycache__/
+*.step
+_stale/
