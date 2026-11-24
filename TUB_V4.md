@@ -467,3 +467,12 @@ Kit: 124 bodies (3MF = STEP), 28 printed parts on 6 plates. `Chassis_Tub` 15060.
 
 ## UPDATE 2026-11-21 (final round doc refresh)
 Tub 14838.6 mm3 (final 10), Cage 6595.8 mm3, shell 13668.6 mm3 (final 6), front spindles 269.6 mm3 each (front final 5). Rear track +2.1 mm (axle Y +-32.55); trailing arm = arm_d4 (1158.8 mm3). Tub bed contact 522.1 mm2, 29.9 mm tall, 8 mm brim; Cage 197.6 mm2, 35.6 mm, 4 mm brim. 124 bodies, 28 printed parts.
+
+## UPDATE 2026-11-23 (pegged cage feet, 4 cage screws, SOMA shell, 120 bodies)
+- **Cage feet**: the four door-bay posts (B-post X -25.5, A-post X 17.0, both sides) end in a locating peg 2.4 x 1.4 mm, 2.5 mm deep, in a pocket in the tub rim, 0.15 mm clearance all round (`PEG_W` 1.4, `PEG_D` 2.5, `PEG_CLR` 0.15, `PEG_FEET` in `scripts/18_tub.py`). No plate, no screw. Assembly: lower the cage straight down so the pegs enter the pockets, then fit the screws.
+- **Cage screws**: 4 in total, `HW_Cage_Screw_L3/R3` (tail foot) and `L6/R6` (front foot), M2 x 6 as modelled. Screws 1 and 5 are removed (older entries above mention 12, then 6, screw points; they are history). The tail and front feet are round screw eyes (R 1.9, 0.8 mm round the D 2.2 hole): tail eye on the lug block at X -36.0, |Y| 16.5; front eye on the rim at X 28.1, |Y| 15.75 (screw 6 moved 0.3 mm back so the cage lifts straight off). The tub support lips and tail cups are gone.
+- **Bodies**: 120 (was 124), 28 printed parts on 6 plates.
+- **Shell**: the builder starts from the shell saved in the SOMA app on 2026-11-22 (`scripts/data/shell_soma/soma.stl`, `base.stl`; applied in `owner_fixes()` in `scripts/19_shell_v4.py` before the wall is levelled; `scripts/shell_soma_patch.py` regenerates them). Direct STL edits in the SOMA app are lost on the next rebuild unless the reference meshes are regenerated.
+- **Wall levelling**: `scripts/shell_wall.py`, nominal 1.4 mm. Exception zones (`k_zones`) keep the old shell, now including the greenhouse (pillars, sills, cowl edge, 2 mm roof rim).
+- **Rebuild order**: `scripts/18_tub.py` -> `scripts/19_shell_v4.py` -> `scripts/18_tub.py` -> `USE_V4=1 scripts/16_integrate_check.py` -> `scripts/20_mesh_clean.py` (new, removes degenerate faces from printed parts); then `scripts/13_front_v3.py`, `print/make_plates.py`, `print/verify_plates.py`, `print/gen_parts_list.py`, `docs/make_diagrams.py`.
+- **Gaps**: the build needs the untracked `.~body_dir`; nothing has been sliced.

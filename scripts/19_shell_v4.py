@@ -26,7 +26,7 @@ def lowlift(m, H=None):
     H = ROOF_LIFT if H is None else H; m = m.copy(); v = m.vertices.copy(); v[:, 2] += H*_ss((v[:, 2] - SILL_Z)/SILL_BAND); m.vertices = v; return m
 def shift_tail(m):
     m = m.copy(); v = m.vertices.copy(); v[:, 0] -= SH*_ss((-30.0 - v[:, 0])/10.0); m.vertices = v; return m
-PL = np.array([-26.0 - SH, float(os.environ.get("PL_Z", 2.4))]); PU = np.array([-24.53 - SH, float(os.environ.get("PU_Z", 12.0))]); R.PL = PL; R.PU = PU; R.A = np.array([-59.0 - SH, -0.5]); R.Bp = np.array([-57.5 - SH, 8.85])   # = 18_tub.py
+PL = np.array([-26.0 - SH, float(os.environ.get("PL_Z", 2.4))]); PU = np.array([-24.53 - SH, float(os.environ.get("PU_Z", 12.0))]); R.PL = PL; R.PU = PU; R.A = np.array([-55.0 - SH, -0.5]); R.Bp = np.array([-57.5 - SH, 8.85])   # = 18_tub.py
 RAIL_DY = float(os.environ.get("RAIL_DY", 4.0)); SHELL_MARGIN = float(os.environ.get("SHELL_MARGIN", 1.5)); WARP_DY = RAIL_DY + SHELL_MARGIN; CLR = float(os.environ.get("CLR", 0.3))
 DELTA = 5.8      # Rev 42: tub stack raised (= 18_tub.py)
 GBX_X, GBX_Y, GBX_Z0, GBX_Z1, SHAFT_Z = 6.0, 12.5, -4.9 + DELTA, 23.1 + DELTA, 4.1 + DELTA; MOTOR_R, MOTOR_L, MOTOR_Z = 8.5, 10.0, 18.1 + DELTA; MOTOR_X1 = -GBX_X; MOTOR_X0 = MOTOR_X1 - MOTOR_L
@@ -847,6 +847,7 @@ for n, m in STATIC.items():
     if os.environ.get("STATIC_CUTS") and (v > 0.01 or _cs.min_distance_other(_o) < CLR + 0.5): use.append(m)
 print("  base shell vs gearbox+motor pocket: %.1f mm3" % vol(BASE, pocket(0.0)))
 
+LEVEL_WALL = os.environ.get("LEVEL_WALL", "1") != "0"
 def build(c):
     cuts = [dil(m, c + 0.9) for m in use] + ([pocket(0.4 + (c - 0.3)*0.5)] if use else [])
     ARCH_X = float(os.environ.get("ARCH_X", 0.25))
@@ -866,9 +867,31 @@ def build(c):
         out = D(out, [U(balls)])
     sh = sorted(out.split(only_watertight=False), key=lambda q: -abs(q.volume)); big = sh[0]
     big = _mirror_left_half(_simplify_checked(_clean_checked(big)))      # after the cleanup: the cleanup itself is not L/R symmetric
+    big = owner_fixes(big)
+    if LEVEL_WALL:      # uniform 1.4 mm wall: inner surface = offset of every outer facet (scripts/shell_wall.py). On the cleaned, mirrored shell:
+        import shell_wall      # sliver faces of the raw mesh give wrong offsets, and the Python cleanup above does not finish on the levelled mesh. level_wall returns a clean, L/R mirrored shell
+        big, _ = shell_wall.level_wall(big, bodies={k: STATIC[k] for k in ("Cage", "Chassis_Tub", "IFS_Bulkhead_v3 (magnet seats)") if k in STATIC})
     print("  relief clr %.3f: vol %.0f -> %.0f, shells %d, faces %d, deg %d" % (c, BASE.volume, big.volume, len(sh), len(big.faces), int((big.area_faces < 1e-6).sum())))
     return big
 
+# Owner markups from the SOMA session of 2026-11-21/22. They were one-off edits of the STL (lip-end fairings, rear ledge trims, filled holes, removed slivers,
+# single-face fixes), lost on every rebuild. scripts/data/shell_soma/ holds soma.stl (the shell that session saved, from output/model.soma) and base.stl (the
+# unlevelled builder shell it was edited from: LEVEL_WALL=0 OWNER_FIXES=0). What the session added (soma - base) and removed (base - soma) is kept by starting
+# from soma.stl and applying to it whatever the builder has changed since base.stl, before the wall is levelled. scripts/shell_soma_patch.py lists the pieces.
+OWNER_FIXES = os.environ.get("OWNER_FIXES", "1") != "0"; OWNER_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "shell_soma")
+def _to_m(t): return m3d.Manifold(m3d.Mesh(np.asarray(t.vertices, np.float32), np.asarray(t.faces, np.uint32)))
+def owner_fixes(m):
+    if not OWNER_FIXES: return m
+    soma, base = (_to_m(trimesh.load(os.path.join(OWNER_DIR, f))) for f in ("soma.stl", "base.stl"))
+    mm = _to_m(m); new, gone = [d for d in (mm - base).decompose() if d.volume() > 0.02], [d for d in (base - mm).decompose() if d.volume() > 0.02]      # what the builder changed since base.stl (nothing, if the builder is unchanged: the result is then soma.stl itself)
+    r_ = soma
+    for d in new: r_ = r_ + d
+    for d in gone: r_ = r_ - d
+    add, cut = soma - base, base - soma; q = r_.to_mesh()
+    r = trimesh.Trimesh(np.asarray(q.vert_properties)[:, :3], np.asarray(q.tri_verts)); sh = sorted(r.split(only_watertight=False), key=lambda t: -abs(t.volume))
+    print("  owner fixes (SOMA session patch): session added %.1f / removed %.1f mm3; builder changes since: %d added, %d removed pieces; volume %.1f -> %.1f, watertight %s, shells %d" % (add.volume(), cut.volume(), len(new), len(gone), m.volume, r.volume, r.is_watertight, len(sh)))
+    if any(abs(t.volume) > 0.5 for t in sh[1:]): raise RuntimeError("owner_fixes cut a piece of %.1f mm3 loose" % max(abs(t.volume) for t in sh[1:]))
+    return sh[0]
 OUTF = os.environ.get("OUT_STL", V4 + "Tacoma_Trophy_Body_Shell.stl"); final = None
 for c in (CLR, CLR + 0.033, CLR + 0.071, CLR + 0.12):
     o = build(c); o.export(OUTF); q = trimesh.load(OUTF)
@@ -877,6 +900,18 @@ for c in (CLR, CLR + 0.033, CLR + 0.071, CLR + 0.12):
     print("    roundtrip: watertight %s open %d shells %d deg %d" % (q.is_watertight, open_edges(q), len(q.split(only_watertight=False)), int((q.area_faces < 1e-6).sum())))
     if q.is_watertight and open_edges(q) == 0 and len(q.split(only_watertight=False)) == 1: final = q; break
 print("SHELL: watertight %s open edges %d shells %d vol %.0f deg_faces %d bounds %s" % (q.is_watertight, open_edges(q), len(q.split(only_watertight=False)), q.volume, int((q.area_faces < 1e-6).sum()), q.bounds.round(1).tolist()))
+# Route 2 (owner 2026-11-23): the shell that ships is built from planes by scripts/24_shell_planes.py (exact 1.4 mm wall per skin facet of the owner-approved
+# scripts/data/shell_soma/soma.stl). The shell built above is kept only so the checks below have the same inputs; SHELL_PLANES=0 keeps it as the output.
+# Owner 2026-11-24: the kit ships the SCT Cyber Trophy variant (scripts/25_shell_variant.py -> sct_shell_variant/trophy_shell.py).
+# SHELL_SOURCE=planes ships the plane-built Tacoma (24_shell_planes.py) instead; SHELL_SOURCE=builder (or SHELL_PLANES=0) keeps the shell built above.
+SHELL_SOURCE = os.environ.get("SHELL_SOURCE", "builder" if os.environ.get("SHELL_PLANES") == "0" else "variant")
+if SHELL_SOURCE in ("variant", "planes"):
+    import subprocess
+    _scr = {"variant": "25_shell_variant.py", "planes": "24_shell_planes.py"}[SHELL_SOURCE]
+    _r = subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), _scr)], env=dict(os.environ, OUT_STL=os.path.abspath(OUTF)), capture_output=True, text=True)
+    print("  shipped shell (%s): exit %d; %s" % (_scr, _r.returncode, (_r.stdout.strip().splitlines() or [""])[-1]))
+    if _r.returncode != 0: raise RuntimeError(_scr + " failed:\n" + _r.stderr[-2000:])
+    q = trimesh.load(OUTF); print("SHELL (shipped): watertight %s shells %d vol %.0f faces %d bounds %s" % (q.is_watertight, len(q.split(only_watertight=False)), q.volume, len(q.faces), q.bounds.round(1).tolist()))
 sh = trimesh.load(OUTF)
 
 # ---- verification vs the finished shell ----

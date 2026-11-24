@@ -60,7 +60,9 @@ PARTS = {
  # --- cage (0.16 mm): one one-piece Cage (the Cabin_Cage is merged into it; light bar and radiator are part of it)
  'Cage':((0,0,1),'cage',4,100,'build-plate','4','One-piece Cage printed inverted (roof down): tube axes stay in the layer plane, legs grow up. With the foot bosses the bed contact is about 200 mm2 (it was 3 mm2 before them). Plan: 4 mm brim (6 mm if it lifts), tree supports under the arch and rails, first layers slow (20 mm/s) and hot, no raft needed. 35.6 mm tall, 103 x 47 mm footprint.'),
  # --- shell (0.20 mm)
- 'Tacoma_Trophy_Body_Shell':(Z,'shell',3,10,'tree-build-plate','8','Sill rim on the bed, roof up (39 mm tall, stable). Tree supports from the plate fill the cabin and hood underside. Alternative: nose down (X+), no support in the cabin but 142 mm tall and wobbly.'),
+ 'Tacoma_Trophy_Body_Shell':(Z,'shell',3,10,'tree-build-plate','8','SCT Cyber Trophy variant body (kit file name kept). Open bottom on the bed (rocker and arch rims down), roof up, 40 mm tall. Tree supports from the plate under the hood, roof and flares; keep them off the magnet pockets and hinge lugs.'),
+ 'SCT_Hex_Mesh_Grille':((-1,0,0),'shell',3,100,'none','0','Back face on the bed, hex cells vertical (1.55 mm cells, 0.55 mm ribs); snap-in, 0.2 mm fit.'),
+ 'SCT_Cyan_DRL_Bar':((-1,0,0),'shell',3,100,'none','0','Back face on the bed; print in cyan or translucent PETG (filament change or separate job); presses into the 1.0 mm brow groove.'),
 }
 
 PROFILES = {

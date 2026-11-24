@@ -39,7 +39,9 @@ MAT = {
  'Rear_Axle_Top_Bracket': ('PETG-CF', 'Carries both upper links on one pin; small but 4.3 mm tall and loaded in shear.'),
  'Chassis_Tub': ('PETG-CF (PA12-CF upgrade)', 'Unified monolithic chassis: tub + fused front bulkhead (dish floor) + chamfered diff drop + 36-deg boat-side chamfers + one rib lattice, skirt taper and ledge chamfer; carries hinge pins, servo, bell-crank pivot and cage mounts.'),
  'Cage': ('PETG (tough); PETG-CF if you want it stiffer', 'One-piece roll cage (rear cage + cabin cage merged; no light bar or radiator parts): CF makes it stiff but brittle in a crash; plain PETG bends instead of snapping.'),
- 'Tacoma_Trophy_Body_Shell': ('PETG', 'Non-structural; PETG survives rolls. No PLA: the shell covers the motor and ESC.'),
+ 'Tacoma_Trophy_Body_Shell': ('PETG', 'SCT Cyber Trophy body (file name kept from the Tacoma shell). Non-structural; PETG survives rolls. No PLA: the shell covers the motor and ESC.'),
+ 'SCT_Hex_Mesh_Grille': ('PETG', 'Snap-in hex mesh grille behind the nose (0.2 mm fit).'),
+ 'SCT_Cyan_DRL_Bar': ('PETG (cyan or translucent)', 'LED brow bar, presses into the 1.0 mm groove across the nose.'),
 }
 ASSUMED_PARTS = {'Chassis_Tub': 'unified tub + fused front bulkhead + 36-deg boat-side chamfers + chamfered diff drop (floor top Z +0.9, diff drop Z -2.7) + rear driveshaft U-slot + 2 shell magnet seats on the front shock tower (X=57.3, Y=+-7.6: Ø4.8 boss, Ø3.2 x 2.1 pocket open upward, seat top Z 27.2, Ø1.0 push-out hole); ModRax longitudinal gearbox 2 diagonal M1.4 bottom foot holes at (-4.8,-9.4),(4.8,9.4)',
                  'Front_Bumper': 'Yeti-style guard / bull bar (new guard profile), zero tyre interference across full lock x bump',
@@ -48,7 +50,7 @@ ASSUMED_PARTS = {'Chassis_Tub': 'unified tub + fused front bulkhead + 36-deg boa
                  'Servo_Horn': 'verified for Injora N30 PRO 28T Ø3.93 mm spline: print a test horn first or use kit horn',
                  'Front_Bump_Stop_L': 'TPU stop ring on shock rod for Injora SCX30-08 (26.0 ext / 18.3 comp, 7.7 mm travel)', 'Front_Bump_Stop_R': 'as L',
                  'Cage': 'One-piece Yeti-style cage (rear cage + cabin cage merged) with twin-position shock tabs, rear tilt-open hinge ears (pin axis along Y at X=-64.0, Z=29.0, Ø2.2 bore + head pocket for the M2 x 8 hinge screws), and the rear sway-bar saddles; mounts with 12 M2 x 6 screws on foot bosses (clean joints); the rear sway-bar saddles are part of it',
-                 'Tacoma_Trophy_Body_Shell': 'Tilt-open mounting with tail fins and a rear arch (circle R 21.1), no front body posts: 2 magnet pockets under the hood over the tower seats (X=57.3, Y=+-7.6, Ø3.0 x 2.0 neodymium discs) + 2 rear tilt-hinge lugs outside the Cage ears (pin axis along Y at X=-64.0, Z=29.0, |Y| 18.9..21.3)'}
+                 'Tacoma_Trophy_Body_Shell': 'SCT Cyber Trophy variant (sct_shell_variant/trophy_shell.py), faceted wall from planes, open cabin over the cage; tilt-open on the rear hinge lugs (pin axis Y at X -64, Z 29), 2 magnet bosses over the tower seats (X 57.3, Y +-7.6, 0.3 mm above the seats)'}
 
 def printed_rows():
     rows = []
@@ -91,7 +93,7 @@ HW = [
  ('Front: Y-brace front lug to the hoop top bar', 'screw (self-tapping)', 1, 'head Ø2.6, 4.0 total, into a Ø1.2 pilot', 'HW_Front_YBrace_Front_Screw', 'M1.4 x 3-4 (FRONT_V3.md says x4)', 'verify before print'),
  ('Motor to gearbox motor face', 'gearbox motor screws (supplied with the gearbox)', 0, 'pattern, size and count UNMEASURED (Motor_Clamp and HW_Motor_Clamp_Screw_1..4 were deleted: the motor mounts directly on the gearbox)', 'gearbox kit screws (motor body modelled Ø17 x 10, axis X, Z 18.1)', 'stock screws from the gearbox kit', 'verify before print'),
  # CAGE
-('Cage: 6 per side (rim feet and tail foot; one-piece cage)', 'screw (self-tapping)', 10, 'shank Ø2.0, head Ø3.8 x 1.3, 4.7 mm in the tub pilot (4.5 at the tail)', 'HW_Cage_Screw_L1, L2, L4, L5, L6, R1, R2, R4, R5, R6', 'M2 x 6 pan head', 'ok'),
+('Cage: front foot (1 per side; the door-bay posts are pegs in rim pockets, no screws)', 'screw (self-tapping)', 2, 'shank Ø2.0, head Ø3.8 x 1.3, 4.7 mm in the tub pilot', 'HW_Cage_Screw_L6, R6', 'M2 x 6 pan head', 'ok'),
 ('Cage: tail foot (1 per side, inboard tail)', 'screw (self-tapping)', 2, 'shank Ø2.0, head Ø3.8 x 1.3, 4.5 mm in the pilot', 'HW_Cage_Screw_L3, R3', 'M2 x 6 pan head', 'ok'),
  # REAR
  ('Rear: trailing arm to tub pad', 'screw (self-tapping, no nut)', 2, 'shank Ø2.0, head Ø3.8 x 1.1, 11.05 under head (12.15 total; 1.05 longer since the rear track grew by 2.1 mm)', 'HW_Rear_Trailing_Pivot_Screw_L/R', 'M2 x 12', 'verify before print (was M2 x 10)'),
@@ -181,7 +183,7 @@ def write_parts():
     from collections import defaultdict
     L.append('\n**Fastener shopping summary** (add 20 % spares; M1.0-M2 self-tapping or machine screws, pan/button head):\n')
     L.append('| Size | Qty | Used at |\n|---|---|---|')
-    L += ['| M2 x 6 pan head | 12 | one-piece cage (L1..L6, R1..R6) |',
+    L += ['| M2 x 6 pan head | 4 | one-piece cage (L3, L6, R3, R6) |',
           '| Ø1.2 x 3.4 steel pin + CA | 2 | sway-link pins in the trailing-arm clevis |',
           '| M2 x 8 | 2 | shell rear tilt-hinge screws |',
           '| M2 x 12 | 2 | rear trailing-arm pivots |',

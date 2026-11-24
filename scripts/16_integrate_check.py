@@ -2,8 +2,8 @@
 import os, sys, trimesh
 from trimesh.collision import CollisionManager
 BD = os.environ["BODY_DIR"]; M = {}
-DROP = ({"Chassis_Rail_L","Chassis_Rail_R","Slider_L","Slider_R","Rear_Sway_Bridge_old","Rear_Sway_Bridge","Spare_Tire_Carrier","Roll_Cage","Rear_Cage","IFS_Bulkhead_Convertible"} if os.environ.get("USE_V4") else set()) | {"Drag_Link","Steering_Ackermann_Bar","Steering_Bell_Crank_L","Steering_Bell_Crank_R","Steering_Pivot_Pin_L","Steering_Pivot_Pin_R","IFS_Knuckle_L","IFS_Knuckle_R","Servo_Ref","Ref_Front_Diff_Ring_Gear","Ref_Front_Input_Worm_Gear","Ref_Front_Center_Driveshaft","Ref_Servo_N30"}
-for d in (BD, "stl/v2", os.environ.get("V3_DIR", "stl/v3/").rstrip("/")) + (("stl/v4",) if os.environ.get("USE_V4") else ()):
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".")); from make_viewer_3mf import DROP   # the ONE active-set list (scripts/make_viewer_3mf.py)
+for d in ((os.environ.get("V3_DIR", "stl/v3/").rstrip("/"), "stl/v4") if os.environ.get("USE_V4") else (BD, "stl/v2", os.environ.get("V3_DIR", "stl/v3/").rstrip("/"))):
     for f in os.listdir(d):
         if f.endswith(".stl"): M[f[:-4]] = os.path.join(d, f)
 M.pop("Tacoma_Trophy_Body_Shell_old", None)

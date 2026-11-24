@@ -1,0 +1,66 @@
+{
+  "parts": {
+    "SCT_Cyber_Trophy_Body": {
+      "solids": 1,
+      "valid": true,
+      "volume_mm3": 17402.7,
+      "bbox": {
+        "x": [
+          -68.6,
+          64.6
+        ],
+        "y": [
+          -32.39,
+          32.39
+        ],
+        "z": [
+          7.2,
+          47.1
+        ]
+      },
+      "max_wheel_bumper_overlap_mm3": 0.0
+    },
+    "SCT_Hex_Mesh_Grille": {
+      "solids": 1,
+      "valid": true,
+      "volume_mm3": 74.7,
+      "bbox": {
+        "x": [
+          61.73,
+          63.32
+        ],
+        "y": [
+          -14.05,
+          14.05
+        ],
+        "z": [
+          21.91,
+          24.27
+        ]
+      },
+      "max_wheel_bumper_overlap_mm3": 0.0
+    },
+    "SCT_Cyan_DRL_Bar": {
+      "solids": 1,
+      "valid": true,
+      "volume_mm3": 62.6,
+      "bbox": {
+        "x": [
+          62.69,
+          63.68
+        ],
+        "y": [
+          -15.8,
+          15.8
+        ],
+        "z": [
+          24.9,
+          27.14
+        ]
+      },
+      "max_wheel_bumper_overlap_mm3": 0.0
+    }
+  },
+  "inter_part_overlaps": [],
+  "status": "ok"
+}

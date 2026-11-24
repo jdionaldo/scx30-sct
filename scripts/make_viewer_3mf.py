@@ -31,7 +31,7 @@ MATERIALS = [
 
 
 def mat_index(name):
-    if "Shell" in name: return 0
+    if "Shell" in name or name.startswith("SCT_"): return 0      # SCT_ = the variant shell's grille and LED bar
     if "Cage" in name: return 1
     if name.startswith("Chassis_Tub"): return 2
     if name.startswith(("Steering_", "Tie_Rod_", "Servo_Horn")): return 4

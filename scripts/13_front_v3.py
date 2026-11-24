@@ -142,9 +142,15 @@ la = D(la, box(40, 58, 27.0, 40, -5, 6), box(54.8, 58.2, 22.4, 25.8, 1.8, 4.2),
        box(53.2, 55.0, 25.05, 25.8, 1.8, 4.2))     # wall fix: removes the 0.38 mm neck left between the raised block (Y<=25.05) and the diagonal rib (Y>=25.8)
 tip = box(44.2, 51.8, 26.0, 34.4, -1.5, 1.5)
 tip = D(tip, box(46.3, 49.7, 29.0, 36, -5, 5))
-lug = U(box(55.4, 57.8, SHOCK_LO0[1] - 1.35, SHOCK_LO0[1] + 1.35, 0.8, SHOCK_LO0[2]),
-        cyl("x", [56.6, SHOCK_LO0[1], SHOCK_LO0[2]], 1.35, 2.4, 28))
+LUG_SOLID_X0 = 50.0  # the solid lug block reaches back to X 50 (owner: solid all the way to the arm); X 48 would come 0.5 mm from the inner CVD at rest
+LUG_R = 1.75          # lower shock lug eye radius (was 1.35: 0.57 mm of ring round the D1.56 pilot; now about 1.0 mm)
+lug = U(box(55.4, 57.8, SHOCK_LO0[1] - LUG_R, SHOCK_LO0[1] + LUG_R, 0.8, SHOCK_LO0[2]),
+        cyl("x", [56.6, SHOCK_LO0[1], SHOCK_LO0[2]], LUG_R, 2.4, 28))
 la = U(la, tip, lug)
+# Solid lug gusset (owner 2026-11-24): the shock lug stood on a post and two slender struts with an open triangle under the eye.
+# The struts, post, legs and eye are filled to their convex hull (one solid block from the arm bottom to the eye, X LUG_SOLID_X0..57.8).
+_lg = trimesh.boolean.intersection([la, box(LUG_SOLID_X0, 57.8, 15.5, 27.5, -3.3, SHOCK_LO0[2] + LUG_R + 0.1)], engine=ENG)   # full depth, back into the arm body
+la = U(la, _lg.convex_hull)
 # Axial Yeti (AX80111) recessed top-face truss pockets (arm plate Z=-1.5..1.5; bottom stays flat). Measured on the built arm: every pocket wall >= 0.93 mm to the nearest side face / window / hole, floor web >= 1.95 mm.
 #  two wedge pockets flank the triangular window (between it and the outer edges), two tip pockets sit between the small through-holes (Y<=24.7) and the carrier slot (Y>=29.0)
 _LA_POCKETS = [([(45.4, 25.8), (47.1, 25.8), (47.1, 27.9), (46.8, 27.9), (45.4, 26.9)], 0.45),      # rear tip pocket (corner cut clear of the spindle droop relief at X44.3..45.3 / Y28.3..29.4)
@@ -660,7 +666,8 @@ BH_HOLES = [(44.5, 3.5), (44.5, -3.5), (52.0, 3.5), (52.0, -3.5)]
 BOSS_REAR_X = 39.9   # wall fix: rear wall of the lower hinge bosses (below Z -0.9) 0.28 -> 0.88 mm, and solid under the hinge-pin bore tail X 40.0..40.5
 bk = D(bk, box(24.0, BOSS_REAR_X, -14.0, 14.0, -6.0, WEB_Z0), box(BOSS_REAR_X, 64.0, -8.5, 8.5, -6.0, WEB_Z0), box(BOSS_REAR_X, 40.5, 13.0, 14.0, -6.0, WEB_Z0), box(BOSS_REAR_X, 40.5, -14.0, -13.0, -6.0, WEB_Z0))      # trim the underside (hinge-pin bosses at |Y|>8.5 untouched)
 bk = max(bk.split(only_watertight=False), key=lambda s: s.volume)
-bk = U(bk, *[cyl("z", [hx_, hy_, (0.2 + SEAT_TOP) / 2], 2.1, SEAT_TOP - 0.2, 28) for (hx_, hy_) in BH_HOLES])
+BH_SEAT_R = 2.4   # wall fix 3: seat boss dia 4.2 -> 4.8, ring around the dia 3.2 counterbore 0.49 -> 0.80 mm
+bk = U(bk, *[cyl("z", [hx_, hy_, (0.2 + SEAT_TOP) / 2], BH_SEAT_R, SEAT_TOP - 0.2, 28) for (hx_, hy_) in BH_HOLES])
 BH_FLOOR_Z0, BH_FLOOR_Z1 = WEB_Z0, SEAT_TOP
 for (hx_, hy_) in BH_HOLES:
     ok_ = bool(bk.contains([[hx_ + 1.3, hy_, 0.0], [hx_ - 1.3, hy_, 0.0], [hx_, hy_ + 1.3, 0.0], [hx_, hy_ - 1.3, 0.0]]).all())
@@ -727,6 +734,38 @@ DROOP_STOP = -12.5
 _ds = U(*[_la.copy().apply_transform(rotx(math.radians(t_), *AL)) for t_ in (-12.0, -12.25, DROOP_STOP)])
 _bk0 = parts["IFS_Bulkhead_Convertible"]; bk = D(_bk0, _ds, mirror(_ds)); bk = max(bk.split(only_watertight=False), key=lambda s: s.volume)
 print(" droop-stop face: removed %.3f mm3 from the bulkhead (lower arm at %.2f deg); hub Z at the stop %.2f" % (_bk0.volume - bk.volume, DROOP_STOP, 3.0 + math.sin(math.radians(DROOP_STOP)) * (PL[0] - AL[0])))
+parts["IFS_Bulkhead_Convertible"] = bk; static["IFS_Bulkhead_Convertible"] = bk; rest_all["IFS_Bulkhead_Convertible"] = bk
+# ---------- wall fix 3 (wall scan < 0.78 mm, 45 clusters): thin sheets thickened to >= 0.8 or removed; added material is kept out of the steering relief (infl) and stays inside the X faces of the existing bosses
+_ybox = lambda x0_, x1_, s_, y0_, y1_, z0_, z1_: box(x0_, x1_, min(s_ * y0_, s_ * y1_), max(s_ * y0_, s_ * y1_), z0_, z1_)
+_bk3 = bk
+TUN_ROOF = (39.5, 42.98, 2.0, 9.9, 10.4)          # X0, X1, |Y|, Z0, Z1: pad on the web over the shaft tunnel (roof 0.41-0.64 -> 0.86-1.09)
+UHF_DBL = (55.2, 57.0, 12.55, 12.8, (0.25, 0.45)) # X0, X1, Y0, Y1 of the solid outboard skin of the front hinge boss, copied outboard by these steps: wall outside the upper pin bore 0.40-0.48 -> 0.80, outside the retainer-screw pilot 0.50-0.55 -> 1.0
+UHR_DBL = (38.3, 40.8, 12.75, 13.0, (0.25,))      # same for the rear upper hinge boss (pin tail X 38.6..40.5): 0.52-0.68 -> 0.80
+MAG_WEB = (57.75, 59.45, 8.3, 9.2, 20.0, BRIDGE_Z1)   # web between the fork arms outboard of the dia 1.0 push-out hole (wall 0.08-0.43 -> 0.85); 1.3 mm inboard of the shock eye sweep
+bk = U(bk, box(TUN_ROOF[0], TUN_ROOF[1], -TUN_ROOF[2], TUN_ROOF[2], TUN_ROOF[3], TUN_ROOF[4]), *[_ybox(MAG_WEB[0], MAG_WEB[1], s_, *MAG_WEB[2:]) for s_ in (1, -1)],
+       *[D(U(*[trimesh.boolean.intersection([_bk3, _ybox(d_[0], d_[1], s_, d_[2], d_[3], z0_, z1_)], engine=ENG).apply_translation([0, s_ * dy_, 0]) for dy_ in d_[4]]), infl)
+         for s_ in (1, -1) for (d_, z0_, z1_) in ((UHF_DBL, 5.9, 7.7), (UHF_DBL, 2.6, 4.3), (UHR_DBL, 5.9, 7.7))])
+LHB_SLOT = (45.75, 50.25, 0.8, 0.0, 2.1)          # X0, X1, half width, Z0, Z1: feathered roof (0.02-0.3) of the lower hinge-pin bore on the centre boss opened to a slot; ends on a 1.0 mm high face
+bk = D(bk, box(59.2, 60.25, -4.0, 4.0, 1.9, BPAD_Z0),                                                              # nose: wedge hanging under the pad (0.0-0.8, median 0.43) removed, pad underside flat from X 59.3
+       *[_ybox(49.45, 53.0, s_, 5.7, 6.02, 10.45, 11.0) for s_ in (1, -1)],                                         # 0.2 wide x 0.5 thick lip at |Y| 5.8..6.0 removed
+       *[_ybox(RET_POCKET[0], RET_POCKET[1], s_, RET_POCKET[2], 10.6, RET_POCKET[5], 6.1) for s_ in (1, -1)],      # 0.43-0.70 roof over the retainer-plate pocket removed (its top is the shock relief, its underside the plate + 0.2)
+       *[cyl("x", [EARW_X0 + 0.15, py_, pz_], 0.45, 0.5, 24) for (py_, pz_) in PILOTS],                             # ear pilots: 0.17 mm blind floor removed (through pilots)
+       box(29.7, 30.05, 14.1, 15.0, 7.65, 9.55),                                                                    # ear wall: 0.25 mm skin behind the cage-tube keep-out removed
+       *[_ybox(LHB_SLOT[0], LHB_SLOT[1], s_, AL[0] - LHB_SLOT[2], AL[0] + LHB_SLOT[2], LHB_SLOT[3], LHB_SLOT[4]) for s_ in (1, -1)])
+bk = D(bk, *[D(_ybox(46.35, 46.75, s_, 8.9, 12.9, 5.0, 5.4), cyl("x", [46.55, s_ * AU[0], AU[1]], UHB_BOSS[2], 1.0, 48)) for s_ in (1, -1)],   # wall fix 3, knife edges of the steering relief (0.01-0.35), material removed only: rib under the upper hinge centre boss (ring kept)
+       box(46.35, 46.70, 9.3, 12.0, 8.15, 8.75), box(49.08, 49.45, 9.3, 12.0, 8.15, 8.75), box(55.15, 55.50, 9.3, 11.4, 7.9, 8.75),    # overhanging lips at Z 8.4..8.7 on the boss end faces squared off
+       *[_ybox(55.95, 56.35, s_, 8.1, 9.0, 8.7, 9.3) for s_ in (1, -1)],                                           # 0.2 mm flake left of the old upper shock mount
+       box(33.3, 35.25, -11.5, -9.2, 1.25, 2.05), box(34.28, 35.6, -5.3, -2.7, 0.9, 1.25),                           # bell-crank pocket: 0.2 mm shelf (4.75 mm2) and 0.06-0.2 mm ledge
+       box(34.95, 36.2, -13.1, -11.45, -0.14, 3.0), box(38.0, 38.75, -13.1, -12.15, -0.14, 1.2),                    # bell-crank pocket: 0.18-0.3 mm curtains on the outer wall, cut back to where the wall is >= 0.7
+       box(33.65, 34.4, 0.2, 2.7, 1.3, 2.0), box(37.2, 39.0, -0.95, 1.15, 1.16, 2.0),                               # rack deck: 0.5 mm lip in front of the servo pocket; 0.2-0.5 mm rim around the guide pilot flattened to the deck (Z 1.16)
+       box(36.25, 36.85, 2.9, 4.25, 1.31, 2.0), box(36.35, 36.8, 9.15, 10.3, 1.38, 1.8), box(34.6, 35.15, 9.1, 10.5, 0.8, 2.1), box(34.4, 35.15, 2.95, 3.95, 0.74, 1.4),   # 0.05-0.2 mm fins around the dish
+       box(40.5, 40.85, -10.4, -8.9, 5.6, 5.95), box(40.45, 40.85, 9.0, 10.9, 1.62, 2.1), *[_ybox(39.85, 40.0, s_, 2.2, 4.3, 3.3, 3.7) for s_ in (1, -1)],   # teeth / fin / flakes at X 40..40.8
+       box(40.5, 40.85, 8.9, 10.4, 5.6, 5.95), box(40.6, 41.3, 12.3, 13.05, 8.5, 9.2))   # wall fix 4: +Y twin of the tooth (0.1 wide, median 0.15) and the feathered lower edge of the overhang at X 40.7, Y 12.6..13 (0.09-0.37) squared off at Z 9.2
+CRK_FLOOR_UP = 0.05   # wall fix 4: bell-crank pocket floor is a free skin in the fused tub (18_tub.py removes the tub floor under the bulkhead): 0.75 -> 0.80 mm by raising its top Z -0.15 -> -0.10 (crank / pin clearance to the floor 0.40 / 0.45 -> 0.35 / 0.40, audit limit 0.25)
+_fl = trimesh.boolean.intersection([bk, box(CRK_WIN[0], 39.95, CRK_WIN[2], -2.8, WEB_Z0 - 0.1, CK_Z0 - _czm)], engine=ENG)   # everything below the floor top (floor + wall feet, pivot pilot stays open), stops behind the lower hinge-pin bore (X 40.0)
+bk = U(bk, _fl.apply_translation([0, 0, CRK_FLOOR_UP]))
+print(" wall fix 3: bulkhead vol %.2f -> %.2f mm3, shells %d" % (_bk3.volume, bk.volume, len(bk.split(only_watertight=False))))
+bk = max(bk.split(only_watertight=False), key=lambda s: s.volume)
 parts["IFS_Bulkhead_Convertible"] = bk; static["IFS_Bulkhead_Convertible"] = bk; rest_all["IFS_Bulkhead_Convertible"] = bk
 # ---------- upper-arm relief: tie rod swept over high bump (+4..+8) x steering lock (+/-3.0), cut from upper arm rear-inner corner (keeps >=0.25 mm clearance at th=+8, s=+-3.0)
 _tr_u = []
@@ -1215,6 +1254,7 @@ for s_, k_ in ((1, "Front_Pin_Retainer_Plate_L"), (-1, "Front_Pin_Retainer_Plate
         print(" retainer plate %s: thickened %.2f, ring r %.2f around a dia %.1f hole, vol %.2f -> %.2f, bounds %s, shells %d" % (k_, RET_THICKEN, RET_RING_R, 2 * RET_HOLE_R, allb[k_].volume, _plate_fix[k_].volume, _plate_fix[k_].bounds.round(2).tolist(), len(_plate_fix[k_].split(only_watertight=False))))
         _ks = k_.replace("Front_Pin_Retainer_Plate", "HW_Front_Retainer_Screw")      # M1.4 x 3 (kept M1.4: the bulkhead wall outboard of its pilot is only 0.5 mm): tip X 55.05, head dia 2.4 x 0.7 on the thicker plate
         _plate_fix[_ks] = U(cyl("x", [(x1_ - 3.0 + x1_) / 2, s_ * RET_SCREW[0], RET_SCREW[1]], 0.7, 3.0, 20), cyl("x", [x1_ + 0.35, s_ * RET_SCREW[0], RET_SCREW[1]], 1.2, 0.7, 24))
+if "Front_Pin_Retainer_Plate_L" in _plate_fix and "Front_Pin_Retainer_Plate_R" in _plate_fix: _plate_fix["Front_Pin_Retainer_Plate_R"] = mirror(_plate_fix["Front_Pin_Retainer_Plate_L"])   # hygiene: R is the exact mirror of the cleaned L plate (its own boolean left 36 sliver faces between 1e-6 and 1e-4 mm2 that _dedegen does not count)
 for k_ in KEEP_FROM_FOLDER:
     if k_ in allb: _plate_fix.get(k_, static.get(k_, allb[k_])).export(os.path.join(OUT, k_ + ".stl")); exported.append(k_ + (" (ring added)" if k_ in _plate_fix else " (unchanged copy from per-body folder)"))
 for k_, m_ in refs.items():

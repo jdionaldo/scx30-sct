@@ -59,7 +59,7 @@ out = sys.argv[1] if len(sys.argv) > 1 else "scx30_sct_assembly.step"
 files = {}
 for d in ("stl/v3", "stl/v4"):
     for f in sorted(glob.glob(d + "/*.stl")): files[os.path.basename(f)[:-4]] = f
-EXCLUDE = {"IFS_Bulkhead_Convertible"}  # fused into Chassis_Tub (intermediate input of scripts/18_tub.py)
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")); from make_viewer_3mf import DROP as EXCLUDE  # the ONE active-set list (IFS_Bulkhead_Convertible is fused into Chassis_Tub; envelopes are keep-outs)
 files = {k: v for k, v in files.items() if k not in EXCLUDE}
 asm = cq.Assembly(name="scx30_sct")
 for i, (n, f) in enumerate(sorted(files.items())):
